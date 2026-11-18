@@ -1,0 +1,4072 @@
+{
+ "meta": {
+  "compiled": "2026-11-04",
+  "sources": [
+   {
+    "id": "IWU2015",
+    "ref": "Loga, T.; Stein, B.; Diefenbach, N.; Born, R.: Deutsche Wohngebäudetypologie. Beispielhafte Maßnahmen zur Verbesserung der Energieeffizienz von typischen Wohngebäuden. 2. erweiterte Auflage. Institut Wohnen und Umwelt, Darmstadt, 2015 (TABULA/EPISCOPE).",
+    "url": "https://www.iwu.de/fileadmin/publikationen/gebaeudebestand/episcope/2015_IWU_LogaEtAl_Deutsche-Wohngeb%C3%A4udetypologie.pdf"
+   },
+   {
+    "id": "GEG",
+    "ref": "Gebäudemodernisierungsgesetz (GModG; until 2026 'Gebäudeenergiegesetz – GEG') vom 8.8.2020 (BGBl. I S. 1728), zuletzt geändert durch Art. 4 G v. 23.7.2026 (BGBl. 2026 I Nr. 226): §§ 22, 25, 26, 82, 86; Anlagen 1, 4, 7, 9, 10",
+    "url": "https://www.gesetze-im-internet.de/geg/BJNR172810020.html"
+   },
+   {
+    "id": "IWU2018",
+    "ref": "Cischinsky, H.; Diefenbach, N.: Datenerhebung Wohngebäudebestand 2016. Datenerhebung zu den energetischen Merkmalen und Modernisierungsraten im deutschen und hessischen Wohngebäudebestand. IWU, Darmstadt, 2018.",
+    "url": "https://www.iwu.de/fileadmin/publikationen/gebaeudebestand/2018_IWU_CischinskyEtDiefenbach_Datenerhebung-Wohngeb%C3%A4udebestand-2016.pdf"
+   },
+   {
+    "id": "IWU2010",
+    "ref": "Diefenbach, N.; Cischinsky, H.; Rodenfels, M.; Clausnitzer, K.-D.: Datenbasis Gebäudebestand. IWU, Darmstadt, 2010.",
+    "url": "https://www.iwu.de/fileadmin/publikationen/gebaeudebestand/datenbasis/Endbericht_Datenbasis.pdf"
+   },
+   {
+    "id": "IWU2022",
+    "ref": "Müller, A.; Heit, P.: Anpassung der mittleren Typgebäude für Altbauten mit Daten der Datenerhebung Wohngebäudebestand 2016. IWU Working Paper, 05.01.2022.",
+    "url": "https://www.iwu.de/fileadmin/publikationen/arbeitspapier/2022-01-05_IWU_MuellerEtHeit_Working-Paper-Anpassung-der-mittleren-Typgebaeude-fuer-Altbauten-2016.pdf"
+   },
+   {
+    "id": "DIBt2014",
+    "ref": "Fachkommission Bautechnik / DIBt: Auslegungsfragen zur EnEV – Teil 19, Auslegung XIX-4 (Ermittlung der Gebäudenutzfläche A_N), 01.08.2014.",
+    "url": "https://enev-online.com/enev_2014_praxisdialog/140811_19.04_dibt_ermittlung_gebaeudenutzflaeche_an.pdf"
+   },
+   {
+    "id": "SWM2026",
+    "ref": "SWM / TU Dresden (T. Sander): Zertifikate Primärenergiefaktor und Emissionsfaktor, Wärmeverbundnetz München Stadt, Martinsried, Unterföhring und Region Süd, Betriebsdaten 2025, ausgestellt 22.06.2026.",
+    "url": "https://www.swm.de/dam/doc/geschaeftskunden/fernwaerme/2025/zertifikat-geg-waermeverbundnetz-muc-stadt-martinsried-unterfoehring-region-sued.pdf"
+   },
+   {
+    "id": "ISE2025",
+    "ref": "Fraunhofer ISE: Wärmepumpen heizen auch im Altbau klimafreundlich (press release on the field test of 77 heat pumps in existing houses), 2025.",
+    "url": "https://www.ise.fraunhofer.de/de/presse-und-medien/presseinformationen/2025/waermepumpen-heizen-auch-im-altbau-klimafreundlich-forschungsprojekt-des-fraunhofer-ise-abgeschlossen.html"
+   },
+   {
+    "id": "OEMOF",
+    "ref": "oemof-thermal documentation, Compression heat pumps and chillers (Carnot quality grades citing VDE ETG 2015).",
+    "url": "https://oemof-thermal.readthedocs.io/en/master/compression_heat_pumps_and_chillers.html"
+   },
+   {
+    "id": "DENA2023",
+    "ref": "dena: Leitfaden Energetische Gebäudebilanzierung nach DIN V 18599 (2023), values from DIN V 18599-10:2018-09",
+    "url": "https://www.dena.de/fileadmin/dena/Publikationen/PDFs/2023/LEITFADEN_ENERGETISCHE_GEBAEUDEBILANZIERUNG_NACH_DIN_V_18599.pdf"
+   },
+   {
+    "id": "BBSR2023",
+    "ref": "BBSR/FIB: Leitfaden für Energiebedarfsausweise im Nichtwohnungsbau, GEG 2023 edition (reproduces DIN V 18599-10:2018 Anhang A profiles)",
+    "url": "https://fib-bund.de/Inhalt/Leitfaden/Energieausweise/2023-09_Leitfaden-energiebedarfsausweise-nichtwohnungsbau-2023-dl.pdf"
+   },
+   {
+    "id": "DIN18599-10",
+    "ref": "DIN V 18599-10:2018-09 Energetische Bewertung von Gebäuden – Teil 10: Nutzungsrandbedingungen, Klimadaten (paywalled; values via DENA2023/BBSR2023). Superseded by DIN/TS 18599-10:2025-10.",
+    "url": "https://www.dinmedia.de/de/vornorm/din-v-18599-10/293576742"
+   },
+   {
+    "id": "IWU2004",
+    "ref": "Loga, T.: Die Heizperiodenbilanz im Vergleich zum Monatsbilanzverfahren, IWU 2004 (DIN V 4108-6 residential boundary conditions)",
+    "url": "https://www.iwu.de/fileadmin/publikationen/energie/werkzeuge/2004_IWU_Loga_Die-Heizperiodenbilanz-im-Vergleich-zum-Monatsbilanzverfahren.pdf"
+   }
+  ],
+  "notes": "Age classes verified against IWU 2015 Bild 1 (identical to the brief). U-values W/(m²K) are the component values of the IWU example buildings in the original state (no refurbishment), i.e. without the extra resistance of unheated attics/basements (use F_roof/F_floor or b-factors separately). Residential reference area in IWU/TABULA is the conditioned net floor area A_C,ref; GEG classes use A_N. 'estimated': true marks any value not read directly from a cited source table; see archetypes_sources.md.",
+  "schemaNotes": "envelope.<type>.<class>: U_roof/U_floor are the example building's own elements (roofIs/floorIs); U_roofPitched, U_topCeiling, U_basementCeiling, U_slab let the consumer pick by OSM roof/basement info; 'reuse' lists which of these came from another type/class and those values must be treated as estimated even when the entry's 'estimated' flag is false (the flag refers to U_wall, U_roof, U_floor, U_window, dU_tb). pkgUsual/pkgAdvanced: per-example refurbishment packages. Section notes that used to be '_' keys are in meta.sectionNotes; global physics defaults (F_floor, F_roof, frameFrac, shading, heatedFrac) are in meta.defaults.",
+  "typeLabels": {
+   "sfh": "独立式单户/双户住宅（EFH）",
+   "th": "联排/双拼住宅（RH）",
+   "mfh": "多户住宅，3–12 户（MFH）",
+   "ab": "大型公寓楼，13 户及以上（GMH）"
+  },
+  "typeLabels_en": {
+   "sfh": "Detached single or two-family house (EFH)",
+   "th": "Terraced or semi-detached house (RH)",
+   "mfh": "Multi-family house, 3–12 dwellings (MFH)",
+   "ab": "Large apartment block, 13 or more dwellings (GMH)"
+  },
+  "typeLabels_de": {
+   "sfh": "Frei stehendes Ein- oder Zweifamilienhaus (EFH)",
+   "th": "Reihen- oder Doppelhaus (RH)",
+   "mfh": "Mehrfamilienhaus, 3–12 Wohnungen (MFH)",
+   "ab": "Großes Mehrfamilienhaus, 13 oder mehr Wohnungen (GMH)"
+  },
+  "defaults": {
+   "F_floor": 0.5,
+   "F_floor_src": "TABULA adjustment factor b_tr = 0.50 for basement ceiling to unheated cellar and for slab on ground (IWU2015 calculation sheets p.87 and p.100)",
+   "F_floor_estimated": false,
+   "F_roof_unheatedAttic": 0.85,
+   "F_roof_heatedAttic": 1.0,
+   "F_roof_src": "derived: TABULA MFH_E sheet reduces top-ceiling U 0.60 -> 0.51 for the unheated attic (b=1.0), i.e. effective factor 0.85; DIN V 4108-6 Tab. 3 (Fx≈0.8) not verified",
+   "F_roof_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA F_F = 0.30 (IWU2015 p.87, p.100)",
+   "frameFrac_estimated": false,
+   "shadeWinter": 0.6,
+   "shadeWinter_src": "TABULA external shading reduction factor F_sh = 0.6 for vertical windows, 0.8 horizontal (IWU2015 p.75, p.87)",
+   "shadeWinter_estimated": false,
+   "nonPerpendicular_Fw": 0.9,
+   "nonPerpendicular_src": "TABULA F_W = 0.90 (IWU2015 p.87)",
+   "shadeCtrl": 0.25,
+   "shadeCtrl_note": "external movable blinds reduction factor F_C (estimate; GEG Anlage 5 uses F_C <= 0.30 as requirement for simplified residential proof)",
+   "shadeCtrl_estimated": true,
+   "heatedFrac": 1.0,
+   "heatedFrac_note": "estimate; DIN V 18599-10 handles partial heating via a_tb (EFH 0.25, MFH 0.15 co-heated share) — see profiles.residential.a_tb",
+   "heatedFrac_estimated": true
+  },
+  "sectionNotes": {
+   "envelope": {},
+   "periodDefaults": {
+    "notes": "n50: estimated typical values for unrefurbished buildings; GEG §26 limits for new buildings tested by blower door are 3.0 1/h (no mechanical ventilation) and 1.5 1/h (with RLT). n_inf_tabula: infiltration air change used by TABULA for existing buildings (0.20 1/h, IWU2015 p.87); TABULA new-build variant with MVHR uses 0.05 1/h (p.100). Cm in J/(m²K) per net floor area using ISO 13790 class values (80k light / 165k medium / 260k heavy); TABULA itself uses 45 Wh/(m²K) = 162 kJ/(m²K) for all buildings (IWU2015 p.87, p.100). Cm_mfh_ab: suggested heavier class for multi-storey concrete-slab buildings D–H (estimate)."
+   },
+   "systems": {
+    "basis": "eta = useful heat delivered to rooms / final energy, referred to net calorific value H_i (GEG/DIN V 18599 basis), generation+storage+distribution+emission. IWU/TABULA expenditure factors are H_s-based and were converted with H_s/H_i = 1.11 (gas), 1.06 (oil), 1.08 (wood)."
+   },
+   "carriers": {
+    "note": "fp = non-renewable primary energy factor; co2 in g CO2-eq per kWh final energy (H_i). Law text: Gebäudemodernisierungsgesetz (GModG, formerly GEG), gesetze-im-internet.de/geg, last amended 23.07.2026; Anlage 4 and 9 values unchanged since 2020/2023."
+   },
+   "zensusMap": {
+    "rule": "split proportional to the number of overlapping years (1949-1978: 9/11/10 of 30; 1979-1990: 5/7 of 12; 1991-2000: 4/6 of 10; 2001-2010: 1/8/1 of 10; 2011-2019: 5/4 of 9).",
+    "lt1919": "estimated. Germany-wide (Zensus 2011, IWU2015 Tab. 4) pre-1860 buildings are 22 % of the pre-1919 residential buildings (15 % of dwellings, 17 % of living area). Munich's pre-1919 stock is dominated by Gründerzeit growth and was heavily rebuilt after WWII, so A is set to 0.10 (plausible range 0.03–0.20).",
+    "estimated": true
+   }
+  }
+ },
+ "ageClasses": [
+  {
+   "id": "A",
+   "label": "1859 年及以前",
+   "label_en": "1859 and earlier",
+   "label_de": "Bis 1859",
+   "from": null,
+   "to": 1859
+  },
+  {
+   "id": "B",
+   "label": "1860–1918 年",
+   "label_en": "1860–1918",
+   "label_de": "1860–1918",
+   "from": 1860,
+   "to": 1918
+  },
+  {
+   "id": "C",
+   "label": "1919–1948 年",
+   "label_en": "1919–1948",
+   "label_de": "1919–1948",
+   "from": 1919,
+   "to": 1948
+  },
+  {
+   "id": "D",
+   "label": "1949–1957 年",
+   "label_en": "1949–1957",
+   "label_de": "1949–1957",
+   "from": 1949,
+   "to": 1957
+  },
+  {
+   "id": "E",
+   "label": "1958–1968 年",
+   "label_en": "1958–1968",
+   "label_de": "1958–1968",
+   "from": 1958,
+   "to": 1968
+  },
+  {
+   "id": "F",
+   "label": "1969–1978 年",
+   "label_en": "1969–1978",
+   "label_de": "1969–1978",
+   "from": 1969,
+   "to": 1978
+  },
+  {
+   "id": "G",
+   "label": "1979–1983 年",
+   "label_en": "1979–1983",
+   "label_de": "1979–1983",
+   "from": 1979,
+   "to": 1983
+  },
+  {
+   "id": "H",
+   "label": "1984–1994 年",
+   "label_en": "1984–1994",
+   "label_de": "1984–1994",
+   "from": 1984,
+   "to": 1994
+  },
+  {
+   "id": "I",
+   "label": "1995–2001 年",
+   "label_en": "1995–2001",
+   "label_de": "1995–2001",
+   "from": 1995,
+   "to": 2001
+  },
+  {
+   "id": "J",
+   "label": "2002–2009 年",
+   "label_en": "2002–2009",
+   "label_de": "2002–2009",
+   "from": 2002,
+   "to": 2009
+  },
+  {
+   "id": "K",
+   "label": "2010–2015 年",
+   "label_en": "2010–2015",
+   "label_de": "2010–2015",
+   "from": 2010,
+   "to": 2015
+  },
+  {
+   "id": "L",
+   "label": "2016 年及以后",
+   "label_en": "2016 and later",
+   "label_de": "Ab 2016",
+   "from": 2016,
+   "to": null
+  }
+ ],
+ "envelope": {
+  "sfh": {
+   "A": {
+    "U_wall": 2.0,
+    "U_roof": 2.6,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 2.6,
+    "U_topCeiling": 1.0,
+    "U_floor": 2.9,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 1.2,
+    "U_slab": 2.9,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.35,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.49,
+     "U_window": 1.6,
+     "dU_tb": 0.15
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.27,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_A",
+     "tabula": "DE.N.SFH.01.Gen",
+     "A_C_ref": 218.9,
+     "A_living": 199.0,
+     "V_e": 767.6,
+     "A_N": 245.6,
+     "HT_prime": 2.24
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_B (class B timber-joist top ceiling; no class-A top-ceiling example in IWU 2015) - estimate",
+     "U_basementCeiling": "MFH_A"
+    }
+   },
+   "B": {
+    "U_wall": 1.7,
+    "U_roof": 1.3,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 1.3,
+    "U_topCeiling": 1.0,
+    "U_floor": 1.2,
+    "floorIs": "basement ceiling + slab on ground (area-weighted)",
+    "U_basementCeiling": 1.2,
+    "U_slab": 1.2,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.25,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.32,
+     "U_slab": 0.32,
+     "U_window": 1.6,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": 0.23,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_B",
+     "tabula": "DE.N.SFH.02.Gen",
+     "A_C_ref": 141.8,
+     "A_living": 128.9,
+     "V_e": 595.0,
+     "A_N": 190.4,
+     "HT_prime": 1.54
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_B"
+    }
+   },
+   "C": {
+    "U_wall": 1.7,
+    "U_roof": 1.4,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 0.8,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.25,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.3,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_C",
+     "tabula": "DE.N.SFH.03.Gen",
+     "A_C_ref": 302.5,
+     "A_living": 275.0,
+     "V_e": 1052.5,
+     "A_N": 336.8,
+     "HT_prime": 1.5
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_C",
+     "U_slab": "MFH_C"
+    }
+   },
+   "D": {
+    "U_wall": 1.4,
+    "U_roof": 1.4,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 0.8,
+    "U_floor": 1.01,
+    "floorIs": "basement ceiling + slab on ground (area-weighted)",
+    "U_basementCeiling": 1.01,
+    "U_slab": 1.01,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.4,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.31,
+     "U_slab": 0.31,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": 0.23,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_D",
+     "tabula": "DE.N.SFH.04.Gen",
+     "A_C_ref": 111.1,
+     "A_living": 101.0,
+     "V_e": 380.0,
+     "A_N": 121.6,
+     "HT_prime": 1.35
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_D"
+    }
+   },
+   "E": {
+    "U_wall": 1.177,
+    "U_roof": 0.8,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.8,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.6,
+    "U_slab": 1.6,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.229,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.34,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.129,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_E",
+     "tabula": "DE.N.SFH.05.Gen",
+     "A_C_ref": 121.2,
+     "A_living": 110.2,
+     "V_e": 502.9,
+     "A_N": 160.9,
+     "HT_prime": 1.07
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_E",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class E)"
+    }
+   },
+   "F": {
+    "U_wall": 1.0,
+    "U_roof": 0.5,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling + slab on ground (area-weighted)",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.22,
+     "U_roofPitched": 0.18,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.3,
+     "U_slab": 0.3,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.09,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": 0.23,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_F",
+     "tabula": "DE.N.SFH.06.Gen",
+     "A_C_ref": 173.3,
+     "A_living": 157.5,
+     "V_e": 606.0,
+     "A_N": 193.9,
+     "HT_prime": 0.9
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_F"
+    }
+   },
+   "G": {
+    "U_wall": 0.8,
+    "U_roof": 0.5,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.5,
+    "U_floor": 0.8,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.8,
+    "U_slab": 0.8,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.21,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.28,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.21,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_G",
+     "tabula": "DE.N.SFH.07.Gen",
+     "A_C_ref": 215.6,
+     "A_living": 196.0,
+     "V_e": 647.0,
+     "A_N": 207.0,
+     "HT_prime": 0.98
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reuse": {
+     "U_topCeiling": "MFH_G",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class G)"
+    },
+    "iwuExample": {
+     "U_window": 4.3,
+     "note": "IWU example EFH_G: metal frames without thermal break, double insulating glazing (IWU 2015 Annex D sheet)"
+    },
+    "notes": [
+     "U_window replaced by 2.8 (value of RH_G / typical wood or PVC double insulating glazing); IWU example value 4.3 kept in iwuExample"
+    ]
+   },
+   "H": {
+    "U_wall": 0.5,
+    "U_roof": 0.4,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.4,
+    "U_topCeiling": 0.4,
+    "U_floor": 0.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.6,
+    "U_slab": 0.6,
+    "U_window": 3.2,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.18,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.11,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.2,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_H",
+     "tabula": "DE.N.SFH.08.Gen",
+     "A_C_ref": 150.2,
+     "A_living": 136.6,
+     "V_e": 514.0,
+     "A_N": 164.5,
+     "HT_prime": 0.72
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "MFH_H",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class H)"
+    }
+   },
+   "I": {
+    "U_wall": 0.3,
+    "U_roof": 0.35,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.35,
+    "U_topCeiling": 0.35,
+    "U_floor": 0.45,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.45,
+    "U_slab": 0.45,
+    "U_window": 1.9,
+    "g_window": 0.65,
+    "g_estimated": true,
+    "U_door": 2.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.15,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.22,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_I",
+     "tabula": "DE.N.SFH.09.Gen",
+     "A_C_ref": 121.9,
+     "A_living": 110.8,
+     "V_e": 427.3,
+     "A_N": 136.7,
+     "HT_prime": 0.55
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "MFH_I",
+     "U_slab": "RH_I"
+    },
+    "notes": [
+     "IWU Paket 1 lists U=0.41 for pitched roofs even where the original is better; use min(original, package)"
+    ]
+   },
+   "J": {
+    "U_wall": 0.3,
+    "U_roof": 0.25,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.25,
+    "U_topCeiling": 0.25,
+    "U_floor": 0.3,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.3,
+    "U_slab": 0.3,
+    "U_window": 1.4,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 2.0,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.15,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_J",
+     "tabula": "DE.N.SFH.10.Gen",
+     "A_C_ref": 146.5,
+     "A_living": 133.2,
+     "V_e": 478.9,
+     "A_N": 153.3,
+     "HT_prime": 0.39
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class J (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class J)"
+    },
+    "notes": [
+     "IWU Paket 1 lists U=0.41 for pitched roofs even where the original is better; use min(original, package)"
+    ]
+   },
+   "K": {
+    "U_wall": 0.28,
+    "U_roof": 0.2,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.2,
+    "U_topCeiling": 0.2,
+    "U_floor": 0.35,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.35,
+    "U_slab": 0.35,
+    "U_window": 1.3,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 1.8,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.2,
+     "U_roofPitched": 0.16,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.24,
+     "U_window": 1.3,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.7,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "EFH_K",
+     "tabula": "DE.N.SFH.11.Gen",
+     "A_C_ref": 176.4,
+     "A_living": 160.4,
+     "V_e": 827.1,
+     "A_N": 264.7,
+     "HT_prime": 0.36
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class K (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class K)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.3,
+      "U_roof": 0.2,
+      "U_floor": 0.45,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.23,
+      "U_roof": 0.2,
+      "U_floor": 0.3,
+      "U_window": 1.3
+     }
+    },
+    "notes": [
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   },
+   "L": {
+    "U_wall": 0.17,
+    "U_roof": 0.15,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.15,
+    "U_topCeiling": 0.15,
+    "U_floor": 0.17,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.17,
+    "U_slab": 0.17,
+    "U_window": 1.1,
+    "g_window": 0.55,
+    "g_estimated": true,
+    "U_door": 1.3,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.15,
+     "U_roofPitched": 0.13,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.15,
+     "U_window": 1.1,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.7,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "EFH_L",
+     "tabula": "DE.N.SFH.12.Gen",
+     "A_C_ref": 176.4,
+     "A_living": 160.4,
+     "V_e": 827.1,
+     "A_N": 264.7,
+     "HT_prime": 0.26
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class L (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class L)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.27,
+      "U_roof": 0.24,
+      "U_floor": 0.27,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.3,
+      "U_roof": 0.26,
+      "U_floor": 0.3,
+      "U_window": 1.1
+     }
+    },
+    "notes": [
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   }
+  },
+  "th": {
+   "A": {
+    "U_wall": 2.0,
+    "U_roof": 2.6,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 2.6,
+    "U_topCeiling": 1.0,
+    "U_floor": 2.9,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 1.2,
+    "U_slab": 2.9,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.35,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.49,
+     "U_window": 1.6,
+     "dU_tb": 0.15
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.27,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "EFH_A",
+     "tabula": "DE.N.SFH.01.Gen",
+     "A_C_ref": 218.9,
+     "A_living": 199.0,
+     "V_e": 767.6,
+     "A_N": 245.6,
+     "HT_prime": 2.24
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "EFH_A",
+    "reuse": {
+     "U_topCeiling": "RH_B (class B timber-joist top ceiling; no class-A top-ceiling example in IWU 2015) - estimate",
+     "U_basementCeiling": "MFH_A"
+    },
+    "notes": [
+     "no IWU example for RH_A; all values reused from EFH_A"
+    ]
+   },
+   "B": {
+    "U_wall": 1.7,
+    "U_roof": 1.0,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 1.3,
+    "U_topCeiling": 1.0,
+    "U_floor": 1.2,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.2,
+    "U_slab": 1.2,
+    "U_window": 2.7,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.34,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.23,
+     "U_basementCeiling": 0.32,
+     "U_slab": null,
+     "U_window": 1.6,
+     "dU_tb": 0.15
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_B",
+     "tabula": "DE.N.TH.02.Gen",
+     "A_C_ref": 96.0,
+     "A_living": 87.2,
+     "V_e": 390.0,
+     "A_N": 124.8,
+     "HT_prime": 1.28
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_B",
+     "U_slab": "EFH_B"
+    }
+   },
+   "C": {
+    "U_wall": 1.7,
+    "U_roof": 0.8,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 0.8,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.25,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.21,
+     "U_basementCeiling": 0.3,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_C",
+     "tabula": "DE.N.TH.03.Gen",
+     "A_C_ref": 112.8,
+     "A_living": 102.5,
+     "V_e": 423.2,
+     "A_N": 135.4,
+     "HT_prime": 1.31
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_C",
+     "U_slab": "MFH_C"
+    }
+   },
+   "D": {
+    "U_wall": 1.2,
+    "U_roof": 0.8,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 0.8,
+    "U_floor": 2.1,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 2.1,
+    "U_slab": 1.01,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.23,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.21,
+     "U_basementCeiling": 0.36,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.26,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_D",
+     "tabula": "DE.N.TH.04.Gen",
+     "A_C_ref": 149.6,
+     "A_living": 136.0,
+     "V_e": 468.6,
+     "A_N": 150.0,
+     "HT_prime": 1.27
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_D",
+     "U_slab": "EFH_D"
+    }
+   },
+   "E": {
+    "U_wall": 1.2,
+    "U_roof": 0.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.8,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.6,
+    "U_slab": 1.6,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.23,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.2,
+     "U_basementCeiling": 0.34,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_E",
+     "tabula": "DE.N.TH.05.Gen",
+     "A_C_ref": 117.4,
+     "A_living": 106.7,
+     "V_e": 374.2,
+     "A_N": 119.7,
+     "HT_prime": 1.05
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_E",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class E)"
+    }
+   },
+   "F": {
+    "U_wall": 1.0,
+    "U_roof": 0.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.22,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.2,
+     "U_basementCeiling": 0.3,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_F",
+     "tabula": "DE.N.TH.06.Gen",
+     "A_C_ref": 106.3,
+     "A_living": 96.6,
+     "V_e": 335.0,
+     "A_N": 107.2,
+     "HT_prime": 0.99
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_F",
+     "U_slab": "EFH_F"
+    }
+   },
+   "G": {
+    "U_wall": 0.8,
+    "U_roof": 0.5,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.5,
+    "U_floor": 0.8,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.8,
+    "U_slab": 0.8,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.21,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.28,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.21,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_G",
+     "tabula": "DE.N.TH.07.Gen",
+     "A_C_ref": 108.3,
+     "A_living": 98.4,
+     "V_e": 409.4,
+     "A_N": 131.0,
+     "HT_prime": 0.82
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "MFH_G",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class G)"
+    }
+   },
+   "H": {
+    "U_wall": 0.6,
+    "U_roof": 0.4,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.4,
+    "U_topCeiling": 0.4,
+    "U_floor": 0.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.6,
+    "U_slab": 0.6,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.2,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.11,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.2,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_H",
+     "tabula": "DE.N.TH.08.Gen",
+     "A_C_ref": 127.6,
+     "A_living": 116.0,
+     "V_e": 421.0,
+     "A_N": 134.7,
+     "HT_prime": 0.77
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "MFH_H",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class H)"
+    }
+   },
+   "I": {
+    "U_wall": 0.6,
+    "U_roof": 0.35,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.35,
+    "U_topCeiling": 0.35,
+    "U_floor": 0.45,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.45,
+    "U_slab": 0.45,
+    "U_window": 1.6,
+    "g_window": 0.65,
+    "g_estimated": true,
+    "U_door": 2.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.2,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.22,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.18,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_I",
+     "tabula": "DE.N.TH.09.Gen",
+     "A_C_ref": 148.8,
+     "A_living": 135.3,
+     "V_e": 495.0,
+     "A_N": 158.4,
+     "HT_prime": 0.62
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "MFH_I",
+     "U_basementCeiling": "EFH_I"
+    },
+    "notes": [
+     "IWU Paket 1 lists U=0.41 for pitched roofs even where the original is better; use min(original, package)"
+    ]
+   },
+   "J": {
+    "U_wall": 0.3,
+    "U_roof": 0.2,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.2,
+    "U_topCeiling": 0.2,
+    "U_floor": 0.3,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.3,
+    "U_slab": 0.3,
+    "U_window": 1.3,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 2.0,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.15,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.15,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "RH_J",
+     "tabula": "DE.N.TH.10.Gen",
+     "A_C_ref": 151.9,
+     "A_living": 138.1,
+     "V_e": 483.0,
+     "A_N": 154.6,
+     "HT_prime": 0.41
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class J (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class J)"
+    },
+    "notes": [
+     "IWU Paket 1 lists U=0.41 for pitched roofs even where the original is better; use min(original, package)"
+    ]
+   },
+   "K": {
+    "U_wall": 0.28,
+    "U_roof": 0.2,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.2,
+    "U_topCeiling": 0.2,
+    "U_floor": 0.35,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.35,
+    "U_slab": 0.35,
+    "U_window": 1.3,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 1.8,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.2,
+     "U_roofPitched": 0.16,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.25,
+     "U_window": 1.3,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.728,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "RH_K",
+     "tabula": "DE.N.TH.11.Gen",
+     "A_C_ref": 184.3,
+     "A_living": 167.5,
+     "V_e": 747.0,
+     "A_N": 239.0,
+     "HT_prime": 0.33
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class K (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class K)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.4,
+      "U_roof": 0.28,
+      "U_floor": 0.5,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.22,
+      "U_roof": 0.18,
+      "U_floor": 0.3,
+      "U_window": 1.3
+     }
+    },
+    "notes": [
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   },
+   "L": {
+    "U_wall": 0.16,
+    "U_roof": 0.13,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.13,
+    "U_topCeiling": 0.13,
+    "U_floor": 0.16,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.16,
+    "U_slab": 0.16,
+    "U_window": 1.1,
+    "g_window": 0.55,
+    "g_estimated": true,
+    "U_door": 1.3,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.15,
+     "U_roofPitched": 0.13,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.15,
+     "U_window": 1.1,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.728,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "RH_L",
+     "tabula": "DE.N.TH.12.Gen",
+     "A_C_ref": 184.3,
+     "A_living": 167.5,
+     "V_e": 747.0,
+     "A_N": 239.0,
+     "HT_prime": 0.24
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class L (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class L)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.28,
+      "U_roof": 0.24,
+      "U_floor": 0.28,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.3,
+      "U_roof": 0.26,
+      "U_floor": 0.3,
+      "U_window": 1.1
+     }
+    },
+    "notes": [
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   }
+  },
+  "mfh": {
+   "A": {
+    "U_wall": 2.0,
+    "U_roof": 2.6,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 2.6,
+    "U_topCeiling": 1.0,
+    "U_floor": 1.2,
+    "floorIs": "basement ceiling + slab on ground (area-weighted)",
+    "U_basementCeiling": 1.2,
+    "U_slab": 1.2,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.35,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.32,
+     "U_slab": 0.32,
+     "U_window": 1.6,
+     "dU_tb": 0.15
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": 0.23,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_A",
+     "tabula": "DE.N.MFH.01.Gen",
+     "A_C_ref": 677.5,
+     "A_living": 615.9,
+     "V_e": 2488.0,
+     "A_N": 796.2,
+     "HT_prime": 2.1
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_B (class B timber-joist top ceiling; no class-A top-ceiling example in IWU 2015) - estimate"
+    }
+   },
+   "B": {
+    "U_wall": 2.2,
+    "U_roof": 1.3,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 1.3,
+    "U_topCeiling": 1.0,
+    "U_floor": 1.2,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.2,
+    "U_slab": 1.2,
+    "U_window": 2.7,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.36,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.32,
+     "U_slab": null,
+     "U_window": 1.6,
+     "dU_tb": 0.15
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_B",
+     "tabula": "DE.N.MFH.02.Gen",
+     "A_C_ref": 312.4,
+     "A_living": 284.0,
+     "V_e": 1360.0,
+     "A_N": 435.2,
+     "HT_prime": 1.7
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_B",
+     "U_slab": "EFH_B"
+    }
+   },
+   "C": {
+    "U_wall": 1.7,
+    "U_roof": 1.302,
+    "roofIs": "pitched roof + top ceiling (area-weighted)",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 0.8,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling + slab on ground (area-weighted)",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.25,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": 0.21,
+     "U_basementCeiling": 0.3,
+     "U_slab": 0.3,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.23,
+     "U_slab": 0.23,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_C",
+     "tabula": "DE.N.MFH.03.Gen",
+     "A_C_ref": 385.0,
+     "A_living": 350.0,
+     "V_e": 1171.0,
+     "A_N": 374.7,
+     "HT_prime": 1.54
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false
+   },
+   "D": {
+    "U_wall": 1.2,
+    "U_roof": 1.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 1.6,
+    "U_floor": 2.2,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 2.2,
+    "U_slab": 1.01,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.23,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.25,
+     "U_basementCeiling": 0.36,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.11,
+     "U_basementCeiling": 0.26,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_D",
+     "tabula": "DE.N.MFH.04.Gen",
+     "A_C_ref": 632.3,
+     "A_living": 574.8,
+     "V_e": 1919.2,
+     "A_N": 614.1,
+     "HT_prime": 1.26
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_D",
+     "U_slab": "EFH_D"
+    }
+   },
+   "E": {
+    "U_wall": 1.2,
+    "U_roof": 0.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.8,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.6,
+    "U_slab": 1.6,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.23,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.2,
+     "U_basementCeiling": 0.34,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_E",
+     "tabula": "DE.N.MFH.05.Gen",
+     "A_C_ref": 3129.1,
+     "A_living": 2844.6,
+     "V_e": 10397.0,
+     "A_N": 3327.0,
+     "HT_prime": 1.21
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_E",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class E)"
+    }
+   },
+   "F": {
+    "U_wall": 1.0,
+    "U_roof": 0.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 4.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.22,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.2,
+     "U_basementCeiling": 0.3,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_F",
+     "tabula": "DE.N.MFH.06.Gen",
+     "A_C_ref": 468.6,
+     "A_living": 426.0,
+     "V_e": 1435.0,
+     "A_N": 459.2,
+     "HT_prime": 1.02
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_F",
+     "U_slab": "EFH_F"
+    }
+   },
+   "G": {
+    "U_wall": 0.8,
+    "U_roof": 0.5,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.5,
+    "U_floor": 0.8,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.8,
+    "U_slab": 0.8,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 4.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.21,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.18,
+     "U_basementCeiling": 0.28,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.09,
+     "U_basementCeiling": 0.21,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_G",
+     "tabula": "DE.N.MFH.07.Gen",
+     "A_C_ref": 654.0,
+     "A_living": 594.5,
+     "V_e": 2040.0,
+     "A_N": 652.8,
+     "HT_prime": 0.92
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_G",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class G)"
+    }
+   },
+   "H": {
+    "U_wall": 0.6,
+    "U_roof": 0.4,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.4,
+    "U_topCeiling": 0.4,
+    "U_floor": 0.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.6,
+    "U_slab": 0.6,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 4.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.2,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.17,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.09,
+     "U_basementCeiling": 0.2,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_H",
+     "tabula": "DE.N.MFH.08.Gen",
+     "A_C_ref": 778.1,
+     "A_living": 707.4,
+     "V_e": 2413.0,
+     "A_N": 772.2,
+     "HT_prime": 0.87
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_H",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class H)"
+    }
+   },
+   "I": {
+    "U_wall": 0.4,
+    "U_roof": 0.35,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.35,
+    "U_topCeiling": 0.35,
+    "U_floor": 0.45,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.45,
+    "U_slab": 0.45,
+    "U_window": 1.9,
+    "g_window": 0.65,
+    "g_estimated": true,
+    "U_door": 2.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.17,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.16,
+     "U_basementCeiling": 0.22,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.12,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_I",
+     "tabula": "DE.N.MFH.09.Gen",
+     "A_C_ref": 834.9,
+     "A_living": 759.0,
+     "V_e": 2971.9,
+     "A_N": 951.0,
+     "HT_prime": 0.62
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_I",
+     "U_slab": "RH_I"
+    }
+   },
+   "J": {
+    "U_wall": 0.25,
+    "U_roof": 0.2,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.2,
+    "U_topCeiling": 0.2,
+    "U_floor": 0.35,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.35,
+    "U_slab": 0.35,
+    "U_window": 1.4,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 3.0,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.19,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_J",
+     "tabula": "DE.N.MFH.10.Gen",
+     "A_C_ref": 2190.1,
+     "A_living": 1991.0,
+     "V_e": 7687.0,
+     "A_N": 2459.8,
+     "HT_prime": 0.39
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class J (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class J)"
+    },
+    "notes": [
+     "IWU Paket 1 lists U=0.41 for pitched roofs even where the original is better; use min(original, package)"
+    ]
+   },
+   "K": {
+    "U_wall": 0.28,
+    "U_roof": 0.2,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.2,
+    "U_topCeiling": 0.2,
+    "U_floor": 0.35,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.35,
+    "U_slab": 0.35,
+    "U_window": 1.3,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 1.8,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.18,
+     "U_window": 0.7,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.08,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.7,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "MFH_K",
+     "tabula": "DE.N.MFH.11.Gen",
+     "A_C_ref": 1287.0,
+     "A_living": 1170.0,
+     "V_e": 5371.0,
+     "A_N": 1458.4,
+     "HT_prime": 0.45
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class K (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class K)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.33,
+      "U_roof": 0.25,
+      "U_floor": 0.5,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.24,
+      "U_roof": 0.2,
+      "U_floor": 0.35,
+      "U_window": 1.3
+     }
+    },
+    "notes": [
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   },
+   "L": {
+    "U_wall": 0.29,
+    "U_roof": 0.25,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.25,
+    "U_topCeiling": 0.25,
+    "U_floor": 0.29,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.29,
+    "U_slab": 0.29,
+    "U_window": 1.1,
+    "g_window": 0.55,
+    "g_estimated": true,
+    "U_door": 1.3,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.11,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.11,
+     "U_window": 1.1,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.08,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.7,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "MFH_L",
+     "tabula": "DE.N.MFH.12.Gen",
+     "A_C_ref": 1287.0,
+     "A_living": 1170.0,
+     "V_e": 5371.0,
+     "A_N": 1458.4,
+     "HT_prime": 0.42
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class L (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class L)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.28,
+      "U_roof": 0.24,
+      "U_floor": 0.28,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.32,
+      "U_roof": 0.28,
+      "U_floor": 0.32,
+      "U_window": 1.1
+     }
+    },
+    "notes": [
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   }
+  },
+  "ab": {
+   "A": {
+    "U_wall": 2.0,
+    "U_roof": 2.6,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 2.6,
+    "U_topCeiling": 1.0,
+    "U_floor": 1.2,
+    "floorIs": "basement ceiling + slab on ground (area-weighted)",
+    "U_basementCeiling": 1.2,
+    "U_slab": 1.2,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.35,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.32,
+     "U_slab": 0.32,
+     "U_window": 1.6,
+     "dU_tb": 0.15
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": 0.23,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_A",
+     "tabula": "DE.N.MFH.01.Gen",
+     "A_C_ref": 677.5,
+     "A_living": 615.9,
+     "V_e": 2488.0,
+     "A_N": 796.2,
+     "HT_prime": 2.1
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "MFH_A",
+    "reuse": {
+     "U_topCeiling": "RH_B (class B timber-joist top ceiling; no class-A top-ceiling example in IWU 2015) - estimate"
+    },
+    "notes": [
+     "no IWU example for GMH_A; all values reused from MFH_A"
+    ]
+   },
+   "B": {
+    "U_wall": 1.7,
+    "U_roof": 1.3,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 1.3,
+    "U_topCeiling": 1.0,
+    "U_floor": 1.2,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.2,
+    "U_slab": 1.2,
+    "U_window": 2.8,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.34,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.32,
+     "U_slab": null,
+     "U_window": 1.6,
+     "dU_tb": 0.15
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "GMH_B",
+     "tabula": "DE.N.AB.02.Gen",
+     "A_C_ref": 829.4,
+     "A_living": 754.0,
+     "V_e": 3375.4,
+     "A_N": 1080.1,
+     "HT_prime": 1.63
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_topCeiling": "RH_B",
+     "U_slab": "EFH_B"
+    }
+   },
+   "C": {
+    "U_wall": 1.4,
+    "U_roof": 0.8,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 0.8,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.24,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.21,
+     "U_basementCeiling": 0.3,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "GMH_C",
+     "tabula": "DE.N.AB.03.Gen",
+     "A_C_ref": 1484.0,
+     "A_living": 1349.1,
+     "V_e": 5942.0,
+     "A_N": 1901.4,
+     "HT_prime": 1.39
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_C",
+     "U_slab": "MFH_C"
+    }
+   },
+   "D": {
+    "U_wall": 1.2,
+    "U_roof": 1.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 1.4,
+    "U_topCeiling": 1.6,
+    "U_floor": 2.1,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 2.1,
+    "U_slab": 1.01,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.23,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.25,
+     "U_basementCeiling": 0.36,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.11,
+     "U_basementCeiling": 0.26,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "GMH_D",
+     "tabula": "DE.N.AB.04.Gen",
+     "A_C_ref": 1602.7,
+     "A_living": 1457.0,
+     "V_e": 4808.0,
+     "A_N": 1538.6,
+     "HT_prime": 1.42
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_D",
+     "U_slab": "EFH_D"
+    }
+   },
+   "E": {
+    "U_wall": 1.2,
+    "U_roof": 0.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.8,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.6,
+    "U_slab": 1.6,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 3.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.23,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.2,
+     "U_basementCeiling": 0.34,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "GMH_E",
+     "tabula": "DE.N.AB.05.Gen",
+     "A_C_ref": 3887.4,
+     "A_living": 3534.0,
+     "V_e": 13165.7,
+     "A_N": 4213.0,
+     "HT_prime": 1.42
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_E",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class E)"
+    }
+   },
+   "F": {
+    "U_wall": 1.1,
+    "U_roof": 0.6,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.6,
+    "U_floor": 1.0,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 1.0,
+    "U_slab": 1.0,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 4.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.23,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.2,
+     "U_basementCeiling": 0.3,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.13,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.1,
+     "U_basementCeiling": 0.23,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "GMH_F",
+     "tabula": "DE.N.AB.06.Gen",
+     "A_C_ref": 3322.0,
+     "A_living": 3020.0,
+     "V_e": 9805.0,
+     "A_N": 3137.6,
+     "HT_prime": 1.29
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": false,
+    "reuse": {
+     "U_roofPitched": "EFH_F",
+     "U_slab": "EFH_F"
+    }
+   },
+   "G": {
+    "U_wall": 0.8,
+    "U_roof": 0.5,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.5,
+    "U_topCeiling": 0.5,
+    "U_floor": 0.8,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.8,
+    "U_slab": 0.8,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 4.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.21,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.18,
+     "U_basementCeiling": 0.28,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.09,
+     "U_basementCeiling": 0.21,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_G",
+     "tabula": "DE.N.MFH.07.Gen",
+     "A_C_ref": 654.0,
+     "A_living": 594.5,
+     "V_e": 2040.0,
+     "A_N": 652.8,
+     "HT_prime": 0.92
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "MFH_G",
+    "reuse": {
+     "U_roofPitched": "EFH_G",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class G)"
+    },
+    "notes": [
+     "no IWU example for GMH_G; all values reused from MFH_G"
+    ]
+   },
+   "H": {
+    "U_wall": 0.6,
+    "U_roof": 0.4,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.4,
+    "U_topCeiling": 0.4,
+    "U_floor": 0.6,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.6,
+    "U_slab": 0.6,
+    "U_window": 3.0,
+    "g_window": 0.75,
+    "g_estimated": false,
+    "U_door": 4.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.2,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.17,
+     "U_basementCeiling": 0.25,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.09,
+     "U_basementCeiling": 0.2,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_H",
+     "tabula": "DE.N.MFH.08.Gen",
+     "A_C_ref": 778.1,
+     "A_living": 707.4,
+     "V_e": 2413.0,
+     "A_N": 772.2,
+     "HT_prime": 0.87
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "MFH_H",
+    "reuse": {
+     "U_roofPitched": "EFH_H",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class H)"
+    },
+    "notes": [
+     "no IWU example for GMH_H; all values reused from MFH_H"
+    ]
+   },
+   "I": {
+    "U_wall": 0.4,
+    "U_roof": 0.35,
+    "roofIs": "top ceiling",
+    "U_roofPitched": 0.35,
+    "U_topCeiling": 0.35,
+    "U_floor": 0.45,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.45,
+    "U_slab": 0.45,
+    "U_window": 1.9,
+    "g_window": 0.65,
+    "g_estimated": true,
+    "U_door": 2.0,
+    "dU_tb": 0.1,
+    "pkgUsual": {
+     "U_wall": 0.17,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.16,
+     "U_basementCeiling": 0.22,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.1
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": null,
+     "U_topCeiling": 0.12,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_I",
+     "tabula": "DE.N.MFH.09.Gen",
+     "A_C_ref": 834.9,
+     "A_living": 759.0,
+     "V_e": 2971.9,
+     "A_N": 951.0,
+     "HT_prime": 0.62
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "MFH_I",
+    "reuse": {
+     "U_roofPitched": "EFH_I",
+     "U_slab": "RH_I"
+    },
+    "notes": [
+     "no IWU example for GMH_I; all values reused from MFH_I"
+    ]
+   },
+   "J": {
+    "U_wall": 0.25,
+    "U_roof": 0.2,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.2,
+    "U_topCeiling": 0.2,
+    "U_floor": 0.35,
+    "floorIs": "basement ceiling",
+    "U_basementCeiling": 0.35,
+    "U_slab": 0.35,
+    "U_window": 1.4,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 3.0,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.13,
+     "U_roofPitched": 0.41,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.19,
+     "U_slab": null,
+     "U_window": 1.3,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.14,
+     "U_topCeiling": null,
+     "U_basementCeiling": 0.18,
+     "U_slab": null,
+     "U_window": 0.8,
+     "dU_tb": 0.05
+    },
+    "exampleBuilding": {
+     "code": "MFH_J",
+     "tabula": "DE.N.MFH.10.Gen",
+     "A_C_ref": 2190.1,
+     "A_living": 1991.0,
+     "V_e": 7687.0,
+     "A_N": 2459.8,
+     "HT_prime": 0.39
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "MFH_J",
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class J (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_slab": "set equal to basement-ceiling value (no slab example in class J)"
+    },
+    "notes": [
+     "no IWU example for GMH_J; all values reused from MFH_J",
+     "IWU Paket 1 lists U=0.41 for pitched roofs even where the original is better; use min(original, package)"
+    ]
+   },
+   "K": {
+    "U_wall": 0.28,
+    "U_roof": 0.2,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.2,
+    "U_topCeiling": 0.2,
+    "U_floor": 0.35,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.35,
+    "U_slab": 0.35,
+    "U_window": 1.3,
+    "g_window": 0.6,
+    "g_estimated": true,
+    "U_door": 1.8,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.14,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.18,
+     "U_window": 0.7,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.08,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.7,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "MFH_K",
+     "tabula": "DE.N.MFH.11.Gen",
+     "A_C_ref": 1287.0,
+     "A_living": 1170.0,
+     "V_e": 5371.0,
+     "A_N": 1458.4,
+     "HT_prime": 0.45
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "MFH_K",
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class K (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class K)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.33,
+      "U_roof": 0.25,
+      "U_floor": 0.5,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.24,
+      "U_roof": 0.2,
+      "U_floor": 0.35,
+      "U_window": 1.3
+     }
+    },
+    "notes": [
+     "no IWU example for GMH_K; all values reused from MFH_K",
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   },
+   "L": {
+    "U_wall": 0.29,
+    "U_roof": 0.25,
+    "roofIs": "pitched roof",
+    "U_roofPitched": 0.25,
+    "U_topCeiling": 0.25,
+    "U_floor": 0.29,
+    "floorIs": "slab on ground",
+    "U_basementCeiling": 0.29,
+    "U_slab": 0.29,
+    "U_window": 1.1,
+    "g_window": 0.55,
+    "g_estimated": true,
+    "U_door": 1.3,
+    "dU_tb": 0.05,
+    "pkgUsual": {
+     "U_wall": 0.11,
+     "U_roofPitched": 0.1,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.11,
+     "U_window": 1.1,
+     "dU_tb": 0.05
+    },
+    "pkgAdvanced": {
+     "U_wall": 0.12,
+     "U_roofPitched": 0.08,
+     "U_topCeiling": null,
+     "U_basementCeiling": null,
+     "U_slab": 0.12,
+     "U_window": 0.7,
+     "dU_tb": 0.02
+    },
+    "exampleBuilding": {
+     "code": "MFH_L",
+     "tabula": "DE.N.MFH.12.Gen",
+     "A_C_ref": 1287.0,
+     "A_living": 1170.0,
+     "V_e": 5371.0,
+     "A_N": 1458.4,
+     "HT_prime": 0.42
+    },
+    "src": "IWU2015",
+    "table": "IWU 2015 Anhang C.1, PDF p.105 (areas, element categories) and p.106 (Wärmeschutz Variante 1 = original state); packages p.107 (Variante 2 = Paket 1 konventionell, Variante 3 = Paket 2 zukunftsweisend)",
+    "estimated": true,
+    "reusedFrom": "MFH_L",
+    "reuse": {
+     "U_topCeiling": "set equal to pitched-roof value of class L (no top-ceiling example in IWU 2015; EnEV requirements are equal for both elements)",
+     "U_basementCeiling": "set equal to slab value (no basement-ceiling example in class L)"
+    },
+    "altDesignVariants": {
+     "biomass": {
+      "U_wall": 0.28,
+      "U_roof": 0.24,
+      "U_floor": 0.28,
+      "U_window": 1.3
+     },
+     "heatPump": {
+      "U_wall": 0.32,
+      "U_roof": 0.28,
+      "U_floor": 0.32,
+      "U_window": 1.1
+     }
+    },
+    "notes": [
+     "no IWU example for GMH_L; all values reused from MFH_L",
+     "K/L examples are designed to just meet EnEV with a given heat supply; the gas-condensing+solar variant is used as default, heat-pump and biomass variants (weaker envelope allowed) are in altDesignVariants. pkgUsual/pkgAdvanced for K/L are IWU new-build efficiency levels (KfW 70 / KfW 40-like), not refurbishment packages"
+    ]
+   }
+  }
+ },
+ "periodDefaults": {
+  "A": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 10,
+   "n50_gsd": 1.6,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 165000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "pre-industrial; timber frame / natural stone / solid brick, timber joist floors"
+  },
+  "B": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 8,
+   "n50_gsd": 1.6,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 165000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "Gründerzeit; solid brick masonry, timber joist floors, vaulted or timber basement ceilings"
+  },
+  "C": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 7,
+   "n50_gsd": 1.6,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 165000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "inter-war; masonry, partly lightweight, timber or massive floors"
+  },
+  "D": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 6,
+   "n50_gsd": 1.6,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 260000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "post-war reconstruction; rubble/hollow block masonry, first concrete slabs, strong thermal bridges"
+  },
+  "E": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 6,
+   "n50_gsd": 1.5,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 260000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "1960s; hollow brick / sand-lime / pumice masonry, concrete slabs, balconies cantilevered"
+  },
+  "F": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 5,
+   "n50_gsd": 1.5,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 260000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "1970s; first thin insulation layers, concrete; WSchV 1977 applies only from 1978"
+  },
+  "G": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 5,
+   "n50_gsd": 1.5,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 260000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "1. WSchV 1977/78"
+  },
+  "H": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 4,
+   "n50_gsd": 1.5,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 260000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "2. WSchV 1984"
+  },
+  "I": {
+   "dU_tb": 0.1,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 3,
+   "n50_gsd": 1.5,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 165000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "3. WSchV 1995 (low-e double glazing becomes standard)"
+  },
+  "J": {
+   "dU_tb": 0.05,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 2.5,
+   "n50_gsd": 1.5,
+   "n50_estimated": true,
+   "n_inf_tabula": 0.2,
+   "Cm": 165000,
+   "Cm_mfh_ab": 165000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "EnEV 2002/2004/2007"
+  },
+  "K": {
+   "dU_tb": 0.05,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 2.0,
+   "n50_gsd": 1.4,
+   "n50_estimated": true,
+   "n_inf_tabula": null,
+   "Cm": 165000,
+   "Cm_mfh_ab": 165000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "EnEV 2009/2014 (IWU example: gas condensing boiler + solar DHW variant)"
+  },
+  "L": {
+   "dU_tb": 0.05,
+   "dU_tb_src": "IWU2015 Annex C.1 p.106 (all types: 0.10 for A–I, 0.05 for J–L)",
+   "dU_tb_estimated": false,
+   "n50": 1.5,
+   "n50_gsd": 1.4,
+   "n50_estimated": true,
+   "n_inf_tabula": null,
+   "Cm": 165000,
+   "Cm_mfh_ab": 165000,
+   "Cm_estimated": true,
+   "frameFrac": 0.3,
+   "frameFrac_src": "TABULA standard frame-area fraction F_F=0.30 (IWU2015 p.87 and p.100)",
+   "src": "IWU2015 (dU_tb, frameFrac, n_inf); n50 and Cm class are estimates (see archetypes_sources.md §A.5)",
+   "estimated": true,
+   "construction": "EnEV 2016 / GEG 2020 (IWU example: gas condensing boiler + solar DHW variant)"
+  }
+ },
+ "refurb": {
+  "usual": {
+   "label": "常规改造（IWU 改造包 1 “konventionell”，约 EnEV 2014/GEG 构件要求水平）",
+   "label_en": "Standard retrofit (IWU package 1 “konventionell”, roughly the EnEV 2014 / GEG element requirements)",
+   "label_de": "Standardsanierung (IWU-Maßnahmenpaket 1 „konventionell“, etwa Bauteilanforderungen nach EnEV 2014 / GEG)",
+   "U_wall": 0.23,
+   "U_wall_range": [
+    0.18,
+    0.4
+   ],
+   "U_roofPitched": 0.41,
+   "U_roofPitched_note": "IWU Paket 1: 12 cm between-rafter insulation (WLS 035); GEG Anlage 7 requires 0.24 when the roof covering is renewed (5b), so 0.24 is the legal value for a full re-roofing",
+   "U_topCeiling": 0.2,
+   "U_topCeiling_range": [
+    0.17,
+    0.25
+   ],
+   "U_roof": 0.24,
+   "U_roof_note": "single value for the tool: GEG Anlage 7 Nr. 5a/5b (0.24); IWU medians: pitched 0.41, top ceiling 0.20",
+   "U_floor": 0.3,
+   "U_floor_range": [
+    0.25,
+    0.36
+   ],
+   "U_floor_note": "basement ceiling insulated from below (8 cm WLS 035); IWU median 0.30",
+   "U_window": 1.3,
+   "U_window_range": [
+    1.3,
+    1.6
+   ],
+   "g_window": 0.6,
+   "dU_tb": 0.1,
+   "hr_eff": 0.0,
+   "src": "IWU2015 Annex C.1 p.107 Wärmeschutz Variante 2 (medians over 28 examples of classes A–H, all types); g from GEG Anlage 1 reference window",
+   "estimated": false
+  },
+  "advanced": {
+   "label": "深度改造（IWU 改造包 2 “zukunftsweisend”，被动房构件水平 + 热回收通风）",
+   "label_en": "Deep retrofit (IWU package 2 “zukunftsweisend”, Passive House element level plus ventilation with heat recovery)",
+   "label_de": "Umfassende Sanierung (IWU-Maßnahmenpaket 2 „zukunftsweisend“, Bauteilniveau Passivhaus plus Lüftung mit Wärmerückgewinnung)",
+   "U_wall": 0.13,
+   "U_wall_range": [
+    0.11,
+    0.14
+   ],
+   "U_roofPitched": 0.14,
+   "U_topCeiling": 0.1,
+   "U_roof": 0.12,
+   "U_floor": 0.23,
+   "U_floor_range": [
+    0.2,
+    0.27
+   ],
+   "U_window": 0.8,
+   "g_window": 0.5,
+   "dU_tb": 0.05,
+   "hr_eff": 0.8,
+   "n_inf": 0.05,
+   "src": "IWU2015 Annex C.1 p.107 Wärmeschutz Variante 3 (medians); hr_eff 0.80 from IWU building sheets ('Lüftungsanlage mit 80% Wärmerückgewinnung'); g 0.50 and n_inf 0.05 from TABULA sheet p.100",
+   "estimated": false
+  },
+  "gegAnlage7": {
+   "label": "GEG 构件更换最低要求（Anlage 7，住宅及 ≥19 °C 区域）",
+   "label_en": "GEG minimum requirements for replaced elements (Anlage 7, residential and zones ≥19 °C)",
+   "label_de": "GEG-Mindestanforderungen für ersetzte Bauteile (Anlage 7, Wohngebäude und Zonen ≥19 °C)",
+   "U_wall": 0.24,
+   "U_wall_note": "1a/1b: replacement, or external cladding/insulation/new render; if insulation thickness is technically limited, max. possible thickness with λ≤0.035 (0.045 blown-in/renewable)",
+   "U_window": 1.3,
+   "U_roofWindow": 1.4,
+   "Ug_glazingOnly": 1.1,
+   "U_curtainWall": 1.5,
+   "U_door": 1.8,
+   "U_roof": 0.24,
+   "U_roof_flatWithSealing": 0.2,
+   "U_topCeiling": 0.24,
+   "U_floor_basementOrGround": 0.3,
+   "U_floor_fromHeatedSide": 0.5,
+   "U_floor_toOutsideAir": 0.24,
+   "nonResidential_12to19C": {
+    "U_wall": 0.35,
+    "U_window": 1.9,
+    "U_roof": 0.35,
+    "U_floor_toOutsideAir": 0.35
+   },
+   "footnote5": "requirements 5b, 5c, 6b, 6c, 6e do not apply if the element was built/renewed after 31.12.1983 in compliance with energy-saving rules",
+   "src": "GModG/GEG Anlage 7 (zu § 36), gesetze-im-internet.de, Stand 23.07.2026",
+   "estimated": false
+  },
+  "gegReferenceBuilding": {
+   "label": "GEG 参考建筑（Anlage 1，新建住宅）",
+   "label_en": "GEG reference building (Anlage 1, new residential)",
+   "label_de": "GEG-Referenzgebäude (Anlage 1, Wohnungsneubau)",
+   "U_wall": 0.28,
+   "U_floor": 0.35,
+   "U_roof": 0.2,
+   "U_window": 1.3,
+   "g_window": 0.6,
+   "U_door": 1.8,
+   "dU_tb": 0.05,
+   "src": "GModG/GEG Anlage 1 (zu § 15 Absatz 1)",
+   "estimated": false
+  }
+ },
+ "profiles": {
+  "residential": {
+   "label": "住宅",
+   "label_en": "Residential",
+   "label_de": "Wohnen",
+   "T_heat": 20,
+   "setback": 4,
+   "setbackHours": 7,
+   "setbackWindow": "23:00-06:00",
+   "setbackMode": {
+    "sfh": "switch-off (Abschaltbetrieb)",
+    "th": "switch-off (Abschaltbetrieb)",
+    "mfh": "set-back (Absenkbetrieb)",
+    "ab": "set-back (Absenkbetrieb)"
+   },
+   "T_cool": null,
+   "T_cool_ifCooled": 25,
+   "hoursPerDay": 24,
+   "daysPerWeek": 7,
+   "daysPerYear": 365,
+   "heatingWindow": "06:00-23:00 (17 h)",
+   "Q_int": 3.0,
+   "Q_int_basis": "24-h mean, W per m² net floor area, all internal sources (persons, appliances, lighting)",
+   "Q_intByType": {
+    "sfh": 1.875,
+    "th": 1.875,
+    "mfh": 3.75,
+    "ab": 3.75
+   },
+   "Q_int_note": "Q_int default 3.0 = TABULA standard (IWU2015 p.75, p.87). Q_intByType = DIN V 18599-10:2018 Tab. 4: 45 Wh/(m²·d) EFH (≤2 dwellings), 90 Wh/(m²·d) MFH, NGF basis. DIN V 4108-6 (EnEV monthly method): 5 W/m² per A_N (≈6.5 W/m² per NGF) — high, not used.",
+   "n_vent": 0.5,
+   "n_vent_note": "DIN V 18599-10:2018 Tab. 4 n_nutz = 0.5 1/h (not demand-controlled), 0.45 1/h demand-controlled with fan-assisted ventilation; infiltration is added separately from n50. TABULA: 0.4 use + 0.2 infiltration. DIN V 4108-6/EnEV: 0.7 (0.6 with tightness test) incl. infiltration.",
+   "dhw": 13.0,
+   "dhwFormula": "Q_w,b = max(16.5 - 0.05 * A_NGF_per_dwelling, 8.5) kWh/(m²a), A_NGF_per_dwelling = NGF / number of dwellings (DIN V 18599-10:2018 Tab. 4)",
+   "dhwByType": {
+    "sfh": 9.5,
+    "th": 10.5,
+    "mfh": 13.0,
+    "ab": 13.5
+   },
+   "dhwByType_assumedNGFperDwelling": {
+    "sfh": 140,
+    "th": 120,
+    "mfh": 70,
+    "ab": 60
+   },
+   "dhw_estimated": true,
+   "dhw_note": "formula verified; default dwelling sizes are estimates. Other conventions: TABULA 10 (EFH) / 15 (MFH) kWh/(m²a) per A_C,ref (IWU2015 p.75); DIN V 4701-10 / EnEV 12.5 kWh/(m²a) per A_N; DIN V 18599-10:2011 12 / 16.",
+   "a_tb": {
+    "sfh": 0.25,
+    "mfh": 0.15,
+    "note": "DIN V 18599-10 share of co-heated area (partial heating, used in DIN V 18599-2)"
+   },
+   "src": "DIN V 18599-10:2018-09 Tab. 4 as reproduced in dena 2023 Leitfaden Tab. 6 (printed p.34-35); TABULA (IWU2015)",
+   "estimated": false
+  },
+  "office": {
+   "label": "办公",
+   "label_en": "Office",
+   "label_de": "Büro",
+   "dinProfile": "1 Einzelbüro (2 Gruppenbüro identical except lighting room factors)",
+   "T_heat": 21,
+   "setback": 4,
+   "T_cool": 24,
+   "hoursPerDay": 11,
+   "usageWindow": "07:00-18:00",
+   "daysPerWeek": 5,
+   "daysPerYear": 250,
+   "heatingHours": 13,
+   "heatingWindow": "05:00-18:00 (usage + 2 h pre-heating)",
+   "Q_int": 9.1,
+   "Q_int_persons": 2.73,
+   "Q_int_equipment": 3.91,
+   "Q_int_lighting": 2.5,
+   "Q_int_lighting_estimated": true,
+   "Q_int_basis": "mean over the 11 usage hours of a usage day; persons 30 + equipment 43 Wh/(m²·d) (DIN 'mittel' values); lighting = estimated LPD 8 W/m² x (1-C_A 0.3) x F_t 0.7 x ~0.6 daylight-dependent use",
+   "V_min": 4.0,
+   "V_min_building": 2.5,
+   "C_RLT": 0.3,
+   "F_RLT": 0.7,
+   "n_vent": 0.93,
+   "n_vent_estimated": true,
+   "n_vent_note": "n_vent = V_min*(1-C_RLT)/h_clear with h_clear = 3.0 m (estimate of the occupancy-averaged rate); full-occupancy rate = V_min/h_clear",
+   "lighting_lx": 500,
+   "lightingPowerDensity": 8.0,
+   "lpdRange": [
+    5,
+    12
+   ],
+   "lpd_estimated": true,
+   "dhw": 0.0,
+   "dhwAlt": 7.5,
+   "dhw_note": "GEG Anlage 6 Nr. 1 (simplified method, office buildings): 0. DIN V 18599-10 Tab. 7: 0.4 kWh/(person·d) or 30 Wh/(m²·d) office area -> 7.5 kWh/(m²a) at 250 d; DIN allows neglecting DHW below 0.2 kWh/(person·d) (hand-wash taps, tea kitchen).",
+   "variants": {
+    "openPlan": {
+     "dinProfile": "3 Großraumbüro",
+     "Q_int_personsEquipment": 9.27,
+     "V_min": 6.0,
+     "C_RLT": 0.2,
+     "F_RLT": 1.0,
+     "lighting_lx": 500
+    }
+   },
+   "src": "DIN V 18599-10:2018-09 Tab. 5 / A.1 via dena 2023 Leitfaden Tab. 1-4 and BBSR Leitfaden Energiebedarfsausweise NWG 2023; GEG Anlage 6",
+   "estimated": false
+  },
+  "education": {
+   "label": "教育（大学研讨室/教室）",
+   "label_en": "Education (university seminar rooms and classrooms)",
+   "label_de": "Bildung (Seminarräume an Hochschulen und Klassenzimmer)",
+   "dinProfile": "4 Besprechung/Sitzungszimmer/Seminar (DIN assigns seminar rooms to profile 4, not 8 or 9)",
+   "T_heat": 21,
+   "setback": 4,
+   "T_cool": 24,
+   "hoursPerDay": 11,
+   "usageWindow": "07:00-18:00",
+   "daysPerWeek": 5,
+   "daysPerYear": 250,
+   "heatingHours": 13,
+   "heatingWindow": "05:00-18:00",
+   "Q_int": 11.7,
+   "Q_int_persons": 8.45,
+   "Q_int_equipment": 0.73,
+   "Q_int_lighting": 2.5,
+   "Q_int_lighting_estimated": true,
+   "Q_int_basis": "mean over 11 usage hours; persons 23.3 W/m² x 4 full-load h = 93, equipment 2 W/m² x 4 h = 8 Wh/(m²·d) (medium occupancy 3 m²/person); lighting estimated as for office with C_A 0.5",
+   "V_min": 15.0,
+   "V_min_building": 2.5,
+   "C_RLT": 0.5,
+   "F_RLT": 0.5,
+   "n_vent": 2.5,
+   "n_vent_estimated": true,
+   "n_vent_note": "n_vent = V_min*(1-C_RLT)/h_clear (h_clear 3.0 m, estimate)",
+   "lighting_lx": 500,
+   "lightingPowerDensity": 8.0,
+   "lpd_estimated": true,
+   "dhw": 0.0,
+   "dhw_note": "negligible (hand-wash taps) per DIN V 18599-10 rule; schools: see variants.classroom",
+   "variants": {
+    "lectureHall": {
+     "dinProfile": "9 Hörsaal, Auditorium",
+     "hoursPerDay": 10,
+     "usageWindow": "08:00-18:00",
+     "daysPerYear": 150,
+     "daysPerWeek": 5,
+     "V_min": 30.0,
+     "lighting_lx": 500,
+     "T_heat": 21,
+     "T_cool": 24,
+     "setback": 4,
+     "heatingHours": 12,
+     "Q_int": 18.4,
+     "Q_int_basis": "estimate: persons ~160 Wh/(m²·d) (2 m²/person, 70 W, 4-5 full-load h) + equipment ~24 Wh/(m²·d), over 10 h",
+     "verified": [
+      "hoursPerDay",
+      "usageWindow",
+      "daysPerYear",
+      "V_min",
+      "lighting_lx"
+     ],
+     "estimated": true
+    },
+    "classroom": {
+     "dinProfile": "8 Klassenzimmer (Schule)",
+     "T_heat": 21,
+     "setback": 4,
+     "T_cool": 24,
+     "hoursPerDay": 7,
+     "usageWindow": "08:00-15:00",
+     "daysPerYear": 200,
+     "daysPerWeek": 5,
+     "heatingHours": 9,
+     "heatingWindow": "06:00-15:00",
+     "Q_int_persons": 14.29,
+     "Q_int_equipment": 2.86,
+     "Q_int_personsEquipment": 17.14,
+     "V_min": 10.0,
+     "C_RLT": 0.25,
+     "F_RLT": 0.9,
+     "lighting_lx": 300,
+     "dhw": 13.0,
+     "dhw_note": "GEG Anlage 6 Nr. 6: 65 Wh per m² NGF and day (no showers), 200 usage days",
+     "estimated": false
+    }
+   },
+   "buildingMixNote": "A university building is a mix of profiles (offices, seminar rooms, lecture halls, labs, circulation); a whole-building blend is the consumer's choice and is not provided by DIN.",
+   "src": "DIN V 18599-10:2018-09 A.4 via BBSR Leitfaden NWG 2023 Tab. 5-22 (p.118, read); A.8 via BBSR Tab. 5-5; A.9 partial (baunormenlexikon excerpt, energie-m); GEG Anlage 6",
+   "estimated": false
+  },
+  "classroom": {
+   "label": "教育（中小学教室、幼儿园活动室）",
+   "label_en": "Education (school classrooms, nursery group rooms)",
+   "label_de": "Bildung (Klassenzimmer, Gruppenräume im Kindergarten)",
+   "dinProfile": "8 Klassenzimmer (Schule), Gruppenraum (Kindergarten)",
+   "T_heat": 21,
+   "setback": 4,
+   "T_cool": 24,
+   "start": 8,
+   "hoursPerDay": 7,
+   "usageWindow": "08:00-15:00",
+   "daysPerWeek": 5,
+   "daysPerYear": 200,
+   "holidays": "school",
+   "heatingHours": 9,
+   "heatingWindow": "06:00-15:00",
+   "Q_int": 17.14,
+   "Q_int_persons": 14.29,
+   "Q_int_equipment": 2.86,
+   "Q_int_basis": "persons 100 + equipment 20 Wh/(m²·d) over 7 h of use",
+   "V_min": 10,
+   "V_min_building": 2.5,
+   "C_RLT": 0.25,
+   "F_RLT": 0.9,
+   "n_vent": 2.5,
+   "n_vent_note": "V_min·(1 − C_RLT)/3 m = 10 × 0.75 / 3: the usage air flow per m² (rc5.js applies it as n_vent × 3 m × A_N), DIN V 18599-10 Tab. 5",
+   "lighting_lx": 300,
+   "dhw": 13,
+   "dhw_note": "GEG Anlage 6 Nr. 6: 65 Wh per m² NGF and day (no showers), 200 usage days",
+   "src": "DIN V 18599-10:2018-09 Tab. 5 profile 8, as reproduced in dena (2023) Leitfaden Energetische Gebäudebilanzierung nach DIN V 18599, Tab. 2–4, pp. 30–32 (times, days, set points, V_A 10 / V_A,Geb 2.5, C_RLT 0.25, F_RLT 0.9, gains 100 + 20 Wh/(m²·d))",
+   "estimated": false
+  },
+  "retail": {
+   "label": "零售",
+   "label_en": "Retail",
+   "label_de": "Einzelhandel",
+   "dinProfile": "6 Einzelhandel/Kaufhaus",
+   "T_heat": 21,
+   "setback": 4,
+   "T_cool": 24,
+   "hoursPerDay": 12,
+   "usageWindow": "08:00-20:00",
+   "daysPerWeek": 6,
+   "daysPerYear": 300,
+   "heatingHours": 14,
+   "heatingWindow": "06:00-20:00",
+   "Q_int": 17.0,
+   "Q_int_persons": 7.0,
+   "Q_int_equipment": 2.0,
+   "Q_int_lighting": 8.0,
+   "Q_int_lighting_estimated": true,
+   "Q_int_basis": "mean over 12 opening hours; persons 14 W/m² x 6 h = 84, equipment 2 W/m² x 12 h = 24 Wh/(m²·d); lighting: estimated LPD 8 W/m² on during all opening hours (C_A 0, F_t 1)",
+   "V_min": 4.0,
+   "V_min_building": 2.5,
+   "C_RLT": 0.5,
+   "F_RLT": 1.0,
+   "n_vent": 0.67,
+   "n_vent_estimated": true,
+   "lighting_lx": 300,
+   "kVB": 1.5,
+   "lightingPowerDensity": 8.0,
+   "lpdRange": [
+    5,
+    15
+   ],
+   "lpd_estimated": true,
+   "dhw": 0.0,
+   "dhwAlt": 3.0,
+   "dhw_note": "GEG Anlage 6 Nr. 4 (retail up to 1000 m²): 0. DIN V 18599-10 Tab. 7: 1 kWh/(employee·d) or 10 Wh/(m²·d) sales area -> 3.0 kWh/(m²a) at 300 d",
+   "variants": {
+    "foodWithRefrigeration": {
+     "dinProfile": "7",
+     "Q_int_equipment_Whd": {
+      "condensersOutside": -170,
+      "condensersInside": 85
+     },
+     "note": "otherwise as profile 6"
+    }
+   },
+   "src": "DIN V 18599-10:2018-09 A.6 via BBSR Leitfaden NWG 2023 Tab. 5-13 and dena 2023 Tab. 4; GEG Anlage 6",
+   "estimated": false
+  }
+ },
+ "systems": {
+  "gas_cond": {
+   "label": "燃气冷凝锅炉",
+   "label_en": "Gas condensing boiler",
+   "label_de": "Gas-Brennwertkessel",
+   "eta": 0.92,
+   "etaRange": [
+    0.85,
+    0.98
+   ],
+   "carrier": "gas",
+   "src": "IWU2015 Annex D sheets: condensing boiler + minimised distribution losses 1.10–1.13 kWh_Hs per kWh heat (= 0.99–1.02 kWh_Hi → eta≈0.98–1.0); default lowered to 0.92 for existing distribution systems",
+   "estimated": true
+  },
+  "gas_old": {
+   "label": "老式燃气锅炉（非冷凝/低温，约 1995 年前）",
+   "label_en": "Old gas boiler (non-condensing or low-temperature, before about 1995)",
+   "label_de": "Alter Gaskessel (Standard- oder Niedertemperaturkessel, vor etwa 1995)",
+   "eta": 0.8,
+   "etaRange": [
+    0.7,
+    0.9
+   ],
+   "carrier": "gas",
+   "src": "IWU2015 Annex D sheets (Ist-Zustand): low-temperature boiler, high distribution losses 1.21–1.54 kWh_Hs per kWh heat (median 1.38 → 1.24 kWh_Hi → eta≈0.80); MFH_E e_g=1.23 (p.88)",
+   "estimated": true
+  },
+  "oil": {
+   "label": "燃油锅炉",
+   "label_en": "Oil boiler",
+   "label_de": "Ölkessel",
+   "eta": 0.8,
+   "etaRange": [
+    0.7,
+    0.92
+   ],
+   "carrier": "oil",
+   "src": "IWU2015 Annex D (EFH_E/MFH_E variant 2): old LT oil boiler 1.35–1.40 kWh_Hs (→ eta 0.76–0.79); oil condensing 1.17–1.18 kWh_Hs (→ eta≈0.90)",
+   "estimated": true
+  },
+  "district": {
+   "label": "区域供热",
+   "label_en": "District heating",
+   "label_de": "Fernwärme",
+   "eta": 0.95,
+   "etaRange": [
+    0.9,
+    0.99
+   ],
+   "carrier": "district",
+   "src": "estimate: substation + in-building distribution losses only (network losses are inside the supplier's f_p / CO2 factor)",
+   "estimated": true
+  },
+  "hp_air": {
+   "label": "空气源热泵",
+   "label_en": "Air-source heat pump",
+   "label_de": "Luft-Wasser-Wärmepumpe",
+   "eta": 0.95,
+   "etaRange": [
+    0.9,
+    0.98
+   ],
+   "carrier": "electricity",
+   "spf": 3.4,
+   "spfRange": [
+    2.6,
+    4.9
+   ],
+   "src": "eta = distribution/emission multiplier only (COP from hpModel). SPF: Fraunhofer ISE field test in existing 1–3-family houses (press release 2025): air/water mean 3.4 (2.6–4.9); predecessor WPsmart im Bestand 3.1",
+   "estimated": true
+  },
+  "hp_ground": {
+   "label": "地源热泵",
+   "label_en": "Ground-source heat pump",
+   "label_de": "Sole-Wasser-Wärmepumpe",
+   "eta": 0.95,
+   "etaRange": [
+    0.9,
+    0.98
+   ],
+   "carrier": "electricity",
+   "spf": 4.3,
+   "spfRange": [
+    3.6,
+    5.4
+   ],
+   "src": "as hp_air; Fraunhofer ISE field test: ground-source mean 4.3 (3.6–5.4); WPsmart im Bestand 4.1",
+   "estimated": true
+  },
+  "pellet": {
+   "label": "木屑颗粒锅炉",
+   "label_en": "Wood pellet boiler",
+   "label_de": "Holzpelletkessel",
+   "eta": 0.8,
+   "etaRange": [
+    0.7,
+    0.88
+   ],
+   "carrier": "wood",
+   "src": "IWU2015 Annex D (MFH variant 3 MP2): pellet boiler, good pipe insulation 1.33 kWh_Hs per kWh heat (→ 1.23 kWh_Hi → eta≈0.81)",
+   "estimated": true
+  },
+  "electric": {
+   "label": "直接电热（含蓄热式电暖器）",
+   "label_en": "Direct electric heating (incl. storage heaters)",
+   "label_de": "Stromdirektheizung (inkl. Nachtspeicherheizung)",
+   "eta": 1.0,
+   "etaRange": [
+    0.95,
+    1.0
+   ],
+   "carrier": "electricity",
+   "src": "IWU2015 Annex D (EFH_E/MFH_E variant 3): Elektro-Nachtspeicherheizung 0.99–1.00 kWh electricity per kWh heat",
+   "estimated": false
+  }
+ },
+ "carriers": {
+  "gas": {
+   "label": "天然气",
+   "label_en": "Natural gas",
+   "label_de": "Erdgas",
+   "fp": 1.1,
+   "co2": 240,
+   "src": "GEG Anlage 4 Nr. 2 / Anlage 9 Nr. 3.2",
+   "estimated": false
+  },
+  "oil": {
+   "label": "燃油",
+   "label_en": "Heating oil",
+   "label_de": "Heizöl",
+   "fp": 1.1,
+   "co2": 310,
+   "src": "GEG Anlage 4 Nr. 1 / Anlage 9 Nr. 3.1",
+   "estimated": false
+  },
+  "electricity": {
+   "label": "电网电力",
+   "label_en": "Grid electricity",
+   "label_de": "Netzstrom",
+   "fp": 1.8,
+   "co2": 560,
+   "src": "GEG Anlage 4 Nr. 9 (netzbezogen) / Anlage 9 Nr. 3.12",
+   "estimated": false
+  },
+  "wood": {
+   "label": "木材/生物质",
+   "label_en": "Wood / biomass",
+   "label_de": "Holz / Biomasse",
+   "fp": 0.2,
+   "co2": 20,
+   "src": "GEG Anlage 4 Nr. 8 (Holz) / Anlage 9 Nr. 3.11",
+   "estimated": false
+  },
+  "district": {
+   "label": "区域供热（通用默认）",
+   "label_en": "District heating (generic default)",
+   "label_de": "Fernwärme (allgemeiner Standardwert)",
+   "fp": 0.7,
+   "co2": 180,
+   "fp_note": "GEG Anlage 4 has NO generic district-heating factor; the supplier's certified value applies (§22(2)–(4)), floor 0.3 (§22(3)). 0.7 = DIN V 18599-1 tabulated value for fossil CHP district heat (not verified here)",
+   "co2_note": "GEG Anlage 9 Nr. 3.21: district heat from CHP (≥70 % CHP) with gaseous/liquid fuel = 180 g/kWh; heating plant gas/liquid = 300 (Nr. 3.24); renewable CHP = 40 (Nr. 3.22)",
+   "co2_options": {
+    "chp_gas_liquid": 180,
+    "chp_coal": 300,
+    "chp_renewable": 40,
+    "heatingPlant_gas_liquid": 300,
+    "heatingPlant_coal": 400,
+    "heatingPlant_renewable": 60,
+    "wasteIncineration": 20
+   },
+   "src": "GEG Anlage 9 Nr. 3.20–3.25 (co2); fp estimated",
+   "estimated": true
+  },
+  "lpg": {
+   "label": "液化石油气",
+   "label_en": "LPG",
+   "label_de": "Flüssiggas",
+   "fp": 1.1,
+   "co2": 270,
+   "src": "GEG Anlage 4 Nr. 3 / Anlage 9 Nr. 3.3",
+   "estimated": false
+  },
+  "pv_onsite": {
+   "label": "建筑自产光伏电力",
+   "label_en": "On-site PV electricity",
+   "label_de": "PV-Strom vor Ort",
+   "fp": 0.0,
+   "co2": 0,
+   "src": "GEG Anlage 4 Nr. 10 / Anlage 9 Nr. 3.13",
+   "estimated": false
+  }
+ },
+ "hpModel": {
+  "formula": "COP = carnotEta * T_sink[K] / (T_sink - T_source); T_sink = supply temperature (plus ~3 K condenser approach optional)",
+  "carnotEta": {
+   "hp_air": 0.4,
+   "hp_ground": 0.55,
+   "hp_groundwater": 0.5
+  },
+  "supplyT": {
+   "floor": 35,
+   "radiator_new": 55,
+   "radiator_old": 70
+  },
+  "supplyT_note": "design supply temperature at design outdoor temperature; floor 35 °C and radiator 55 °C are the maximum distribution temperatures of the IWU K/L new-build heat-pump variants (IWU2015 Tab. 23, p.126); 70 °C for unrefurbished old radiator systems is an estimate",
+  "heatingCurve": "linear between (T_out_design, supplyT) and (T_heat, T_heat) — estimate; Munich design outdoor temperature ≈ −16 °C (estimate, DIN/TS 12831-1 table not verified)",
+  "sourceT": {
+   "hp_air": "outdoor air temperature (hourly)",
+   "hp_ground": "≈ 0–10 °C brine, use 5 °C constant or seasonal sine (estimate)"
+  },
+  "backupHeater": "electric heating rod below balance point (IWU K variant 21 includes 'Elektro-Heizstab für Last-Spitzen')",
+  "calibrationCheck": "with these factors a Munich SFH gives SPF ≈ 3 (air, radiators) to ≈ 4+ (ground, floor heating), consistent with Fraunhofer ISE field means 3.4 / 4.3",
+  "src": "oemof-thermal documentation (Carnot quality grades from VDE ETG 'Potenziale für Strom im Wärmemarkt bis 2050', 2015); Fraunhofer ISE 2025 field test; IWU2015 Tab. 23",
+  "estimated": true
+ },
+ "classes": [
+  {
+   "label": "A+",
+   "max": 30
+  },
+  {
+   "label": "A",
+   "max": 50
+  },
+  {
+   "label": "B",
+   "max": 75
+  },
+  {
+   "label": "C",
+   "max": 100
+  },
+  {
+   "label": "D",
+   "max": 130
+  },
+  {
+   "label": "E",
+   "max": 160
+  },
+  {
+   "label": "F",
+   "max": 200
+  },
+  {
+   "label": "G",
+   "max": 250
+  },
+  {
+   "label": "H",
+   "max": null
+  }
+ ],
+ "referenceArea": {
+  "AN_factor": 0.32,
+  "rule": "A_N = 0.32 m^-1 * V_e (DIN V 18599-1:2018-09 Gl. 30). If the mean storey height h_G (floor surface to floor surface of the storey above) is > 3 m or < 2.5 m: A_N = (1/h_G - 0.04 m^-1) * V_e (Gl. 31). Top (attic) storeys are excluded when averaging h_G (DIBt Auslegung XIX-4). V_e = gross heated volume enclosed by the thermal envelope (external dimensions).",
+  "fromLivingArea": {
+   "factor": 1.2,
+   "factor_sfh_heatedBasement": 1.35,
+   "note": "consumption certificates only, if A_N unknown: A_N = 1.2 × Wohnfläche (1.35 for buildings with ≤2 dwellings and heated basement), GEG §82(2)"
+  },
+  "classesBasis": "final energy (Endenergie) per m² A_N per year; class follows directly from final energy demand or consumption (GEG §86(2), Anlage 10)",
+  "src": "GEG §25(10), §82(2), §86, Anlage 10; EnEV 2013 Anlage 1 Nr. 1.3.3 as quoted in DIBt Auslegung XIX-4 (2014)",
+  "estimated": false
+ },
+ "munich": {
+  "districtHeating": {
+   "network": "Wärmeverbundnetz München Stadt, Martinsried, Unterföhring und Region Süd (SWM Versorgungs GmbH)",
+   "fp_GEG": 0.29,
+   "co2_GEG": 0.0,
+   "fp_carnot": 0.56,
+   "co2_carnot": 119.1,
+   "co2_recommended": 119.1,
+   "co2_note": "GEG-method value (FW 309-1, Anlage 9 Nr. 1c) is 0 g/kWh because CHP fuel is allocated to electricity; the Carnot-method value including upstream chains (119.1 g CO2-eq/kWh) is the more physical figure for a CO2 estimate",
+   "mix2025": {
+    "naturalGas": 0.667,
+    "wasteIncineration": 0.199,
+    "geothermal": 0.111,
+    "biomass": 0.021,
+    "other": 0.002,
+    "chpShare": 0.784,
+    "renewableOrWasteHeat": 0.332
+   },
+   "heatDelivered2025_MWh": 4872504,
+   "validity": "operating data 2025, certificates issued 22.06.2026, valid until 21.06.2029",
+   "src": "SWM certificates (TU Dresden, FW 309-1/-5/-6/-7), see archetypes_sources.md §F",
+   "estimated": false,
+   "otherNetworks": {
+    "Riem": {
+     "fp_GEG": 0.4,
+     "co2_GEG": 87.2,
+     "verified": false
+    },
+    "RegionSuedost": {
+     "fp_GEG": 0.23,
+     "fp_carnot": 0.47,
+     "verified": false
+    }
+   }
+  },
+  "districtHeatingShare": {
+   "heatDemand": 0.3,
+   "src": "secondary (press summary of the Munich municipal heat plan 2024); not verified against an official document",
+   "estimated": true
+  },
+  "heatPlanTarget2045": {
+   "districtHeatHouseholds": 0.62,
+   "heatPumpHouseholds": 0.33,
+   "estimated": true,
+   "src": "secondary, unverified"
+  },
+  "designOutdoorTemp": -16,
+  "designOutdoorTemp_estimated": true
+ },
+ "modernisation": {
+  "byPeriod": [
+   {
+    "from": null,
+    "to": 1948,
+    "tabula": [
+     "A",
+     "B",
+     "C"
+    ],
+    "asOf": 2026,
+    "wall": 0.491,
+    "wallRange": [
+     0.407,
+     0.558
+    ],
+    "roof": 0.752,
+    "roofRange": [
+     0.68,
+     0.932
+    ],
+    "floor": 0.269,
+    "floorRange": [
+     0.218,
+     0.285
+    ],
+    "windows": 0.727,
+    "windowsRange": [
+     0.572,
+     0.95
+    ],
+    "heating": 0.98,
+    "measured2016": {
+     "wall": 0.407,
+     "wall_se": 0.023,
+     "roof": 0.68,
+     "roof_se": 0.021,
+     "floor": 0.218,
+     "floor_se": 0.017,
+     "windows": 0.572,
+     "windows_estimated": false,
+     "areaShare": {
+      "wall": 0.296,
+      "roof": 0.612,
+      "floor": 0.175
+     },
+     "src": "IWU2018 Tab. 18 (wall/roof/floor: share of all residential buildings with post-construction insulation of the element, ± standard error; areaShare = insulated element area); windows: IWU2018 Tab. 39 (share with window installation year ≥1995 = low-e glazing, only available for buildings up to 1978)"
+    },
+    "src": "IWU2018 (Cischinsky & Diefenbach, Datenerhebung Wohngebäudebestand 2016) Tab. 18, 39, 43, 54; projection to 2026 and heating values are estimates",
+    "estimated": true
+   },
+   {
+    "from": 1949,
+    "to": 1957,
+    "tabula": [
+     "D"
+    ],
+    "asOf": 2026,
+    "wall": 0.503,
+    "wallRange": [
+     0.421,
+     0.572
+    ],
+    "roof": 0.749,
+    "roofRange": [
+     0.676,
+     0.928
+    ],
+    "floor": 0.239,
+    "floorRange": [
+     0.186,
+     0.253
+    ],
+    "windows": 0.727,
+    "windowsRange": [
+     0.572,
+     0.95
+    ],
+    "heating": 0.98,
+    "measured2016": {
+     "wall": 0.421,
+     "wall_se": 0.034,
+     "roof": 0.676,
+     "roof_se": 0.038,
+     "floor": 0.186,
+     "floor_se": 0.025,
+     "windows": 0.572,
+     "windows_estimated": false,
+     "areaShare": {
+      "wall": 0.329,
+      "roof": 0.609,
+      "floor": 0.149
+     },
+     "src": "IWU2018 Tab. 18 (wall/roof/floor: share of all residential buildings with post-construction insulation of the element, ± standard error; areaShare = insulated element area); windows: IWU2018 Tab. 39 (share with window installation year ≥1995 = low-e glazing, only available for buildings up to 1978)"
+    },
+    "src": "IWU2018 (Cischinsky & Diefenbach, Datenerhebung Wohngebäudebestand 2016) Tab. 18, 39, 43, 54; projection to 2026 and heating values are estimates",
+    "estimated": true
+   },
+   {
+    "from": 1958,
+    "to": 1968,
+    "tabula": [
+     "E"
+    ],
+    "asOf": 2026,
+    "wall": 0.494,
+    "wallRange": [
+     0.411,
+     0.562
+    ],
+    "roof": 0.707,
+    "roofRange": [
+     0.622,
+     0.874
+    ],
+    "floor": 0.216,
+    "floorRange": [
+     0.162,
+     0.229
+    ],
+    "windows": 0.727,
+    "windowsRange": [
+     0.572,
+     0.95
+    ],
+    "heating": 0.98,
+    "measured2016": {
+     "wall": 0.411,
+     "wall_se": 0.026,
+     "roof": 0.622,
+     "roof_se": 0.023,
+     "floor": 0.162,
+     "floor_se": 0.016,
+     "windows": 0.572,
+     "windows_estimated": false,
+     "areaShare": {
+      "wall": 0.296,
+      "roof": 0.561,
+      "floor": 0.13
+     },
+     "src": "IWU2018 Tab. 18 (wall/roof/floor: share of all residential buildings with post-construction insulation of the element, ± standard error; areaShare = insulated element area); windows: IWU2018 Tab. 39 (share with window installation year ≥1995 = low-e glazing, only available for buildings up to 1978)"
+    },
+    "src": "IWU2018 (Cischinsky & Diefenbach, Datenerhebung Wohngebäudebestand 2016) Tab. 18, 39, 43, 54; projection to 2026 and heating values are estimates",
+    "estimated": true
+   },
+   {
+    "from": 1969,
+    "to": 1978,
+    "tabula": [
+     "F"
+    ],
+    "asOf": 2026,
+    "wall": 0.37,
+    "wallRange": [
+     0.267,
+     0.418
+    ],
+    "roof": 0.565,
+    "roofRange": [
+     0.439,
+     0.691
+    ],
+    "floor": 0.173,
+    "floorRange": [
+     0.115,
+     0.182
+    ],
+    "windows": 0.727,
+    "windowsRange": [
+     0.572,
+     0.95
+    ],
+    "heating": 0.97,
+    "measured2016": {
+     "wall": 0.267,
+     "wall_se": 0.022,
+     "roof": 0.439,
+     "roof_se": 0.027,
+     "floor": 0.115,
+     "floor_se": 0.017,
+     "windows": 0.572,
+     "windows_estimated": false,
+     "areaShare": {
+      "wall": 0.202,
+      "roof": 0.395,
+      "floor": 0.092
+     },
+     "src": "IWU2018 Tab. 18 (wall/roof/floor: share of all residential buildings with post-construction insulation of the element, ± standard error; areaShare = insulated element area); windows: IWU2018 Tab. 39 (share with window installation year ≥1995 = low-e glazing, only available for buildings up to 1978)"
+    },
+    "src": "IWU2018 (Cischinsky & Diefenbach, Datenerhebung Wohngebäudebestand 2016) Tab. 18, 39, 43, 54; projection to 2026 and heating values are estimates",
+    "estimated": true
+   },
+   {
+    "from": 1979,
+    "to": 1994,
+    "tabula": [
+     "G",
+     "H"
+    ],
+    "asOf": 2026,
+    "wall": 0.206,
+    "wallRange": [
+     0.118,
+     0.223
+    ],
+    "roof": 0.335,
+    "roofRange": [
+     0.211,
+     0.38
+    ],
+    "floor": 0.101,
+    "floorRange": [
+     0.059,
+     0.105
+    ],
+    "windows": 0.444,
+    "windowsRange": [
+     0.22,
+     0.553
+    ],
+    "heating": 0.9,
+    "measured2016": {
+     "wall": 0.118,
+     "wall_se": 0.017,
+     "roof": 0.211,
+     "roof_se": 0.02,
+     "floor": 0.059,
+     "floor_se": 0.01,
+     "windows": 0.22,
+     "windows_estimated": true,
+     "areaShare": {
+      "wall": 0.099,
+      "roof": 0.19,
+      "floor": 0.047
+     },
+     "src": "IWU2018 Tab. 18 (wall/roof/floor: share of all residential buildings with post-construction insulation of the element, ± standard error; areaShare = insulated element area); windows: IWU2018 Tab. 39 (share with window installation year ≥1995 = low-e glazing, only available for buildings up to 1978)"
+    },
+    "src": "IWU2018 (Cischinsky & Diefenbach, Datenerhebung Wohngebäudebestand 2016) Tab. 18, 39, 43, 54; projection to 2026 and heating values are estimates",
+    "estimated": true
+   },
+   {
+    "from": 1995,
+    "to": null,
+    "tabula": [
+     "I",
+     "J",
+     "K",
+     "L"
+    ],
+    "asOf": 2026,
+    "wall": 0.078,
+    "wallRange": [
+     0.028,
+     0.081
+    ],
+    "roof": 0.118,
+    "roofRange": [
+     0.04,
+     0.124
+    ],
+    "floor": 0.041,
+    "floorRange": [
+     0.019,
+     0.042
+    ],
+    "windows": 0.18,
+    "windowsRange": [
+     0.03,
+     0.197
+    ],
+    "heating": 0.55,
+    "measured2016": {
+     "wall": 0.028,
+     "wall_se": 0.006,
+     "roof": 0.04,
+     "roof_se": 0.007,
+     "floor": 0.019,
+     "floor_se": 0.007,
+     "windows": 0.03,
+     "windows_estimated": true,
+     "areaShare": {
+      "wall": 0.022,
+      "roof": 0.036,
+      "floor": 0.015
+     },
+     "src": "IWU2018 Tab. 18 (wall/roof/floor: share of all residential buildings with post-construction insulation of the element, ± standard error; areaShare = insulated element area); windows: IWU2018 Tab. 39 (share with window installation year ≥1995 = low-e glazing, only available for buildings up to 1978)"
+    },
+    "src": "IWU2018 (Cischinsky & Diefenbach, Datenerhebung Wohngebäudebestand 2016) Tab. 18, 39, 43, 54; projection to 2026 and heating values are estimates",
+    "estimated": true
+   }
+  ],
+  "definition": "Probability that the component of a building of this construction period has been modernised after construction (wall/roof/floor: post-construction insulation of at least part of the element; windows: windows of installation year ≥1995, i.e. low-e glazing; heating: main heat generator replaced at least once). Germany-wide, all residential buildings.",
+  "windowsCaveat": "IWU 'original state' U_window 2.7–3.0 for classes A–H already represents later double insulating glazing (IWU sheets: 'in späteren Jahren modernisiert, Original-Fenster nicht mehr erhalten'); the Bernoulli event 'windows' therefore means upgrade to low-e glazing (U≈1.3–1.6), not replacement of single glazing.",
+  "partialArea": {
+   "wall": 0.739,
+   "roof": 0.901,
+   "floor": 0.801,
+   "note": "If modernised, mean insulated fraction of the element area, buildings up to 1978 (IWU2018 Tab. 15; roof/floor fractions taken over from Datenbasis 2010 Tab. 4.1-2). About 7.9 % of buildings up to 1978 had wall insulation already at construction (IWU2018 footnote 55)."
+  },
+  "projection": "value = p2016 + (1 − p2016)·(1 − (1 − r)^10) with r = annual share of buildings with a measure 2010–2016 (IWU2018 Tab. 43; up to 1978: wall 1.51 %, roof 2.52 %, floor 0.67 %, windows 4.39 %/a; 1979–1994: all-building rates 1.05/1.69/0.46/3.33 %/a; 1995+: half of those). Range = [p2016, p2016 + 10·r] (capped 0.95). Post-2016 activity is not measured here; treat as estimate.",
+  "regional": "Differences between regions are small for buildings up to 1978 (IWU2018 Tab. 19: old Länder South wall 25.4 %, roof 53.4 %, floor 14.4 % area-insulated vs. all Germany 27.8/54.9/14.2 %; large/medium cities 27.3/55.4/13.4 %).",
+  "heatingNote": "Main heat generator renewal rate 2010–2016: 3.27 %/a (buildings up to 1978), 2.69 %/a (1979–2009), 2.64 %/a in old Länder South (IWU2018 Tab. 54). In 2010 only 6.6 % of gas boilers and 16.3 % of oil boilers were older than 1987 (Datenbasis 2010 Tab. 5.7-2). 'heating' values are estimates derived from these.",
+  "typicalUAfter": {
+   "U_wall": 0.3,
+   "U_roof": 0.25,
+   "U_floor": 0.33,
+   "U_window": 1.5,
+   "method": "U = 1/(1/U0 + d/λ) with mean post-construction insulation thickness for buildings up to 1978 (IWU2018 Tab. 33: wall 9.0 cm; Tab. 35: roof/top ceiling 13.3 cm; Tab. 38: floor 7.7 cm), λ = 0.035 W/(mK) (roof λ_eff = 0.045 for rafters), U0 = 1.4 / 1.0 / 1.2; window U implied by IWU 2022 working paper Tab. 3 (mean 2016 window U 2.11/2.04 at 54/60 % modernised share and 2.7 unmodernised → ≈1.6)",
+   "alternative": "TABULA usual package (refurb.usual) is better than the stock average of past retrofits",
+   "estimated": true,
+   "thickness_m": {
+    "wall": 0.09,
+    "roof": 0.133,
+    "floor": 0.077
+   },
+   "lambda": {
+    "wall": 0.035,
+    "roof": 0.045,
+    "floor": 0.035
+   },
+   "U_window_derived": 1.6,
+   "src_thickness": "IWU2018 Tab. 33 (wall 9.0 cm), Tab. 35 (roof/top ceiling 13.3 cm), Tab. 38 (floor 7.7 cm): mean post-construction insulation thickness, buildings up to 1978",
+   "src_window": "IWU2022 working paper Tab. 3: mean window U 2016 of 2.11 (EZFH) / 2.04 (MFH) at 54 % / 60 % modernised share and 2.7 unmodernised, implying about 1.6 for modernised windows"
+  }
+ },
+ "zensusMap": {
+  "<1919": {
+   "A": 0.1,
+   "B": 0.9
+  },
+  "1919-1948": {
+   "C": 1.0
+  },
+  "1949-1978": {
+   "D": 0.3,
+   "E": 0.367,
+   "F": 0.333
+  },
+  "1979-1990": {
+   "G": 0.417,
+   "H": 0.583
+  },
+  "1991-2000": {
+   "H": 0.4,
+   "I": 0.6
+  },
+  "2001-2010": {
+   "I": 0.1,
+   "J": 0.8,
+   "K": 0.1
+  },
+  "2011-2019": {
+   "K": 0.556,
+   "L": 0.444
+  },
+  "2020+": {
+   "L": 1.0
+  }
+ }
+}

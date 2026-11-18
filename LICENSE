@@ -1,0 +1,156 @@
+Open Energy Map: Munich
+Copyright (c) 2026 Xia Chen, Postdoctoral Fellow at the Georg Nemetschek
+Institute Artificial Intelligence for the Built World (GNI), Technical
+University of Munich, https://www.mdsi.tum.de/gni/research-at-gni/
+
+Required Notice: Copyright (c) 2026 Xia Chen (https://github.com/chenxiachan/open-energy-map)
+
+
+Licences
+
+Except for the third-party material listed below, this work is licensed in
+two parts.
+
+  Software           The code (index.html, css/ and js/), which includes the
+                     energy model, is licensed under the PolyForm
+                     Noncommercial License 1.0.0. Its full text is at the
+                     end of this file.
+                     https://polyformproject.org/licenses/noncommercial/1.0.0
+
+  Data, results      The results computed with the model (data/city/), the
+  and texts          other data files prepared for this work that are not
+                     listed below as third-party material, and the texts are
+                     licensed under the Creative Commons Attribution-
+                     NonCommercial 4.0 International licence (CC BY-NC 4.0).
+                     https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+Academic and personal use is free under these terms. For the software, use by
+educational institutions, public research organisations and government
+institutions counts as noncommercial regardless of the source of funding
+(PolyForm Noncommercial, section "Noncommercial Organizations").
+
+Credit the work as "Open Energy Map: Munich, (c) 2026 Xia Chen" and keep this
+notice, including the line that begins with "Required Notice:", with every
+copy.
+
+Commercial use needs a separate licence from the licensor, for example to use
+the software or an adaptation of it in a paid product or service, or in paid
+consulting work. Please ask first: x.c.chen@tum.de
+
+
+Third-party material
+
+These files keep the licences of their sources. The non-commercial condition
+does not apply to them. Credit the sources as given here.
+
+  data/osm/          Building outlines and tags from OpenStreetMap,
+                     (c) OpenStreetMap contributors, Open Database License
+                     (ODbL) 1.0, https://www.openstreetmap.org/copyright
+  data/lod2/         LoD2 building models, Bayerische Vermessungsverwaltung,
+                     CC BY 4.0
+  data/terrain/      DGM1 terrain model and DOP40 orthophotos,
+                     Bayerische Vermessungsverwaltung, CC BY 4.0
+  data/trees/        Single-tree data (2024), Bayerische Vermessungsverwaltung,
+                     CC BY 4.0
+  data/zensus/       Zensus 2022, Statistische Aemter des Bundes und der
+                     Laender, Datenlizenz Deutschland Namensnennung 2.0
+                     (dl-de/by-2-0)
+  data/weather/      Open-Meteo, from ERA5 of the Copernicus Climate Change
+                     Service, CC BY 4.0
+  assets/textures/   ambientCG, CC0 1.0
+
+data/city/ holds results computed from OpenStreetMap, Zensus 2022, the LoD2
+models and the Mapillary coverage. Where the terms of those sources reach these
+files, such as attribution and share-alike, they apply to the parts derived
+from them.
+
+Loaded at run time and not part of this repository: street-level photos from
+Mapillary (CC BY-SA 4.0), map tiles from OpenFreeMap ((c) OpenMapTiles,
+(c) OpenStreetMap contributors), MapLibre GL JS and three.js, each under its
+own licence.
+
+
+No warranty
+
+The results are estimates from open data and published literature, for
+reference only. They do not replace an energy performance certificate or an
+on-site assessment. The work is provided as is, without warranty of any kind,
+as set out in the section "No Liability" of the PolyForm licence and in
+section 5 of CC BY-NC 4.0.
+
+
+------------------------------------------------------------------------------
+
+# PolyForm Noncommercial License 1.0.0
+
+<https://polyformproject.org/licenses/noncommercial/1.0.0>
+
+## Acceptance
+
+In order to get any license under these terms, you must agree to them as both strict obligations and conditions to all your licenses.
+
+## Copyright License
+
+The licensor grants you a copyright license for the software to do everything you might do with the software that would otherwise infringe the licensor's copyright in it for any permitted purpose.  However, you may only distribute the software according to [Distribution License](#distribution-license) and make changes or new works based on the software according to [Changes and New Works License](#changes-and-new-works-license).
+
+## Distribution License
+
+The licensor grants you an additional copyright license to distribute copies of the software.  Your license to distribute covers distributing the software with changes and new works permitted by [Changes and New Works License](#changes-and-new-works-license).
+
+## Notices
+
+You must ensure that anyone who gets a copy of any part of the software from you also gets a copy of these terms or the URL for them above, as well as copies of any plain-text lines beginning with `Required Notice:` that the licensor provided with the software.  For example:
+
+> Required Notice: Copyright Yoyodyne, Inc. (http://example.com)
+
+## Changes and New Works License
+
+The licensor grants you an additional copyright license to make changes and new works based on the software for any permitted purpose.
+
+## Patent License
+
+The licensor grants you a patent license for the software that covers patent claims the licensor can license, or becomes able to license, that you would infringe by using the software.
+
+## Noncommercial Purposes
+
+Any noncommercial purpose is a permitted purpose.
+
+## Personal Uses
+
+Personal use for research, experiment, and testing for the benefit of public knowledge, personal study, private entertainment, hobby projects, amateur pursuits, or religious observance, without any anticipated commercial application, is use for a permitted purpose.
+
+## Noncommercial Organizations
+
+Use by any charitable organization, educational institution, public research organization, public safety or health organization, environmental protection organization, or government institution is use for a permitted purpose regardless of the source of funding or obligations resulting from the funding.
+
+## Fair Use
+
+You may have "fair use" rights for the software under the law. These terms do not limit them.
+
+## No Other Rights
+
+These terms do not allow you to sublicense or transfer any of your licenses to anyone else, or prevent the licensor from granting licenses to anyone else.  These terms do not imply any other licenses.
+
+## Patent Defense
+
+If you make any written claim that the software infringes or contributes to infringement of any patent, your patent license for the software granted under these terms ends immediately. If your company makes such a claim, your patent license ends immediately for work on behalf of your company.
+
+## Violations
+
+The first time you are notified in writing that you have violated any of these terms, or done anything with the software not covered by your licenses, your licenses can nonetheless continue if you come into full compliance with these terms, and take practical steps to correct past violations, within 32 days of receiving notice.  Otherwise, all your licenses end immediately.
+
+## No Liability
+
+***As far as the law allows, the software comes as is, without any warranty or condition, and the licensor will not be liable to you for any damages arising out of these terms or the use or nature of the software, under any kind of legal claim.***
+
+## Definitions
+
+The **licensor** is the individual or entity offering these terms, and the **software** is the software the licensor makes available under these terms.
+
+**You** refers to the individual or entity agreeing to these terms.
+
+**Your company** is any legal entity, sole proprietorship, or other kind of organization that you work for, plus all organizations that have control over, are under the control of, or are under common control with that organization.  **Control** means ownership of substantially all the assets of an entity, or the power to direct its management and policies by vote, contract, or otherwise.  Control can be direct or indirect.
+
+**Your licenses** are all the licenses granted to you for the software under these terms.
+
+**Use** means anything you do with the software requiring one of your licenses.

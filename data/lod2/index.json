@@ -1,0 +1,33 @@
+{
+ "generated": "2026-11-07T00:55:55.792Z",
+ "tool": "node tools/lod2_extract.mjs + node tools/lod2_match.mjs",
+ "source": "3D-Gebäudemodelle LoD2, Bayerische Vermessungsverwaltung (geodaten.bayern.de), 109 tiles of Munich (AGS 09162000), metalink of 2026-11-03",
+ "license": "CC BY 4.0, © Bayerische Vermessungsverwaltung",
+ "fields": [
+  "eaves_m",
+  "roofHeight_m",
+  "storeys (0 = unknown)",
+  "roofType (AdV code)",
+  "measuredHeight_m",
+  "volume_m3",
+  "groundArea_m2",
+  "wallArea_m2",
+  "lod2Id (DEBY_LOD2_ + id, largest)",
+  "nLoD2",
+  "mode (0 = A centroid in outline, 1 = B outline centroid in LoD2)",
+  "groundArea / OSM footprint, %",
+  "lowest eaves above ground of the largest LoD2 building, m (NiedrigsteTraufeDesGebaeudes − HoeheGrund)",
+  "building function (ALKIS Gebäudefunktion) with the largest ground area",
+  "residential share of the LoD2 ground area, % (function 31001_1xxx)"
+ ],
+ "counts": {
+  "osm": 281118,
+  "A": 203007,
+  "B": 9522,
+  "none": 68589,
+  "partial": 2852,
+  "used": 209677
+ },
+ "lod2Used": 277787,
+ "lod2Total": 372911
+}

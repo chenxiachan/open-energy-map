@@ -1,0 +1,29 @@
+{
+  "source": "Heizspiegel München 2018, Vergleichswerte für das Abrechnungsjahr 2016 (co2online gGmbH for the Referat für Gesundheit und Umwelt, Landeshauptstadt München)",
+  "file": "Heizspiegel_Muenchen_2018_Abrechnungsjahr_2016_web.pdf (Wayback Machine copy of 2024-04-16 of www.heizspiegel.de/fileadmin/hs/khsp/muenchen/; local copy in ~/EnergyMapData/heizspiegel/)",
+  "page": "PDF page 4 (printed pages 6-7), table 'Der Heizenergieverbrauch Ihres Gebäudes'",
+  "billingYear": 2016,
+  "unit": "kWh per m² living area and year, space heating + hot water, centrally heated residential buildings",
+  "definitions": {
+    "area": "Wohnfläche des gesamten Gebäudes (also labelled beheizte Wohnfläche, Nutzfläche or Gebäudefläche on the bill)",
+    "hotWater": "included for buildings with central hot water; buildings without central hot water add 24 kWh/m² before comparing",
+    "fuelConversion": "1 litre heating oil or 1 m³ natural gas = 10 kWh when the bill does not state kWh",
+    "sizeClasses": "100-250, 251-500, 501-1.000, >1.000 m² living area of the whole building",
+    "bands": "günstig < low; mittel low to below the mean; Ø = mean; erhöht above the mean to high; zu hoch > high. The leaflet does not state which percentiles the limits correspond to.",
+    "weather": "actual consumption of the billing year; the leaflet mentions no weather correction"
+  },
+  "groups": {
+    "oil · 100-250":      { "low": 126, "mean": 189, "high": 273 },
+    "oil · 251-500":      { "low": 122, "mean": 183, "high": 261 },
+    "oil · 501-1000":     { "low": 119, "mean": 178, "high": 250 },
+    "oil · >1000":        { "low": 117, "mean": 175, "high": 243 },
+    "gas · 100-250":      { "low": 125, "mean": 208, "high": 299 },
+    "gas · 251-500":      { "low": 121, "mean": 201, "high": 288 },
+    "gas · 501-1000":     { "low": 116, "mean": 194, "high": 278 },
+    "gas · >1000":        { "low": 114, "mean": 189, "high": 272 },
+    "district · 100-250": { "low": 111, "mean": 168, "high": 227 },
+    "district · 251-500": { "low": 107, "mean": 162, "high": 220 },
+    "district · 501-1000":{ "low": 102, "mean": 155, "high": 213 },
+    "district · >1000":   { "low": 100, "mean": 151, "high": 208 }
+  }
+}

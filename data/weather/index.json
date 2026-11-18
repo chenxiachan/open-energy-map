@@ -1,0 +1,120 @@
+{
+ "tmy": {
+  "file": "munich_tmy.json",
+  "months_from_year": [
+   2015,
+   2023,
+   2011,
+   2019,
+   2023,
+   2024,
+   2019,
+   2017,
+   2019,
+   2019,
+   2024,
+   2024
+  ],
+  "Tmean": 9.94,
+  "HDD20_15": 3541,
+  "GHI_kWh": 1255
+ },
+ "years": {
+  "2010": {
+   "file": "munich_2010.json",
+   "Tmean": 7.65,
+   "HDD20_15": 4408,
+   "GHI_kWh": 1155
+  },
+  "2011": {
+   "file": "munich_2011.json",
+   "Tmean": 9.38,
+   "HDD20_15": 3689,
+   "GHI_kWh": 1277
+  },
+  "2012": {
+   "file": "munich_2012.json",
+   "Tmean": 8.89,
+   "HDD20_15": 3881,
+   "GHI_kWh": 1235
+  },
+  "2013": {
+   "file": "munich_2013.json",
+   "Tmean": 8.38,
+   "HDD20_15": 4168,
+   "GHI_kWh": 1163
+  },
+  "2014": {
+   "file": "munich_2014.json",
+   "Tmean": 9.84,
+   "HDD20_15": 3519,
+   "GHI_kWh": 1222
+  },
+  "2015": {
+   "file": "munich_2015.json",
+   "Tmean": 9.72,
+   "HDD20_15": 3747,
+   "GHI_kWh": 1236
+  },
+  "2016": {
+   "file": "munich_2016.json",
+   "Tmean": 9.23,
+   "HDD20_15": 3777,
+   "GHI_kWh": 1203
+  },
+  "2017": {
+   "file": "munich_2017.json",
+   "Tmean": 9.1,
+   "HDD20_15": 3908,
+   "GHI_kWh": 1218
+  },
+  "2018": {
+   "file": "munich_2018.json",
+   "Tmean": 10.44,
+   "HDD20_15": 3350,
+   "GHI_kWh": 1291
+  },
+  "2019": {
+   "file": "munich_2019.json",
+   "Tmean": 9.9,
+   "HDD20_15": 3591,
+   "GHI_kWh": 1251
+  },
+  "2020": {
+   "file": "munich_2020.json",
+   "Tmean": 9.8,
+   "HDD20_15": 3574,
+   "GHI_kWh": 1262
+  },
+  "2021": {
+   "file": "munich_2021.json",
+   "Tmean": 8.8,
+   "HDD20_15": 3929,
+   "GHI_kWh": 1257
+  },
+  "2022": {
+   "file": "munich_2022.json",
+   "Tmean": 10.36,
+   "HDD20_15": 3444,
+   "GHI_kWh": 1335
+  },
+  "2023": {
+   "file": "munich_2023.json",
+   "Tmean": 10.64,
+   "HDD20_15": 3273,
+   "GHI_kWh": 1265
+  },
+  "2024": {
+   "file": "munich_2024.json",
+   "Tmean": 10.64,
+   "HDD20_15": 3334,
+   "GHI_kWh": 1236
+  },
+  "2025": {
+   "file": "munich_2025.json",
+   "Tmean": 10.1,
+   "HDD20_15": 3552,
+   "GHI_kWh": 1300
+  }
+ }
+}

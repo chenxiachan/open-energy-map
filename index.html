@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Open Energy Map: Munich</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.187.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <h1>Open Energy Map: Munich</h1>
+    <div class="sub" id="sub">Loading data…</div>
+    <button class="btn small" id="theme" title="Switch between light and dark">Theme</button>
+    <div class="langsw" id="lang" role="group" aria-label="语言 · Language · Sprache">
+      <button type="button" data-l="zh" lang="zh-CN" title="中文">中</button><button type="button" data-l="en" lang="en" title="English">EN</button><button type="button" data-l="de" lang="de" title="Deutsch">DE</button>
+    </div>
+  </header>
+  <main class="app">
+    <section class="mapcol">
+      <div class="search">
+        <input id="q" type="search" autocomplete="off" placeholder="Search an address or building" aria-label="Search an address or building">
+        <div class="qres" id="qres"></div>
+      </div>
+      <div id="map"></div>
+      <div class="maphint" id="maphint" role="status"></div>
+      <div class="mapbusy" id="mapbusy" hidden>Building the model…</div>
+      <div class="presets" id="presets" aria-label="Featured buildings"></div>
+    </section>
+    <section class="detail" id="detail">
+      <div class="empty" id="empty">
+        <h2>Pick a building</h2>
+        <ol class="steps">
+          <li><b>1</b><span>Click the map, search, or choose a featured building below</span></li>
+          <li><b>2</b><span>The model builds itself and gives ranges</span></li>
+          <li><b>3</b><span>Calibrate with bills if you have them</span></li>
+        </ol>
+        <div class="tierkey"><span class="src osm">Observed</span><span class="src archetype">Published table</span><span class="src default">Assumed</span><span class="src user">User input</span><span class="src calibrated">Bill-calibrated</span></div>
+      </div>
+      <div id="content" hidden>
+        <div class="bhead"><h2 id="bname"></h2><span class="addr" id="baddr"></span></div>
+        <div class="facts" id="bchips"></div>
+        <div class="kpis" id="kpis"></div>
+        <nav class="tabs" id="tabs">
+          <button data-tab="overview" class="on">Overview</button>
+          <button data-tab="params">Inputs &amp; sources</button>
+          <button data-tab="balance">Heat balance</button>
+          <button data-tab="calib">Calibration</button>
+          <button data-tab="retro">Retrofit</button>
+          <button data-tab="method">Method &amp; export</button>
+        </nav>
+        <div class="panel on" id="p-overview"></div>
+        <div class="panel" id="p-params"><div id="p-checks"></div><div id="params-main"></div></div>
+        <div class="panel" id="p-balance"></div>
+        <div class="panel" id="p-calib"></div>
+        <div class="panel" id="p-retro"></div>
+        <div class="panel" id="p-method"><div id="p-export"></div><div id="method-body"></div></div>
+        <p class="disclaimer" id="bdisc">Data come from open data sources and published literature. The model has been calibrated and checked against public statistics and measurements, but results may still deviate. This is work in progress: results are for reference only and do not replace an energy performance certificate or an on-site assessment.</p>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

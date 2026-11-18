@@ -1,0 +1,280 @@
+{
+ "generated": "2026-11-08T15:04:45.041Z",
+ "tool": "node tools/heizspiegel_compare.mjs --year 2016 --n 1200 --seed 1",
+ "report": "qa/heizspiegel_compare.md",
+ "billingYear": 2016,
+ "usage": [
+  "mfh",
+  "ab"
+ ],
+ "minLiving": 100,
+ "living": "A_N / 1.2 × kappa (Zensus 2022, data/zensus/living.json); bands with kappa < 0.5 left out",
+ "geometry": "lod2",
+ "lod2Share": 0.91,
+ "hsHiGas": 1.11,
+ "pooled": {
+  "all · Hi": {
+   "n": 1109,
+   "share": [
+    0.12,
+    0.25,
+    0.29,
+    0.33
+   ],
+   "ratioMean": 1.25
+  },
+  "all · gas on Hs": {
+   "n": 1109,
+   "share": [
+    0.1,
+    0.24,
+    0.27,
+    0.39
+   ],
+   "ratioMean": 1.33
+  },
+  "all · typical · Hi": {
+   "n": 1109,
+   "share": [
+    0.16,
+    0.47,
+    0.34,
+    0.04
+   ],
+   "ratioMean": 0.91
+  },
+  "all · typical · gas on Hs": {
+   "n": 1109,
+   "share": [
+    0.12,
+    0.41,
+    0.42,
+    0.05
+   ],
+   "ratioMean": 0.97
+  },
+  "all · typical ×0.86 · Hi": {
+   "n": 1109,
+   "share": [
+    0.23,
+    0.52,
+    0.23,
+    0.02
+   ],
+   "ratioMean": 0.83
+  },
+  "all · typical ×0.86 · gas on Hs": {
+   "n": 1109,
+   "share": [
+    0.2,
+    0.46,
+    0.32,
+    0.03
+   ],
+   "ratioMean": 0.88
+  },
+  "without ≥2002 · Hi": {
+   "n": 905,
+   "share": [
+    0.03,
+    0.23,
+    0.34,
+    0.4
+   ],
+   "ratioMean": 1.38
+  },
+  "without ≥2002 · gas on Hs": {
+   "n": 905,
+   "share": [
+    0.02,
+    0.19,
+    0.31,
+    0.47
+   ],
+   "ratioMean": 1.48
+  },
+  "without ≥2002 · typical · Hi": {
+   "n": 905,
+   "share": [
+    0.05,
+    0.5,
+    0.41,
+    0.04
+   ],
+   "ratioMean": 0.98
+  },
+  "without ≥2002 · typical · gas on Hs": {
+   "n": 905,
+   "share": [
+    0.03,
+    0.41,
+    0.5,
+    0.06
+   ],
+   "ratioMean": 1.05
+  },
+  "without ≥2002 · typical ×0.86 · Hi": {
+   "n": 905,
+   "share": [
+    0.1,
+    0.6,
+    0.28,
+    0.02
+   ],
+   "ratioMean": 0.9
+  },
+  "without ≥2002 · typical ×0.86 · gas on Hs": {
+   "n": 905,
+   "share": [
+    0.07,
+    0.51,
+    0.38,
+    0.03
+   ],
+   "ratioMean": 0.96
+  }
+ },
+ "byCarrier": {
+  "oil": {
+   "n": 124,
+   "Hi": 1.35,
+   "Hs": 1.35
+  },
+  "gas": {
+   "n": 673,
+   "Hi": 1.24,
+   "Hs": 1.37
+  },
+  "district": {
+   "n": 312,
+   "Hi": 1.24,
+   "Hs": 1.24
+  }
+ },
+ "an12": {
+  "note": "living area = A_N / 1.2, before the calibration to Zensus 2022",
+  "pooled": {
+   "all · Hi": {
+    "n": 1113,
+    "share": [
+     0.16,
+     0.34,
+     0.31,
+     0.19
+    ],
+    "ratioMean": 1.07
+   },
+   "all · gas on Hs": {
+    "n": 1113,
+    "share": [
+     0.13,
+     0.31,
+     0.33,
+     0.23
+    ],
+    "ratioMean": 1.14
+   },
+   "all · typical · Hi": {
+    "n": 1113,
+    "share": [
+     0.2,
+     0.57,
+     0.22,
+     0.01
+    ],
+    "ratioMean": 0.83
+   },
+   "all · typical · gas on Hs": {
+    "n": 1113,
+    "share": [
+     0.16,
+     0.52,
+     0.31,
+     0.01
+    ],
+    "ratioMean": 0.88
+   },
+   "all · typical ×0.86 · Hi": {
+    "n": 1113,
+    "share": [
+     0.29,
+     0.57,
+     0.14,
+     0
+    ],
+    "ratioMean": 0.75
+   },
+   "all · typical ×0.86 · gas on Hs": {
+    "n": 1113,
+    "share": [
+     0.25,
+     0.55,
+     0.2,
+     0
+    ],
+    "ratioMean": 0.8
+   },
+   "without ≥2002 · Hi": {
+    "n": 921,
+    "share": [
+     0.05,
+     0.35,
+     0.38,
+     0.23
+    ],
+    "ratioMean": 1.17
+   },
+   "without ≥2002 · gas on Hs": {
+    "n": 921,
+    "share": [
+     0.03,
+     0.3,
+     0.39,
+     0.28
+    ],
+    "ratioMean": 1.25
+   },
+   "without ≥2002 · typical · Hi": {
+    "n": 921,
+    "share": [
+     0.07,
+     0.65,
+     0.27,
+     0.01
+    ],
+    "ratioMean": 0.89
+   },
+   "without ≥2002 · typical · gas on Hs": {
+    "n": 921,
+    "share": [
+     0.05,
+     0.56,
+     0.38,
+     0.01
+    ],
+    "ratioMean": 0.95
+   },
+   "without ≥2002 · typical ×0.86 · Hi": {
+    "n": 921,
+    "share": [
+     0.17,
+     0.66,
+     0.17,
+     0
+    ],
+    "ratioMean": 0.81
+   },
+   "without ≥2002 · typical ×0.86 · gas on Hs": {
+    "n": 921,
+    "share": [
+     0.12,
+     0.64,
+     0.24,
+     0
+    ],
+    "ratioMean": 0.86
+   }
+  },
+  "n": 1200
+ }
+}
