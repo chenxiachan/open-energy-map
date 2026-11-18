@@ -61,7 +61,8 @@ function initTheme() {
 const DIR = L({ N: '北', E: '东', S: '南', W: '西' }, { N: 'N', E: 'E', S: 'S', W: 'W' }, { N: 'N', E: 'O', S: 'S', W: 'W' });
 function initLang() {
   document.documentElement.lang = L('zh-CN', 'en', 'de');
-  document.title = L('Open Energy Map：慕尼黑', 'Open Energy Map: Munich', 'Open Energy Map: München');
+  // the name carries no city: Munich is the first area covered, shown as the region next to the name (user, 2026-11-18)
+  document.title = L('Open Energy Map · 慕尼黑', 'Open Energy Map · Munich', 'Open Energy Map · München');
   // 中 · EN · DE: the current language is pressed; another one saves the choice and reloads
   for (const b of document.querySelectorAll('#lang button[data-l]')) {
     b.setAttribute('aria-pressed', String(b.dataset.l === LANG));
@@ -69,9 +70,14 @@ function initLang() {
   }
   // index.html carries the English text, so the page does not flash another language before this runs
   $('#lang').setAttribute('aria-label', L('语言', 'Language', 'Sprache'));
-  $('header.top h1').textContent = L('Open Energy Map：慕尼黑', 'Open Energy Map: Munich', 'Open Energy Map: München');
+  // the region and the word on the theme button give way at phone width (css: .top .region, #theme .tt)
+  $('#region').textContent = L('慕尼黑', 'Munich', 'München');
+  $('#region').title = L('目前覆盖慕尼黑及周边', 'Currently covers Munich and its surroundings', 'Derzeit München und Umgebung');
   $('#sub').textContent = L('正在加载数据…', 'Loading data…', 'Daten werden geladen …');
-  $('#theme').textContent = L('明暗', 'Theme', 'Hell/Dunkel');
+  $('#theme').innerHTML = '<svg class="ti" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg>';
+  $('#theme').append(h('span', { class: 'tt' }, L('明暗', 'Theme', 'Hell/Dunkel')));
+  $('#home').title = L('Xia Chen 的个人主页', 'Homepage of Xia Chen', 'Homepage von Xia Chen');
+  for (const k of ['title', 'aria-label']) $('#repo').setAttribute(k, L('GitHub 上的源代码', 'Source code on GitHub', 'Quellcode auf GitHub'));
   $('#theme').title = L('切换明暗', 'Switch between light and dark', 'Zwischen hell und dunkel wechseln');
   $('#q').placeholder = L('搜索地址或楼名', 'Search an address or building', 'Adresse oder Gebäude suchen');
   $('#q').setAttribute('aria-label', $('#q').placeholder);
@@ -1150,7 +1156,9 @@ function renderSources(list) {
 function licenceNote() {
   const a = (href, text) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
   return h('p', { class: 'disclaimer' },
-    L('代码、模型和计算结果 © 2026 Xia Chen（慕尼黑工业大学 ', 'Code, model and results © 2026 Xia Chen (Postdoctoral Fellow, ', 'Code, Modell und Ergebnisse © 2026 Xia Chen (Postdoc am '),
+    L('代码、模型和计算结果 © 2026 ', 'Code, model and results © 2026 ', 'Code, Modell und Ergebnisse © 2026 '),
+    a(HOME_URL, 'Xia Chen'),
+    L('（慕尼黑工业大学 ', ' (Postdoctoral Fellow, ', ' (Postdoc am '),
     a('https://www.mdsi.tum.de/gni/research-at-gni/', 'Georg Nemetschek Institute'),
     L(' 博士后研究员）。代码和模型按 ', ', Technical University of Munich). Code and model under ', ', Technische Universität München). Code und Modell unter '),
     a('https://polyformproject.org/licenses/noncommercial/1.0.0', 'PolyForm Noncommercial 1.0.0'),
@@ -1158,8 +1166,12 @@ function licenceNote() {
     a('https://creativecommons.org/licenses/by-nc/4.0/' + L('deed.zh-hans', 'deed.en', 'deed.de'), 'CC BY-NC 4.0'),
     L(' 许可：学术和个人使用免费，须注明出处；商业用途须另行授权，请先联系 ', ': free for academic and personal use with credit; commercial use needs a licence, please write first to ', ': wissenschaftliche und private Nutzung mit Namensnennung frei; kommerzielle Nutzung nur mit Lizenz, bitte vorher an '),
     a('mailto:x.c.chen@tum.de', 'x.c.chen@tum.de'),
-    L('。第三方数据按上面列出的各自许可。', '. Third-party data keep the licences listed above.', ' schreiben. Für Daten Dritter gelten die oben genannten Lizenzen.'));
+    L('。第三方数据按上面列出的各自许可。源代码在 ', '. Third-party data keep the licences listed above. Source code on ', ' schreiben. Für Daten Dritter gelten die oben genannten Lizenzen. Quellcode auf '),
+    a(REPO_URL, 'GitHub'), L('。', '.', '.'));
 }
+// the author's homepage and the public repository, also linked at the top right (user, 2026-11-18)
+const HOME_URL = 'https://chenxiachan.github.io/';
+const REPO_URL = 'https://github.com/chenxiachan/open-energy-map';
 // Small print under the sources and at the bottom of the building panel (user, 2026-11-17)
 function disclaimer() {
   return L('数据来自公开数据源和已发表的文献。模型已用公开统计和实测数据校准和核对，结果仍可能有偏差。项目仍在开发中，结果仅供参考，不能替代能源证书或现场评估。',

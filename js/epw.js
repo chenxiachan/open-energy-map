@@ -230,7 +230,7 @@ export function buildEPW(weather, opts = {}) {
   lines.push('HOLIDAYS/DAYLIGHT SAVINGS,No,0,0,0');
   lines.push('COMMENTS 1,' + clean(`${weather.name || 'weather'}; source: ${weather.source || 'n/a'}` +
     (isTMY && mfy ? `; TMY months from years ${mfy.join(' ')}` : '')));
-  lines.push('COMMENTS 2,' + clean(`Converted by Open Energy Map: Munich (js/epw.js): UTC interval means -> local standard time UTC${meta.tz >= 0 ? '+' : ''}${meta.tz} hour-ending` +
+  lines.push('COMMENTS 2,' + clean(`Converted by Open Energy Map (js/epw.js): UTC interval means -> local standard time UTC${meta.tz >= 0 ? '+' : ''}${meta.tz} hour-ending` +
     ` (radiation shifted by the time zone; T/RH/wind = mean of the two interval means around each stamp); dew point Magnus;` +
     ` constant station pressure ${meta.pressure} Pa (standard atmosphere at ${meta.elev} m); horizontal IR Clark-Allen with` +
     ` sky cover estimated from clearness; ${meta.wind.note}; wind direction missing (999); ground temperatures damped/lagged monthly means at ${(opts.groundDepth ?? 2.0)} m`));

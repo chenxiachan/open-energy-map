@@ -1,23 +1,37 @@
-# Open Energy Map：慕尼黑
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-zh-dark.png">
+  <img src="assets/readme/banner-zh-light.png" alt="Open Energy Map：可追溯到来源的建筑能耗。首个城市：慕尼黑">
+</picture>
 
-[English](README.md) | **简体中文**
+<p align="center">一个交互式网络地图，基于开放数据逐栋估算建筑的供暖需求。<br>结果以区间而非单一数值给出，每一项输入都可以追溯到来源。<br>第一座城市是慕尼黑。</p>
 
-一个交互式网络地图，基于开放数据估算慕尼黑及周边建筑的供暖需求。结果以区间而非单一数值给出，每一项输入都可以追溯到来源。
+<p align="center">
+  <a href="https://chenxiachan.github.io/open-energy-map/"><img alt="打开地图" src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%E5%9C%B0%E5%9B%BE-chenxiachan.github.io%2Fopen--energy--map-6b5ce7?style=flat-square"></a>
+  <a href="https://youtu.be/90e-aEyOkDE"><img alt="演示视频，1 分钟" src="https://img.shields.io/badge/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-1_%E5%88%86%E9%92%9F-e08a3c?style=flat-square&logo=youtube&logoColor=white"></a>
+  <a href="#许可"><img alt="许可：PolyForm Noncommercial 1.0.0 和 CC BY-NC 4.0" src="https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF-PolyForm_NC_%C2%B7_CC_BY--NC-59636e?style=flat-square"></a>
+  <img alt="语言：英文、德文、中文" src="https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-EN_%C2%B7_DE_%C2%B7_%E4%B8%AD%E6%96%87-59636e?style=flat-square">
+</p>
 
-**在线访问：** <https://chenxiachan.github.io/open-energy-map/>（页面默认英文，可在右上角切换为中文或德文。）
+<p align="center"><a href="README.md">English</a> · <b>简体中文</b></p>
 
-[![演示视频：Open Energy Map: Munich，从一栋楼到整座城市（1 分钟，YouTube）](assets/readme/video.jpg)](https://youtu.be/90e-aEyOkDE)
-
-**演示视频：** [From one building to the whole city](https://youtu.be/90e-aEyOkDE)（1 分钟，YouTube，英文字幕）
+<p align="center">
+  <a href="https://youtu.be/90e-aEyOkDE"><img src="assets/readme/video.jpg" width="760" alt="演示视频：Open Energy Map: Munich，从一栋楼到整座城市（1 分钟，YouTube）"></a><br>
+  <sub>从一栋楼到整座城市 · YouTube 1 分钟，英文字幕 · 页面默认英文，可在右上角切换为中文或德文</sub>
+</p>
 
 > [!NOTE]
 > 本项目是研究原型，仍在开发中。结果为估算值，仅供参考，不能替代能源证书或现场评估。
 
 ## 概述
 
-Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利亚 LoD2 建筑模型、2022 年人口普查（Zensus 2022）和逐时气象数据。在此基础上，页面直接在浏览器中为任意一栋建筑建立能耗模型，无需安装，也无需注册账号。每栋建筑使用同一个模型，因此结果可以在三个尺度上阅读：单栋建筑、所在街道和整座城市。慕尼黑是第一座城市。
+Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利亚 LoD2 建筑模型、2022 年人口普查（Zensus 2022）和逐时气象数据。在此基础上，页面直接在浏览器中为任意一栋建筑建立能耗模型，无需安装，也无需注册账号。每栋建筑使用同一个模型，因此结果可以在三个尺度上阅读：单栋建筑、所在街道和整座城市。慕尼黑及周边是第一个地区；OpenStreetMap、Zensus 2022 和 ERA5 覆盖德国全境，同样的方法可以扩展到更多城市和地区。
 
 ## 功能
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features-zh-dark.jpg">
+  <img src="assets/readme/features-zh-light.jpg" alt="地图的四个画面：单栋建筑的三维模型和区间、带来源的输入参数表、全市单位面积供暖需求图层、三维街区漫游">
+</picture>
 
 - **单栋建模。** 点击一栋楼或搜索地址，页面即建立逐时热模型，给出供暖需求、终端能源、CO₂ 排放和峰值负荷的 P10–P90 区间。
 - **热平衡。** 按构件给出热损失和得热（墙、窗、屋顶、地面、通风、太阳得热和内部得热），并显示在三维立面上；太阳位置可调到一年中的任意时刻。
@@ -76,18 +90,18 @@ index.html    页面
 css/          样式
 js/           模型、地图、三维视图和界面（ES 模块）
 data/         为地图预处理的开放数据；全市结果在 data/city/
-assets/       材质贴图；本 README 的视频封面在 assets/readme/
+assets/       材质贴图；logo 在 assets/brand/；本 README 的图片在 assets/readme/
 LICENSE       许可条款
 ```
 
 ## 引用
 
-请以 "Open Energy Map: Munich, (c) 2026 Xia Chen" 注明出处，并保留许可声明。学术引用：
+请以 "Open Energy Map, (c) 2026 Xia Chen" 注明出处，并保留许可声明。学术引用：
 
 ```bibtex
 @software{chen2026openenergymap,
   author = {Chen, Xia},
-  title  = {Open Energy Map: Munich},
+  title  = {Open Energy Map},
   year   = {2026},
   url    = {https://github.com/chenxiachan/open-energy-map},
   note   = {Georg Nemetschek Institute Artificial Intelligence for the Built World, Technical University of Munich}
@@ -108,3 +122,10 @@ LICENSE       许可条款
 ## 联系
 
 欢迎反馈，尤其是估算结果明显偏离的建筑。请提交 [issue](https://github.com/chenxiachan/open-energy-map/issues)，或发邮件至 x.c.chen@tum.de。
+
+<br>
+
+<p align="center">
+  <a href="https://chenxiachan.github.io/open-energy-map/"><img src="assets/brand/logo.svg" width="44" alt="Open Energy Map"></a><br>
+  <sub>由 <a href="https://chenxiachan.github.io/">Xia Chen</a> 在慕尼黑工业大学 <a href="https://www.mdsi.tum.de/gni/research-at-gni/">Georg Nemetschek Institute</a> 制作</sub>
+</p>

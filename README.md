@@ -1,23 +1,37 @@
-# Open Energy Map: Munich
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-dark.png">
+  <img src="assets/readme/banner-light.png" alt="Open Energy Map: building energy you can trace to its source. First city: Munich">
+</picture>
 
-**English** | [简体中文](README.zh-CN.md)
+<p align="center">An interactive web map that estimates the heating demand of buildings from open data, building by building.<br>Results are given as ranges rather than single numbers, and every input can be traced back to its source.<br>The first city is Munich.</p>
 
-An interactive web map that estimates the heating demand of buildings in and around Munich from open data. Results are given as ranges rather than single numbers, and every input can be traced back to its source.
+<p align="center">
+  <a href="https://chenxiachan.github.io/open-energy-map/"><img alt="Open the map" src="https://img.shields.io/badge/open_the_map-chenxiachan.github.io%2Fopen--energy--map-6b5ce7?style=flat-square"></a>
+  <a href="https://youtu.be/90e-aEyOkDE"><img alt="Video, 1 min" src="https://img.shields.io/badge/video-1_min-e08a3c?style=flat-square&logo=youtube&logoColor=white"></a>
+  <a href="#licence"><img alt="Licence: PolyForm Noncommercial 1.0.0 and CC BY-NC 4.0" src="https://img.shields.io/badge/licence-PolyForm_NC_%C2%B7_CC_BY--NC-59636e?style=flat-square"></a>
+  <img alt="Languages: English, German, Chinese" src="https://img.shields.io/badge/languages-EN_%C2%B7_DE_%C2%B7_%E4%B8%AD%E6%96%87-59636e?style=flat-square">
+</p>
 
-**Live site:** <https://chenxiachan.github.io/open-energy-map/>
+<p align="center"><b>English</b> · <a href="README.zh-CN.md">简体中文</a></p>
 
-[![Video: Open Energy Map: Munich, from one building to the whole city (1 min, YouTube)](assets/readme/video.jpg)](https://youtu.be/90e-aEyOkDE)
-
-**Video:** [From one building to the whole city](https://youtu.be/90e-aEyOkDE) (1 min, YouTube)
+<p align="center">
+  <a href="https://youtu.be/90e-aEyOkDE"><img src="assets/readme/video.jpg" width="760" alt="Video: Open Energy Map: Munich, from one building to the whole city (1 min, YouTube)"></a><br>
+  <sub>From one building to the whole city · 1 min on YouTube</sub>
+</p>
 
 > [!NOTE]
 > This is a research prototype and a work in progress. The results are estimates for reference only. They do not replace an energy performance certificate or an on-site assessment.
 
 ## Overview
 
-Open Energy Map aligns open data building by building: the OpenStreetMap outline, the Bavarian LoD2 building model, the 2022 census (Zensus 2022) and hourly weather. From these data the page builds an energy model of any building directly in the browser, without installation or an account. Because the same model runs on every building, the results can be read at three scales: a single building, its street and the whole city. Munich is the first city.
+Open Energy Map aligns open data building by building: the OpenStreetMap outline, the Bavarian LoD2 building model, the 2022 census (Zensus 2022) and hourly weather. From these data the page builds an energy model of any building directly in the browser, without installation or an account. Because the same model runs on every building, the results can be read at three scales: a single building, its street and the whole city. Munich and its surroundings come first; OpenStreetMap, the Zensus 2022 and ERA5 cover all of Germany, so the same approach can be extended to further cities and regions.
 
 ## Features
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features-dark.jpg">
+  <img src="assets/readme/features-light.jpg" alt="Four views of the map: one building with its 3D model and ranges, the table of inputs with their sources, the city layer of heating demand per m², and the 3D street view">
+</picture>
 
 - **Building model.** Click a building or search an address. The page builds an hourly thermal model and reports heating demand, final energy, CO₂ emissions and peak load as P10–P90 ranges.
 - **Heat balance.** Losses and gains by element (walls, windows, roof, floor, ventilation, solar and internal gains), also shown on the 3D facades, with the sun position adjustable to any hour of the year.
@@ -76,18 +90,18 @@ index.html    the page
 css/          styles
 js/           model, map, 3D view and interface (ES modules)
 data/         open data prepared for the map; city results in data/city/
-assets/       textures; the video thumbnail of this README in assets/readme/
+assets/       textures; the logo in assets/brand/; the images of this README in assets/readme/
 LICENSE       licence terms
 ```
 
 ## Citation
 
-Please credit the work as "Open Energy Map: Munich, (c) 2026 Xia Chen" and keep the licence notice. For academic use:
+Please credit the work as "Open Energy Map, (c) 2026 Xia Chen" and keep the licence notice. For academic use:
 
 ```bibtex
 @software{chen2026openenergymap,
   author = {Chen, Xia},
-  title  = {Open Energy Map: Munich},
+  title  = {Open Energy Map},
   year   = {2026},
   url    = {https://github.com/chenxiachan/open-energy-map},
   note   = {Georg Nemetschek Institute Artificial Intelligence for the Built World, Technical University of Munich}
@@ -108,3 +122,10 @@ Academic and personal use is free, with credit. For the code, use by educational
 ## Contact
 
 Feedback is welcome, in particular on buildings where the estimate is clearly off. Please open an [issue](https://github.com/chenxiachan/open-energy-map/issues) or write to x.c.chen@tum.de.
+
+<br>
+
+<p align="center">
+  <a href="https://chenxiachan.github.io/open-energy-map/"><img src="assets/brand/logo.svg" width="44" alt="Open Energy Map"></a><br>
+  <sub>Made by <a href="https://chenxiachan.github.io/">Xia Chen</a> at the <a href="https://www.mdsi.tum.de/gni/research-at-gni/">Georg Nemetschek Institute</a>, Technical University of Munich</sub>
+</p>

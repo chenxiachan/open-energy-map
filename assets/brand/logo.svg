@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <title>Open Energy Map</title>
+  <rect width="96" height="96" rx="22" fill="#faf9f7"/>
+  <rect x="16" y="16" width="18" height="18" rx="4" fill="#f4d6b9"/>
+  <rect x="39" y="16" width="18" height="18" rx="4" fill="#ecb07c"/>
+  <rect x="62" y="16" width="18" height="18" rx="4" fill="#f4d6b9"/>
+  <rect x="16" y="39" width="18" height="18" rx="4" fill="#ecb07c"/>
+  <rect x="39" y="39" width="18" height="18" rx="4" fill="#6b5ce7"/>
+  <rect x="62" y="39" width="18" height="18" rx="4" fill="#e08a3c"/>
+  <rect x="16" y="62" width="18" height="18" rx="4" fill="#f4d6b9"/>
+  <rect x="39" y="62" width="18" height="18" rx="4" fill="#e08a3c"/>
+  <rect x="62" y="62" width="18" height="18" rx="4" fill="#ecb07c"/>
+</svg>

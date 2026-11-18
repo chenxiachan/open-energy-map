@@ -65,6 +65,13 @@ a { color: var(--accent); }
 .top { display: flex; align-items: center; gap: 16px; padding: 10px 18px; border-bottom: 1px solid var(--line); background: var(--surface); position: sticky; top: 0; z-index: 20; }
 .top h1 { font-size: 17px; margin: 0; font-weight: 700; letter-spacing: .2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .top .sub:empty { visibility: hidden; }
+/* the logo, and the links to the author's homepage and to the source code (user, 2026-11-18) */
+.top .brand { flex: none; display: block; width: 24px; height: 24px; margin-right: -6px; }
+.toplink { flex: none; display: inline-flex; align-items: center; color: var(--muted); font-size: 12.5px; text-decoration: none; white-space: nowrap; }
+.toplink:hover { color: var(--fg); }
+.toplink svg { display: block; }
+.top .region { flex: none; margin-left: -6px; padding: 1px 9px; border: 1px solid var(--line-2); border-radius: 999px; font-size: 12px; line-height: 1.5; color: var(--fg-2); white-space: nowrap; }
+#theme .ti { display: none; }
 .top .sub { color: var(--muted); font-size: 12.5px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .btn { border: 1px solid var(--line-2); background: var(--surface); border-radius: 8px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
 .btn:hover { border-color: var(--accent); }
@@ -359,8 +366,11 @@ svg .c-post { fill: var(--c1); }
   .grid2 { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
-  .top { padding: 8px 12px; }
+  .top { padding: 8px 12px; gap: 12px; }
   .top .sub { display: none; }
+  .top #home { display: none; }   /* the homepage stays linked in the licence line of the start page */
+  .top .region, #theme .tt { display: none; }
+  #theme { padding: 5px 8px; } #theme .ti { display: block; }
   .top h1 { flex: 1; font-size: 15.5px; }
   .panel, .bhead, .chips, .facts, .kpis { padding-left: 16px; padding-right: 16px; }
   .empty { padding: 28px 16px; }
