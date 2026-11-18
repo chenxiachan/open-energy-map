@@ -71,6 +71,17 @@ The tab **Method & export** of any building describes every step with its assump
 
 Published tables and standards, such as the IWU / TABULA typology, DIN V 18599, GEG 2024, Heizspiegel München 2018 and Loga et al. (2019), are cited where they are used. The complete list is at the bottom of the start page of the map.
 
+## For AI agents
+
+A command line tool and an MCP server give the model of one building as JSON, with the range of every result and the source tier and references of every input. An LLM agent can then quote building energy it can trace. They use the same modules and data as the map, need only Node.js and work offline.
+
+```bash
+node agent/oem.mjs building --address "Schellingstraße 51, München"
+claude mcp add open-energy-map -- node /path/to/open-energy-map/agent/oem.mjs mcp
+```
+
+See [agent/README.md](agent/README.md) for the options, the MCP tools and the fields of the result.
+
 ## Running locally
 
 The map is a static site without a build step. Serve the folder with any static web server:
@@ -89,6 +100,7 @@ Then open <http://127.0.0.1:8000/>. The repository is about 100 MB, most of it p
 index.html    the page
 css/          styles
 js/           model, map, 3D view and interface (ES modules)
+agent/        command line tool and MCP server for LLM agents
 data/         open data prepared for the map; city results in data/city/
 assets/       textures; the logo in assets/brand/; the images of this README in assets/readme/
 LICENSE       licence terms

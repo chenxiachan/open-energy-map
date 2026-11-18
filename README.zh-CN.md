@@ -71,6 +71,17 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 
 已发表的表格和标准，例如 IWU / TABULA 建筑类型学、DIN V 18599、GEG 2024、Heizspiegel München 2018 和 Loga 等（2019），均在使用处注明出处。完整列表见地图起始页底部。
 
+## 给 AI 智能体用
+
+命令行工具和 MCP 服务以 JSON 返回一栋楼的模型：每个结果都有区间，每项输入都有来源等级和出处。LLM 智能体用它，就能引用可追溯的建筑能耗。它们和地图用同一套模块和数据，只需要 Node.js，离线即可运行。
+
+```bash
+node agent/oem.mjs building --address "Schellingstraße 51, München"
+claude mcp add open-energy-map -- node /path/to/open-energy-map/agent/oem.mjs mcp
+```
+
+选项、MCP 工具和返回字段见 [agent/README.md](agent/README.md)（英文）。
+
 ## 本地运行
 
 地图是静态网站，无需构建。用任意静态服务器提供该文件夹即可：
@@ -89,6 +100,7 @@ python3 -m http.server 8000
 index.html    页面
 css/          样式
 js/           模型、地图、三维视图和界面（ES 模块）
+agent/        给 LLM 智能体用的命令行工具和 MCP 服务
 data/         为地图预处理的开放数据；全市结果在 data/city/
 assets/       材质贴图；logo 在 assets/brand/；本 README 的图片在 assets/readme/
 LICENSE       许可条款
