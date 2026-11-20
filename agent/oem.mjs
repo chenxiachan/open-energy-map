@@ -5,6 +5,7 @@
 //   node agent/oem.mjs find "Schellingstraße 51"
 //   node agent/oem.mjs building --address "Schellingstraße 51, München"
 //   node agent/oem.mjs building --at 48.150761 11.573679 --assume age_class=B --assume refurbished.windows=yes
+//   node agent/oem.mjs building --lod2 DEBY_LOD2_4958835
 //   node agent/oem.mjs mcp            (MCP server on stdio: tools find_building and building_energy)
 //
 // Options: --lang en|de|zh (default en), --samples N (100–1000, default 300), --summary (shorter result), --compact (one line)
@@ -18,9 +19,12 @@ const cmd = argv[0];
 const HELP = `Open Energy Map: building energy you can trace to its source (first city: Munich)
 
   node agent/oem.mjs find <query> [--limit 10]
-      Addresses and building names in the local data, with OSM ids and coordinates.
-  node agent/oem.mjs building (--address <text> | --at <lat> <lon> | --id <osm id> [--at <lat> <lon>])
+      Addresses and building names in the local data, with OSM ids and coordinates. The house number must match;
+      if it does not, the numbers that exist on the street come back with exact: false.
+  node agent/oem.mjs building (--id <osm id> [--at <lat> <lon>] | --lod2 <DEBY_LOD2_…> | --at <lat> <lon> | --address <text>)
                               [--assume key=value ...] [--samples 300]
+      An address that fits several buildings (several buildings at one address, or the same street and number in
+      several municipalities) returns status "ambiguous" with the candidates instead of a model.
       The energy model of one building as JSON: heating demand, final energy, CO2 and peak load with P10-P90
       ranges, every input with its source tier and references, where the uncertainty comes from, self-checks.
       --assume  age_class=A..L  system=gas_cond|gas_old|oil|district|hp_air|hp_ground|pellet|electric
@@ -58,7 +62,7 @@ async function cli() {
     out(await core.findBuildings(q, +opt('limit', 10)));
   } else if (cmd === 'building') {
     const i = argv.indexOf('--at');
-    const where = { address: opt('address'), osm_id: opt('id'), lat: i > -1 ? +argv[i + 1] : undefined, lon: i > -1 ? +argv[i + 2] : undefined };
+    const where = { address: opt('address'), osm_id: opt('id'), lod2_id: opt('lod2'), lat: i > -1 ? +argv[i + 1] : undefined, lon: i > -1 ? +argv[i + 2] : undefined };
     out(await core.buildingEnergy(where, parseAssume(), { samples: +opt('samples', 300), detail: flag('summary') ? 'summary' : 'full' }));
   } else throw new core.UserError(`Unknown command ${cmd}. Run node agent/oem.mjs help`);
 }
@@ -68,20 +72,21 @@ const TOOLS = [
   {
     name: 'find_building',
     title: 'Find a building',
-    description: 'Search addresses and building names in the area Open Energy Map covers so far (Munich and its surroundings). Returns matches with OSM id, coordinates and a link to the map. Use it when an address is ambiguous, then call building_energy with the osm_id and lat/lon.',
-    inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'Street and house number, or a building name, e.g. "Arcisstraße 21"' }, limit: { type: 'integer', minimum: 1, maximum: 20, default: 10 } }, required: ['query'] },
+    description: 'Search addresses and building names in the area Open Energy Map covers so far (Munich and its surroundings). Returns matches with OSM id, postcode, coordinates and a link to the map. The house number must match exactly; if it is not in the index, the numbers that exist on that street come back with exact: false. One address can hold several buildings, and the same street and number exist in several municipalities around Munich (the postcode tells them apart; in_munich is true for the city of Munich). Then call building_energy with the osm_id and lat/lon of the building meant.',
+    inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'Street and house number, ideally with postcode or "München", or a building name, e.g. "Arcisstraße 21, 80333 München"' }, limit: { type: 'integer', minimum: 1, maximum: 20, default: 10 } }, required: ['query'] },
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
   {
     name: 'building_energy',
     title: 'Energy model of a building',
-    description: 'The energy model of one building from open data, as on the Open Energy Map page: heating demand, final energy, CO2 and peak load, each with a P10-P90 range, plus every input with its value, its source tier (observed, published_table, assumed, user_input) and references down to the document and page. When you report a number, give the range and name the tier of the inputs that drive it (see uncertainty.shares); do not present assumed inputs as facts. Pass what the user knows as assume (it enters as user input and narrows the range). Results are research estimates, not an energy performance certificate.',
+    description: 'The energy model of one building from open data, as on the Open Energy Map page: heating demand, final energy, CO2 and peak load, each with a P10-P90 range, plus every input with its value, its source tier (observed, published_table, assumed, user_input) and references down to the document and page. When you report a number, give the range and name the tier of the inputs that drive it (see uncertainty.shares); do not present assumed inputs as facts. Pass what the user knows as assume (it enters as user input and narrows the range). Identify the building by osm_id (with lat/lon), lod2_id, lat/lon, or address, taken in this order. An address that fits several buildings returns status "ambiguous" with candidates (name, use, footprint, storeys, LoD2 id) and no model: ask the user or choose, then call again with the osm_id and lat/lon of one candidate. The result carries building.identity: the OSM id with its snapshot date and the gml:id of the official LoD2 model. Results are research estimates, not an energy performance certificate.',
     inputSchema: {
       type: 'object',
       properties: {
-        address: { type: 'string', description: 'Street and house number in Munich, e.g. "Schellingstraße 51"' },
+        address: { type: 'string', description: 'Street and house number, ideally with postcode or "München", e.g. "Schellingstraße 51, 80799 München"' },
         lat: { type: 'number' }, lon: { type: 'number' },
-        osm_id: { type: 'string', description: 'OSM id as w<number> or r<number>, from find_building' },
+        osm_id: { type: 'string', description: 'OSM id as w<number> or r<number>, from find_building or a candidate; pass lat/lon with it' },
+        lod2_id: { type: 'string', description: 'gml:id of the building in the Bavarian LoD2 model (CityGML), e.g. "DEBY_LOD2_4958835"; city of Munich only' },
         assume: {
           type: 'object', description: 'What is known about the building; each value enters as user input',
           properties: {
@@ -113,7 +118,7 @@ async function mcp() {
       protocolVersion: PROTOCOLS.includes(params.protocolVersion) ? params.protocolVersion : PROTOCOLS[0],
       capabilities: { tools: {} },
       serverInfo: { name: 'open-energy-map', title: 'Open Energy Map', version: core.VERSION },
-      instructions: 'Building energy you can trace to its source. building_energy returns ranges and the source tier of every input; report the range and the tiers, and link map_url so the user can check. Coverage so far: Munich and its surroundings.',
+      instructions: 'Building energy you can trace to its source. building_energy returns ranges and the source tier of every input; report the range and the tiers, and link map_url so the user can check. An address can fit several buildings: if the result says status "ambiguous", do not pick silently; ask or explain your choice, then call again with the osm_id and lat/lon. Coverage so far: Munich and its surroundings.',
     });
     if (method === 'ping') return reply(id, {});
     if (method === 'tools/list') return reply(id, { tools: TOOLS });
@@ -121,7 +126,7 @@ async function mcp() {
       const a = params.arguments || {};
       try {
         const r = params.name === 'find_building' ? { matches: await core.findBuildings(a.query || '', a.limit || 10) }
-          : params.name === 'building_energy' ? await core.buildingEnergy({ address: a.address, lat: a.lat, lon: a.lon, osm_id: a.osm_id }, a.assume || {}, { samples: a.samples, detail: a.detail === 'full' ? 'full' : 'summary' })
+          : params.name === 'building_energy' ? await core.buildingEnergy({ address: a.address, lat: a.lat, lon: a.lon, osm_id: a.osm_id, lod2_id: a.lod2_id }, a.assume || {}, { samples: a.samples, detail: a.detail === 'full' ? 'full' : 'summary' })
           : null;
         if (!r) return fail(id, -32602, `Unknown tool ${params.name}`);
         return reply(id, { content: [{ type: 'text', text: JSON.stringify(r) }], structuredContent: r });

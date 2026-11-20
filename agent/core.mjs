@@ -6,12 +6,12 @@
 // its neighbours within 150 m, the Bavarian LoD2 model, the Zensus 2022 priors for the construction age and the
 // heating carrier, the typology table, shading, the hourly 5R1C model with the typical year, the prior Monte Carlo
 // for the ranges and the self-checks. Assumptions given by the caller enter as user input, as on the page.
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 
 const ROOT = new URL('../', import.meta.url);
 export const SITE = 'https://chenxiachan.github.io/open-energy-map/';
 export const REPO = 'https://github.com/chenxiachan/open-energy-map';
-export const VERSION = '2026-11-18';
+export const VERSION = '2026-11-20';
 const RES = ['sfh', 'th', 'mfh', 'ab'];
 
 // tiers as on the page (js/main.js TIER_OF): what kind of evidence a value rests on
@@ -49,38 +49,92 @@ export async function init(lang = 'en') {
 }
 
 // ---------- addresses (data/osm/addr.json, the index behind the search field of the page) ----------
+// One row per OSM building with an address or a name. An address can still name several buildings (a school and its
+// sports hall), and the same street and number exist in several municipalities around Munich, so a match is only
+// taken when it is unique; otherwise the candidates go back to the caller.
 const norm = (s) => String(s).toLowerCase().replace(/ß/g, 'ss').replace(/straße|strasse/g, 'str').replace(/[.\-,/]/g, ' ').replace(/\s+/g, ' ').trim();
 const CITY_WORDS = new Set(['münchen', 'munchen', 'muenchen', 'munich', 'germany', 'deutschland', 'bayern', 'bavaria', 'de']);
+const MUNICH_WORDS = new Set(['münchen', 'munchen', 'muenchen', 'munich']);
+// the postcodes of the city of Munich run from 80331 to 81929; the index keeps no municipality names
+const inMunich = (pc) => (pc ? /^8[01]\d{3}$/.test(pc) : null);
+const place = (pc) => (!pc ? '' : inMunich(pc) ? `${pc} München` : pc);
+const label = (street, number, pc) => [`${street || ''} ${number || ''}`.trim(), place(pc)].filter(Boolean).join(', ');
+// house numbers of a row: "12a" → [12a]; "3;5" → [3, 5]; "12-14" → [12, 13, 14]
+function numbers(s) {
+  const out = new Set();
+  for (const part of String(s || '').toLowerCase().replace(/\s+/g, '').split(/[;,/]/)) {
+    const m = part.match(/^(\d+)[-–](\d+)$/);
+    if (m && +m[2] > +m[1] && +m[2] - +m[1] < 40) for (let k = +m[1]; k <= +m[2]; k++) out.add(String(k));
+    else if (part) out.add(part);
+  }
+  return out;
+}
 
 async function addresses() {
   if (!S.addr) {
     const rows = JSON.parse(await readFile(new URL('data/osm/addr.json', ROOT), 'utf8'));
     // street, number, postcode, OSM id, lon, lat, name
-    S.addr = rows.map((r) => ({ street: r[0], number: r[1], postcode: r[2], id: r[3], lon: r[4], lat: r[5], name: r[6] || '', key: norm(`${r[0]} ${r[1]} ${r[6] || ''}`) }));
+    S.addr = rows.map((r) => ({ street: r[0], number: r[1], postcode: r[2], id: r[3], lon: r[4], lat: r[5], name: r[6] || '', nums: numbers(r[1]),
+      street_n: norm(r[0] || ''), parts: norm(`${r[0]} ${r[6] || ''}`).split(' ').filter(Boolean) }));
   }
   return S.addr;
 }
 
+function parseQuery(query) {
+  const toks = norm(query).split(' ').filter(Boolean);
+  const q = { postcodes: [], number: null, words: [], munich: false };
+  for (let i = 0; i < toks.length; i++) {
+    const t = toks[i];
+    if (CITY_WORDS.has(t)) { if (MUNICH_WORDS.has(t)) q.munich = true; continue; }
+    if (/^\d{5}$/.test(t)) { q.postcodes.push(t); continue; }
+    if (q.number == null && /^\d{1,4}[a-z]?$/.test(t)) { q.number = /^\d+$/.test(t) && /^[a-z]$/.test(toks[i + 1] || '') ? t + toks[++i] : t; continue; }
+    q.words.push(t);
+  }
+  return q;
+}
+
+// rows matching a query: { rows (unique buildings, best first), exact, near (same street, other numbers), ignored words }
+async function matchAddress(query) {
+  const all = await addresses();
+  const q = parseQuery(query);
+  if (!q.words.length && !q.number) return { q, rows: [], near: [], ignored: [] };
+  const wordsOk = (r, ws) => ws.every((w) => r.parts.some((p) => p.startsWith(w)));
+  const scan = (ws) => all.filter((r) => (!q.postcodes.length || q.postcodes.includes(r.postcode))
+    && (r.street ? wordsOk(r, ws) : wordsOk(r, q.number ? [...ws, q.number] : ws)));
+  let words = q.words, ignored = [], cand = scan(words);
+  // a word that matches nothing, often a municipality or district, which the index does not keep, is left out
+  for (let i = words.length - 1; !cand.length && i >= 0 && words.length > 1; i--) {
+    const ws = words.filter((_, j) => j !== i), c = scan(ws);
+    if (c.length) { ignored = [words[i]]; words = ws; cand = c; }
+  }
+  const numOk = (r) => !q.number || !r.street || r.nums.has(q.number);
+  let rows = cand.filter(numOk);
+  const near = rows.length || !q.number ? [] : cand.filter((r) => r.street).sort((a, b) => Math.abs(parseInt(a.number) - parseInt(q.number)) - Math.abs(parseInt(b.number) - parseInt(q.number)));
+  // the street as typed beats a longer street that starts with it ("Hauptstraße 5" over "Hauptstraße Nord 5")
+  const typed = words.join(' ');
+  if (rows.some((r) => r.street_n === typed)) rows = rows.filter((r) => !r.street || r.street_n === typed);
+  // "München" in the query: buildings in the city first, and only those if there are any
+  if (q.munich && rows.some((r) => inMunich(r.postcode))) rows = rows.filter((r) => inMunich(r.postcode) !== false);
+  // an address names a place, not a building: every building with the same street, number and postcode is a candidate,
+  // also when a word of the query matched the name of only one of them
+  if (q.number) {
+    const keys = new Set(rows.filter((r) => r.street).map((r) => `${r.street_n}|${r.number}|${r.postcode}`)), have = new Set(rows);
+    for (const r of all) if (r.street && !have.has(r) && keys.has(`${r.street_n}|${r.number}|${r.postcode}`)) rows.push(r);
+  }
+  const score = (r) => words.filter((w) => r.parts.includes(w)).length * 10 - r.parts.join(' ').length / 100;
+  rows.sort((a, b) => score(b) - score(a));
+  return { q, rows, near, ignored };
+}
+
+const entry = (r, exact = true) => ({
+  address: label(r.street, r.number, r.postcode) || null, name: r.name || null, postcode: r.postcode || null, in_munich: inMunich(r.postcode),
+  osm_id: r.id, lat: r.lat, lon: r.lon, map_url: mapUrl(r.id, r.lat, r.lon), exact,
+});
+
 export async function findBuildings(query, limit = 10) {
   await init();
-  const rows = await addresses();
-  const toks = norm(query).split(' ').filter((t) => t && !CITY_WORDS.has(t));
-  const pcs = toks.filter((t) => /^\d{5}$/.test(t)), words = toks.filter((t) => !/^\d{5}$/.test(t));
-  if (!words.length && !pcs.length) return [];
-  const hits = [];
-  for (const r of rows) {
-    if (pcs.length && !pcs.includes(r.postcode)) continue;
-    if (!words.every((t) => r.key.includes(t))) continue;
-    const parts = r.key.split(' ');
-    // exact house number and whole words first, then the shorter entries
-    const score = words.filter((t) => parts.includes(t)).length * 10 - r.key.length / 100;
-    hits.push({ r, score });
-  }
-  hits.sort((a, b) => b.score - a.score);
-  return hits.slice(0, limit).map(({ r }) => ({
-    address: [`${r.street} ${r.number}`.trim(), [r.postcode, 'München'].filter(Boolean).join(' ')].filter(Boolean).join(', '),
-    name: r.name || null, osm_id: r.id, lat: r.lat, lon: r.lon, map_url: mapUrl(r.id, r.lat, r.lon),
-  }));
+  const m = await matchAddress(query);
+  return (m.rows.length ? m.rows.map((r) => entry(r)) : m.near.map((r) => entry(r, false))).slice(0, limit);
 }
 
 const mapUrl = (id, lat, lon) => `${SITE}#b=${id}@${(+lat).toFixed(6)},${(+lon).toFixed(6)}`;
@@ -91,33 +145,118 @@ const absUrl = (u) => (!u ? null : /^https?:/.test(u) ? u : `${REPO}/blob/main/$
 class UserError extends Error {}
 export { UserError };
 
+// ---------- identifiers ----------
+// osm_id (w… or r…) is unique in the OSM snapshot of the data; it changes when mappers redraw an outline, so keep the
+// point as well (map_url carries both). lod2_id is the gml:id of the building in the LoD2 model of the Bavarian
+// survey (CityGML, city of Munich only). The two do not always match one to one: an OSM outline can cover several
+// LoD2 buildings (the index keeps the largest), and one LoD2 building can be split into several OSM outlines.
+const OSM_ID = /^[wr]\d+(_\d+)?$/;
+const tileCentre = (key) => { const [ix, iy] = key.split('_').map(Number), I = S.idx; return [I.bbox[0] + (ix + 0.5) * I.dlon, I.bbox[1] + (iy + 0.5) * I.dlat]; };
+const tileFiles = async (dir) => (await readdir(new URL(dir, ROOT))).filter((f) => /^t_-?\d+_-?\d+\.json$/.test(f));
+
+async function locateOsm(id) {
+  const row = (await addresses()).find((r) => r.id === id);
+  if (row) return { lat: row.lat, lon: row.lon };
+  const needle = `"i":"${id}"`;
+  for (const f of await tileFiles('data/osm/')) {
+    if (!(await readFile(new URL('data/osm/' + f, ROOT), 'utf8')).includes(needle)) continue;
+    const [lon, lat] = tileCentre(f.slice(2, -5)), rec = await S.osm.byId(id, lon, lat);
+    if (rec) return { lat: (rec.bbox[1] + rec.bbox[3]) / 2, lon: (rec.bbox[0] + rec.bbox[2]) / 2 };
+  }
+  return null;
+}
+
+async function lod2Index() {
+  if (!S.lod2rev) {
+    S.lod2rev = new Map();
+    for (const f of await tileFiles('data/lod2/')) {
+      const t = JSON.parse(await readFile(new URL('data/lod2/' + f, ROOT), 'utf8'));
+      for (const [id, v] of Object.entries(t.b || {})) { const k = String(v[8]); if (!S.lod2rev.has(k)) S.lod2rev.set(k, []); S.lod2rev.get(k).push({ id, tile: f.slice(2, -5) }); }
+    }
+  }
+  return S.lod2rev;
+}
+
+async function locateLod2(lod2) {
+  const num = String(lod2).trim().replace(/^DEBY_LOD2_/i, '');
+  if (!/^\d+$/.test(num)) throw new UserError(`lod2_id should look like DEBY_LOD2_4769338, got ${lod2}.`);
+  const out = [];
+  for (const { id, tile } of (await lod2Index()).get(num) || []) {
+    const [lon, lat] = tileCentre(tile), rec = await S.osm.byId(id, lon, lat);
+    if (rec) out.push({ id, lat: (rec.bbox[1] + rec.bbox[3]) / 2, lon: (rec.bbox[0] + rec.bbox[2]) / 2 });
+  }
+  return out;
+}
+
+const footprint = (rec) => {
+  if (!rec) return null;
+  const lat0 = (rec.bbox[1] + rec.bbox[3]) / 2, kx = 111320 * Math.cos((lat0 * Math.PI) / 180), ky = 110540;
+  const ring = (r) => { let a = 0; for (let i = 0; i < r.length; i++) { const [x1, y1] = r[i], [x2, y2] = r[(i + 1) % r.length]; a += (x1 * kx) * (y2 * ky) - (x2 * kx) * (y1 * ky); } return Math.abs(a) / 2; };
+  return Math.round(ring(rec.outer) - (rec.holes || []).reduce((t, h) => t + ring(h), 0));
+};
+
+// several buildings fit the query: describe each so the agent (or the person) can choose
+async function ambiguous(base, list, reason) {
+  const cands = [];
+  for (const c of list.slice(0, 12)) {
+    const rec = await S.osm.byId(c.osm_id, c.lon, c.lat), l2 = (await S.osm.lod2Around(c.lon, c.lat)).get(c.osm_id);
+    cands.push({ ...c, exact: undefined, osm_building: rec?.tags?.building || null, footprint_m2: footprint(rec), storeys: rec?.tags?.['building:levels'] ? +rec.tags['building:levels'] : null, lod2_id: l2 ? `DEBY_LOD2_${l2[8]}` : null });
+  }
+  return { ...base, modelled: false, status: 'ambiguous', reason, n_candidates: list.length, candidates: cands,
+    next_step: 'Ask the person which building is meant, or choose by name, postcode, use and size; then call building_energy again with the osm_id and the lat and lon of that candidate.' };
+}
+
 // ---------- one building ----------
-// where: { address } | { lat, lon } | { osm_id, lat?, lon? }; assume: what the caller knows (user input on the page)
+// where: { osm_id, lat?, lon? } | { lod2_id } | { lat, lon } | { address }, taken in this order;
+// assume: what the caller knows (user input on the page)
 export async function buildingEnergy(where = {}, assume = {}, opts = {}) {
   await init();
   const { G, Arch, solar, rc5, sys, osm, prior, checks, refs, A, L } = S;
   const n = Math.max(50, Math.min(1000, Math.round(opts.samples || 300)));
-  let match = null, lat = where.lat, lon = where.lon;
-  if (where.address) {
-    const hits = await findBuildings(where.address, 5);
-    if (!hits.length) throw new UserError(`No address in the local data matches "${where.address}". The map covers Munich and its surroundings; try the street and house number, or give lat/lon.`);
-    match = hits[0]; lat = match.lat; lon = match.lon; where = { ...where, osm_id: where.osm_id || match.osm_id };
-    match.other_candidates = hits.slice(1).map((h) => h.address);
-  }
-  if (where.osm_id && (lat == null || lon == null)) {
-    const row = (await addresses()).find((r) => r.id === where.osm_id);
-    if (!row) throw new UserError(`OSM id ${where.osm_id} needs lat and lon (it has no address in the local index).`);
-    lat = row.lat; lon = row.lon;
-  }
-  if (lat == null || lon == null) throw new UserError('Give an address, lat and lon, or an OSM id.');
+  const base = { tool: toolInfo(), query: { ...Object.fromEntries(Object.entries(where).filter(([, v]) => v != null && v !== '')), assume } };
+  let match = null, lat = where.lat, lon = where.lon, osmId = where.osm_id, resolvedBy = null, note = null;
+  if (osmId != null) {
+    osmId = String(osmId).trim();
+    if (!OSM_ID.test(osmId)) throw new UserError(`osm_id should look like w34107320 or r1234567, got ${where.osm_id}.`);
+    if (lat == null || lon == null) {
+      const p = await locateOsm(osmId);
+      if (!p) throw new UserError(`OSM id ${osmId} is not in the local data (OSM snapshot ${toolInfo().osm_snapshot}). Give lat and lon as well, or use find_building.`);
+      ({ lat, lon } = p);
+    }
+    resolvedBy = 'osm_id';
+  } else if (where.lod2_id) {
+    const hits = await locateLod2(where.lod2_id);
+    if (!hits.length) throw new UserError(`LoD2 building ${where.lod2_id} is not matched to an OSM outline in the local data. LoD2 covers the city of Munich; where an OSM outline covers several LoD2 buildings, only the largest is indexed. Give lat and lon instead.`);
+    if (hits.length > 1) {
+      const rows = await addresses();
+      return ambiguous(base, hits.map((h) => { const r = rows.find((x) => x.id === h.id); return r ? entry(r) : { address: null, name: null, postcode: null, in_munich: true, osm_id: h.id, lat: rd(h.lat, 6), lon: rd(h.lon, 6), map_url: mapUrl(h.id, h.lat, h.lon) }; }),
+        `LoD2 building ${where.lod2_id} is split into ${hits.length} OSM outlines; the map models each outline as a building.`);
+    }
+    ({ id: osmId, lat, lon } = hits[0]); resolvedBy = 'lod2_id';
+  } else if (lat != null && lon != null) {
+    resolvedBy = 'point';
+  } else if (where.address) {
+    const m = await matchAddress(where.address);
+    const ign = m.ignored.length ? ` The word "${m.ignored.join(' ')}" matched nothing and was left out (the index keeps postcodes, not municipality names).` : '';
+    if (!m.rows.length) {
+      throw new UserError(m.near.length
+        ? `${m.near[0].street} ${m.q.number} is not in the local address index, which holds the addresses tagged on OSM building outlines. Numbers on this street in the index: ${[...new Set(m.near.map((r) => label(r.street, r.number, r.postcode)))].slice(0, 8).join('; ')}. If the address exists, give lat and lon of the building.${ign}`
+        : `No address in the local data matches "${where.address}". The map covers Munich and its surroundings; try the street and house number, or give lat and lon.${ign}`);
+    }
+    if (m.rows.length > 1) return ambiguous(base, m.rows.map((r) => entry(r)), `"${where.address}" fits ${m.rows.length} buildings.${ign}`);
+    match = entry(m.rows[0]); match.exact = undefined; lat = match.lat; lon = match.lon; osmId = match.osm_id; resolvedBy = 'address';
+    if (ign) note = ign.trim();
+  } else throw new UserError('Give an address, lat and lon, an osm_id or a lod2_id.');
   if (!osm.inCoverage(lon, lat)) throw new UserError(`${lat}, ${lon} is outside the area covered so far (Munich and its surroundings).`);
-  const rec = (where.osm_id && await osm.byId(where.osm_id, lon, lat)) || await osm.buildingAt(lon, lat);
+  let rec = osmId ? await osm.byId(osmId, lon, lat) : null;
+  if (osmId && !rec) { note = `OSM id ${osmId} was not found near ${lat}, ${lon} in this snapshot; the building at the point was used instead.`; resolvedBy = 'point'; }
+  rec = rec || await osm.buildingAt(lon, lat);
   if (!rec) throw new UserError(`No building outline at ${lat}, ${lon}.`);
+  base.resolved_by = resolvedBy; base.matched_address = match || undefined; base.note = note || undefined;
 
   const nbRecs = await osm.neighbours(rec, 150);
   const cLon = (rec.bbox[0] + rec.bbox[2]) / 2, cLat = (rec.bbox[1] + rec.bbox[3]) / 2;
   const lod2Map = await osm.lod2Around(cLon, cLat);
-  const base = { tool: toolInfo(), query: { ...where, assume }, matched_address: match };
   const st = lod2Map.structures.get(rec.id), open = G.openStructure(rec.tags || {}, G.lod2Record(lod2Map.get(rec.id))?.fn);
   if (st || open) return { ...base, building: { osm_id: rec.id, lat: cLat, lon: cLon, map_url: mapUrl(rec.id, cLat, cLon) }, modelled: false,
     reason: open ? `An open structure (${open}): no enclosing walls and no heating, so no energy demand is computed.` : 'A structure such as a monument, tower, chimney or shaft (tall and slender, no address, no LoD2 building in the cadastre), so no energy demand is computed.' };
@@ -205,12 +344,14 @@ export async function buildingEnergy(where = {}, assume = {}, opts = {}) {
     modelled: true,
     building: {
       osm_id: m.id, name: tags.name || null,
-      address: [tags['addr:street'] && `${tags['addr:street']} ${tags['addr:housenumber'] || ''}`.trim(), tags['addr:postcode'] && `${tags['addr:postcode']} ${tags['addr:city'] || 'München'}`].filter(Boolean).join(', ') || match?.address || null,
+      address: (tags['addr:street'] && label(tags['addr:street'], tags['addr:housenumber'], tags['addr:postcode'])) || match?.address || null,
       lat: rd(m.center.lat, 6), lon: rd(m.center.lon, 6), map_url: mapUrl(m.id, m.center.lat, m.center.lon), osm_url: `https://www.openstreetmap.org/${m.id.startsWith('w') ? 'way' : 'relation'}/${m.id.slice(1)}`,
       usage: m.usage, usage_label: Arch.TYPE_CN[m.usage], usage_source: m.usageSrc || null, possibly_unheated: !m.heated || undefined,
       storeys: m.floors, height_m: rd(m.height, 1), storey_height_m: rd(m.floorHeight, 2), roof: m.roof?.shape || null, attic: m.roof?.attic || null,
       geometry_sources: { height: m.geomSrc?.height || null, storeys: m.geomSrc?.floors || null, roof: m.geomSrc?.roof || null, tier: { height: GSRC(m.geomSrc?.height), storeys: GSRC(m.geomSrc?.floors) } },
-      lod2_id: m.lod2?.lod2 || null, party_wall_share: rd(m.facades.reduce((t, f) => t + f.length * (1 - f.exposed), 0) / Math.max(1e-9, m.facades.reduce((t, f) => t + f.length, 0)), 2),
+      lod2_id: m.lod2?.lod2 || null,
+      identity: identity(rec.id, lod2Map),
+      party_wall_share: rd(m.facades.reduce((t, f) => t + f.length * (1 - f.exposed), 0) / Math.max(1e-9, m.facades.reduce((t, f) => t + f.length, 0)), 2),
       reference_area_m2: Math.round(AN), living_area_m2: m.areas.living ? Math.round(m.areas.living) : null,
       construction_age: {
         used: { class: asg.cls, period: cls.label, set_by_user: !!state.ageClass },
@@ -248,6 +389,17 @@ function summary(o) {
       reference: i.references[0] ? [i.references[0].label, i.references[0].where].filter(Boolean).join(' · ') + (i.references[0].url ? ` <${i.references[0].url}>` : '') : null })),
     checks: o.checks.filter((c) => c.status !== 'pass').map((c) => ({ title: c.title, status: c.status, detail: c.detail })),
     tiers: undefined, sources: o.sources.map((x) => `${x.data}: ${x.source} (${x.licence})`),
+  };
+}
+
+// how this outline relates to the official LoD2 model (see "identifiers" above)
+function identity(id, lod2Map) {
+  const v = lod2Map.get(id), k = v ? v[8] : null;
+  return {
+    osm_id: id, osm_snapshot: toolInfo().osm_snapshot,
+    lod2_id: v ? `DEBY_LOD2_${k}` : null,
+    lod2_buildings_under_outline: v ? v[9] : 0,
+    outlines_sharing_lod2: v ? [...lod2Map].filter(([o, w]) => o !== id && w[8] === k).map(([o]) => o) : [],
   };
 }
 

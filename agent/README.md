@@ -11,11 +11,12 @@ node agent/oem.mjs find "Schellingstraße 51"
 node agent/oem.mjs building --address "Schellingstraße 51, München"
 node agent/oem.mjs building --at 48.148862 11.568004
 node agent/oem.mjs building --id w34107320 --assume refurbished.windows=yes --assume system=hp_air
+node agent/oem.mjs building --lod2 DEBY_LOD2_4958835
 ```
 
 | Option | Meaning |
 |---|---|
-| `--address`, `--at LAT LON`, `--id` | The building: an address, a point, or an OSM id (`w…` or `r…`) |
+| `--id`, `--lod2`, `--at LAT LON`, `--address` | The building: an OSM id (`w…` or `r…`), a LoD2 id (`DEBY_LOD2_…`), a point or an address, taken in this order |
 | `--assume key=value` | What is known, entered as user input as on the page: `age_class=A…L`, `system=gas_cond…`, `usage=mfh…`, `storeys=5`, `height_m=16`, `refurbished.wall=yes`, or any input such as `U_wall=0.3` |
 | `--summary` | A shorter result: each input with its tier, prior range and first reference |
 | `--samples N` | Draws of the prior for the ranges (100 to 1000, default 300) |
@@ -30,7 +31,7 @@ node agent/oem.mjs mcp
 The server speaks MCP over stdio and offers two tools:
 
 - `find_building` searches addresses and building names and returns OSM ids, coordinates and links to the map.
-- `building_energy` returns the model of one building. Arguments: `address`, or `lat` and `lon`, or `osm_id`; optional `assume`, `samples` and `detail` (`summary`, the default, or `full`).
+- `building_energy` returns the model of one building. Arguments: `osm_id` (with `lat` and `lon`), `lod2_id`, `lat` and `lon`, or `address`; optional `assume`, `samples` and `detail` (`summary`, the default, or `full`).
 
 Claude Code:
 
@@ -48,11 +49,28 @@ Claude Desktop and other clients (`mcpServers` in the client's configuration):
 }
 ```
 
+## Which building
+
+An address does not always name one building. Several buildings can share an address (a school and its sports hall), and the same street and number exist in several municipalities around Munich. The tool therefore takes an address only when it fits exactly one building:
+
+- The house number must match. If it is not in the index, the tool says so and lists the numbers that exist on the street; it does not take the nearest one.
+- "München" in the query keeps the buildings in the city of Munich (postcodes 80331 to 81929). A postcode narrows the search further. The index keeps no municipality names, so a word such as "Gauting" that matches nothing is left out, and the reply says so.
+- If more than one building fits, `building_energy` returns `"status": "ambiguous"` and the candidates, each with name, postcode, OSM building type, footprint, storeys and LoD2 id, and no model. The agent asks the person or chooses, then calls again with the `osm_id` and `lat`, `lon` of one candidate.
+
+Two identifiers come back in `building.identity`:
+
+| Identifier | What it is |
+|---|---|
+| `osm_id` | The OSM way or relation (`w34107320`). Unique in the OSM snapshot of the data (`osm_snapshot`), but it can change when mappers redraw an outline. Keep the point as well: `map_url` carries both, and a stale id falls back to the building at the point (the result then says so in `note`). |
+| `lod2_id` | The `gml:id` of the building in the LoD2 model of the Bavarian survey (CityGML, city of Munich only), the key to join with other city models. |
+
+The two do not always match one to one. About one OSM outline in five covers several LoD2 buildings (`lod2_buildings_under_outline`; the index keeps the largest), and about 5,400 LoD2 buildings are split into several OSM outlines (`outlines_sharing_lod2`). The map models each OSM outline as a building, so a `lod2_id` that is split returns the outlines as candidates.
+
 ## What comes back
 
 | Field | Content |
 |---|---|
-| `building` | OSM id, address, use, storeys, height, roof, LoD2 id, reference area, construction age with its prior, and links to the map and to OSM |
+| `building` | OSM id, address, use, storeys, height, roof, `identity`, reference area, construction age with its prior, and links to the map and to OSM |
 | `results` | Heating demand, final energy (with carrier, system and energy class), primary energy, CO₂ and peak load. Each has `value` (the model with the point values of the inputs) and `p10_p90` with `median` (the dark band on the page). If the construction age is uncertain, `p10_p90_all_ages` gives the range over all ages (the light band) |
 | `inputs` | Every input: value, unit, `tier`, a note on how the value was set, the prior range and the references (document, page, link) |
 | `uncertainty` | The share of each input in the variance of the heating demand |
