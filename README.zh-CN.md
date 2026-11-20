@@ -39,7 +39,7 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 - **账单标定与改造。** 输入年度能源账单后，用贝叶斯方法（序贯蒙特卡洛）缩小区间。改造页在同一模型上比较各项改造措施，同样给出区间。
 - **全市图层。** 205,505 栋供暖建筑的模型结果汇总到 Zensus 的 100 m 网格（27,295 格）：单位面积供暖需求、热需求密度（采用地方供热规划的分级，KEA-BW）、模型与同类建筑账单的对比，以及 LoD2 几何和街景照片的覆盖情况。每个着色格至少包含 5 栋供暖建筑，任何颜色都不对应单一地址。
 - **三维街景。** 所选建筑周围的 LoD2 建筑和单棵树木，并附 Mapillary 街景照片。地形和航拍目前只覆盖慕尼黑工业大学主楼一带。
-- **导出。** 每栋建筑都可以导出 EnergyPlus 输入文件（IDF）和气象文件（EPW），以及 CityGML 2.0 加 Energy ADE 3.0（beta 7）：边界面、热区和使用区、构造、供热设备和能耗需求，每项输入的区间和来源等级写在通用属性里。
+- **导出。** 每栋建筑都可以导出 EnergyPlus 输入文件（IDF）和气象文件（EPW），以及 CityGML 2.0 加 [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE)（beta 7，由 TU Delft 和 HFT Stuttgart 开发；[Agugiaro 与 Padsala 2026](https://doi.org/10.5194/isprs-archives-L-4-W2-2026-1-2026)）：边界面、热区和使用区、构造、供热设备和能耗需求，每项输入的区间和来源等级写在通用属性里。
 - **语言。** 英文、德文和中文，在页面右上角切换。
 
 ## 方法
@@ -73,14 +73,44 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 
 ## 给 AI 智能体用
 
-命令行工具和 MCP 服务以 JSON 返回一栋楼的模型：每个结果都有区间，每项输入都有来源等级和出处。LLM 智能体用它，就能引用可追溯的建筑能耗。它们和地图用同一套模块和数据，只需要 Node.js，离线即可运行。
+<p align="center"><img src="assets/readme/mcp-demo.gif" width="880" alt="Claude Code 通过 MCP 向 Open Energy Map 查询 Schellingstraße 51，回答里给出区间、主要不确定来源和改造假设"></p>
+<p align="center"><sub>一次真实的 Claude Code 会话的回放（<a href="assets/readme/mcp-demo.mp4">MP4</a>）。提问、工具调用和回答都是原样，工具返回的 JSON 做了摘要，路径做了缩短。</sub></p>
+
+MCP 服务和命令行工具以 JSON 返回一栋楼的模型：每个结果都有区间，每项输入都有来源等级和出处。LLM 智能体用它，就能引用可追溯的建筑能耗。它们和地图用同一套模块和数据，只需要 Node.js 18 或更高版本，离线即可运行。
+
+### Claude Code
+
+```bash
+git clone https://github.com/chenxiachan/open-energy-map.git
+cd open-energy-map
+claude mcp add open-energy-map -- node agent/oem.mjs mcp
+claude mcp list          # open-energy-map: node agent/oem.mjs mcp - ✔ Connected
+claude
+```
+
+然后直接问，比如："慕尼黑 Schellingstraße 51 一年要多少供暖能耗？这个数有多可靠？"Claude 会调用 `building_energy`，回答里给出区间、主要影响因素及其来源等级，以及这栋楼在地图上的链接。告诉它你知道的情况（窗户换过、装了热泵），它会把这些作为用户填写再算一次。上面的命令只对这个文件夹生效；想在任何目录使用，把 `agent/oem.mjs` 换成绝对路径，并加上 `--scope user`。
+
+### Claude Desktop 和其他 MCP 客户端
+
+```json
+{
+  "mcpServers": {
+    "open-energy-map": { "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] }
+  }
+}
+```
+
+### 工具和命令行
+
+- `find_building`：查地址和楼名，返回 OSM 编号、邮编和地图链接。
+- `building_energy`：按 OSM 编号、LoD2 编号、坐标或地址返回一栋楼的模型。一个地址对应几栋楼时，返回候选列表，不替你选。
 
 ```bash
 node agent/oem.mjs building --address "Schellingstraße 51, München"
-claude mcp add open-energy-map -- node /path/to/open-energy-map/agent/oem.mjs mcp
+node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out schellingstr51.gml
 ```
 
-选项、MCP 工具和返回字段见 [agent/README.md](agent/README.md)（英文）。
+选项、识别符和返回字段见 [agent/README.md](agent/README.md)（英文）。
 
 ## 本地运行
 

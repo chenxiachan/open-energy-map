@@ -39,7 +39,7 @@ Open Energy Map aligns open data building by building: the OpenStreetMap outline
 - **Bill calibration and retrofit.** Annual energy bills narrow the ranges through Bayesian calibration (sequential Monte Carlo). The retrofit tab compares measures on the same model, again with ranges.
 - **City layers.** The model results of 205,505 heated buildings, summed on the 100 m grid of the Zensus (27,295 cells): heating demand per m², heat demand density in the classes used for municipal heat planning (KEA-BW), the model compared with the bills of similar buildings, and the coverage of LoD2 geometry and street-level photos. Every coloured cell covers at least five heated buildings, so no colour stands for a single address.
 - **3D street view.** LoD2 buildings and single trees around the selected building, with street-level photos from Mapillary. Terrain and aerial photos are so far available around the TUM main building.
-- **Export.** EnergyPlus input (IDF) and weather (EPW) files for each building, and CityGML 2.0 with the Energy ADE 3.0 (beta 7): boundary surfaces, thermal and usage zone, constructions, heat generator and energy demand, with the range and source tier of every input as generic attributes.
+- **Export.** EnergyPlus input (IDF) and weather (EPW) files for each building, and CityGML 2.0 with the [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE) (beta 7, TU Delft and HFT Stuttgart; [Agugiaro and Padsala 2026](https://doi.org/10.5194/isprs-archives-L-4-W2-2026-1-2026)): boundary surfaces, thermal and usage zone, constructions, heat generator and energy demand, with the range and source tier of every input as generic attributes.
 - **Languages.** English, German and Chinese, switched at the top right of the page.
 
 ## Method
@@ -73,14 +73,44 @@ Published tables and standards, such as the IWU / TABULA typology, DIN V 18599, 
 
 ## For AI agents
 
-A command line tool and an MCP server give the model of one building as JSON, with the range of every result and the source tier and references of every input. An LLM agent can then quote building energy it can trace. They use the same modules and data as the map, need only Node.js and work offline.
+<p align="center"><img src="assets/readme/mcp-demo.gif" width="880" alt="Claude Code asks Open Energy Map about Schellingstraße 51 through MCP and answers with the range, the inputs that drive it and a what-if"></p>
+<p align="center"><sub>A real Claude Code session, replayed (<a href="assets/readme/mcp-demo.mp4">MP4</a>). The question, the tool calls and the answer are as recorded; the tool results are summarized and the paths shortened.</sub></p>
+
+An MCP server and a command line tool give the model of one building as JSON, with the range of every result and the source tier and references of every input. An LLM agent can then quote building energy it can trace. They use the same modules and data as the map, need only Node.js 18 or later and work offline.
+
+### Claude Code
+
+```bash
+git clone https://github.com/chenxiachan/open-energy-map.git
+cd open-energy-map
+claude mcp add open-energy-map -- node agent/oem.mjs mcp
+claude mcp list          # open-energy-map: node agent/oem.mjs mcp - ✔ Connected
+claude
+```
+
+Then ask, for example: *How much heating energy does Schellingstraße 51 in Munich need, and how sure is that number?* Claude calls `building_energy` and answers with the range, the inputs that drive it and their source tiers, and a link to the building on the map. Tell it what you know (the windows were replaced, it has a heat pump) and it calls again with these as user input. The server is added for this folder; to use it from anywhere, give the absolute path of `agent/oem.mjs` and add `--scope user`.
+
+### Claude Desktop and other MCP clients
+
+```json
+{
+  "mcpServers": {
+    "open-energy-map": { "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] }
+  }
+}
+```
+
+### Tools and command line
+
+- `find_building` searches addresses and building names and returns OSM ids, postcodes and links to the map.
+- `building_energy` returns the model of one building, by OSM id, LoD2 id, point or address. If an address fits several buildings, it returns the candidates instead of choosing one.
 
 ```bash
 node agent/oem.mjs building --address "Schellingstraße 51, München"
-claude mcp add open-energy-map -- node /path/to/open-energy-map/agent/oem.mjs mcp
+node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out schellingstr51.gml
 ```
 
-See [agent/README.md](agent/README.md) for the options, the MCP tools and the fields of the result.
+See [agent/README.md](agent/README.md) for the options, the identifiers and the fields of the result.
 
 ## Running locally
 
