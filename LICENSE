@@ -11,8 +11,8 @@ Licences
 Except for the third-party material listed below, this work is licensed in
 two parts.
 
-  Software           The code (index.html, css/ and js/), which includes the
-                     energy model, is licensed under the PolyForm
+  Software           The code (index.html, css/, js/ and agent/), which
+                     includes the energy model, is licensed under the PolyForm
                      Noncommercial License 1.0.0. Its full text is at the
                      end of this file.
                      https://polyformproject.org/licenses/noncommercial/1.0.0

@@ -42,7 +42,7 @@ Claude Code:
 claude mcp add open-energy-map -- node /path/to/open-energy-map/agent/oem.mjs mcp
 ```
 
-Claude Desktop and other clients (`mcpServers` in the client's configuration):
+Claude Desktop, Cursor, Windsurf, Gemini CLI and most other clients (`mcpServers` in the client's configuration; VS Code and the Codex CLI use their own keys, see the [main README](../README.md#for-ai-agents)):
 
 ```json
 {
