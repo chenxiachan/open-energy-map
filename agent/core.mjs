@@ -33,8 +33,8 @@ export async function init(lang = 'en') {
     try { return new Response(await readFile(url), { status: 200, headers: { 'content-type': 'application/json' } }); } catch { return new Response(null, { status: 404 }); }
   };
   const im = (p) => import(new URL(p, ROOT).href);
-  const [i18n, G, Arch, solar, rc5, sys, osm, prior, checks, refs] = await Promise.all(
-    ['js/i18n.js', 'js/geometry.js', 'js/archetype.js', 'js/solar.js', 'js/rc5.js', 'js/systems.js', 'js/osmdb.js', 'js/prior.js', 'js/checks.js', 'js/refs.js'].map(im));
+  const [i18n, G, Arch, solar, rc5, sys, osm, prior, checks, refs, T] = await Promise.all(
+    ['js/i18n.js', 'js/geometry.js', 'js/archetype.js', 'js/solar.js', 'js/rc5.js', 'js/systems.js', 'js/osmdb.js', 'js/prior.js', 'js/checks.js', 'js/refs.js', 'js/trace.js'].map(im));
   const idx = await osm.loadIndex('data/osm/');
   const A = await Arch.loadArchetypes('data/archetypes_de.json');
   sys.setFactors(A);
@@ -44,12 +44,13 @@ export async function init(lang = 'en') {
   const wIdx = JSON.parse(await readFile(new URL('data/weather/index.json', ROOT), 'utf8'));
   const W = JSON.parse(await readFile(new URL('data/weather/' + wIdx.tmy.file, ROOT), 'utf8'));
   for (const k of ['T', 'GHI', 'DNI', 'DHI']) W[k] = Float32Array.from(W[k]);
-  S = { lang: i18n.LANG, L: i18n.L, G, Arch, solar, rc5, sys, osm, prior, checks, refs, A, idx, W, wIdx, addr: null };
+  S = { lang: i18n.LANG, L: i18n.L, G, Arch, solar, rc5, sys, osm, prior, checks, refs, T, A, idx, W, wIdx, addr: null };
   return S;
 }
 
 // ---------- addresses (data/osm/addr.json, the index behind the search field of the page) ----------
-// One row per OSM building with an address or a name. An address can still name several buildings (a school and its
+// Rows: the addresses and names on OSM building outlines, and the OSM address points placed on the outline that holds
+// them (tools/build_addr_index.py). An address can still name several buildings (a school and its
 // sports hall), and the same street and number exist in several municipalities around Munich, so a match is only
 // taken when it is unique; otherwise the candidates go back to the caller.
 const norm = (s) => String(s).toLowerCase().replace(/ß/g, 'ss').replace(/straße|strasse/g, 'str').replace(/[.\-,/]/g, ' ').replace(/\s+/g, ' ').trim();
@@ -123,6 +124,9 @@ async function matchAddress(query) {
   }
   const score = (r) => words.filter((w) => r.parts.includes(w)).length * 10 - r.parts.join(' ').length / 100;
   rows.sort((a, b) => score(b) - score(a));
+  // a building can carry several addresses (a corner, several entrances): one row per building
+  const seen = new Set();
+  rows = rows.filter((r) => !seen.has(r.id) && seen.add(r.id));
   return { q, rows, near, ignored };
 }
 
@@ -211,7 +215,7 @@ async function ambiguous(base, list, reason) {
 // assume: what the caller knows (user input on the page)
 export async function buildingEnergy(where = {}, assume = {}, opts = {}) {
   await init();
-  const { G, Arch, solar, rc5, sys, osm, prior, checks, refs, A, L } = S;
+  const { G, Arch, solar, rc5, sys, osm, prior, checks, refs, T, A, L } = S;
   const n = Math.max(50, Math.min(1000, Math.round(opts.samples || 300)));
   const base = { tool: toolInfo(), query: { ...Object.fromEntries(Object.entries(where).filter(([, v]) => v != null && v !== '')), assume } };
   let match = null, lat = where.lat, lon = where.lon, osmId = where.osm_id, resolvedBy = null, note = null;
@@ -240,7 +244,7 @@ export async function buildingEnergy(where = {}, assume = {}, opts = {}) {
     const ign = m.ignored.length ? ` The word "${m.ignored.join(' ')}" matched nothing and was left out (the index keeps postcodes, not municipality names).` : '';
     if (!m.rows.length) {
       throw new UserError(m.near.length
-        ? `${m.near[0].street} ${m.q.number} is not in the local address index, which holds the addresses tagged on OSM building outlines. Numbers on this street in the index: ${[...new Set(m.near.map((r) => label(r.street, r.number, r.postcode)))].slice(0, 8).join('; ')}. If the address exists, give lat and lon of the building.${ign}`
+        ? `${m.near[0].street} ${m.q.number} is not in the local address index (the OSM addresses on or inside building outlines). Numbers on this street in the index: ${[...new Set(m.near.map((r) => label(r.street, r.number, r.postcode)))].slice(0, 8).join('; ')}. If the address exists, give lat and lon of the building.${ign}`
         : `No address in the local data matches "${where.address}". The map covers Munich and its surroundings; try the street and house number, or give lat and lon.${ign}`);
     }
     if (m.rows.length > 1) return ambiguous(base, m.rows.map((r) => entry(r)), `"${where.address}" fits ${m.rows.length} buildings.${ign}`);
@@ -307,34 +311,9 @@ export async function buildingEnergy(where = {}, assume = {}, opts = {}) {
   const topAge = Object.entries(ageInfo.p).sort((a, b) => b[1] - a[1]);
   // as the range bars of the page: the band the value belongs to (construction age at the class used, if the age is
   // uncertain) is p10_p90 with its median; the band over all possible ages is p10_p90_all_ages
-  const band = (k, f = 1) => {
-    const main = (pr.cond || pr)[k];
-    return { p10_p90: [sig(main[0] / f), sig(main[2] / f)], median: sig(main[1] / f), p10_p90_all_ages: pr.cond ? [sig(pr[k][0] / f), sig(pr[k][2] / f)] : undefined };
-  };
-  const systems = sys.factors().systems;
-  const sp = Arch.systemPrior(ageInfo.heat, asg.cls);
-
-  // the prior range of each input, from draws of the prior as in the parameter table of the page
-  const draw = Arch.makePrior(m, ageInfo, state, asg), rg = Arch.rng(5), draws = Array.from({ length: 400 }, () => draw(rg).p);
-  const q = (k, f) => { const a = draws.map((d) => d[k]).filter((v) => typeof v === 'number').sort((x, y) => x - y); return a.length ? a[Math.round(f * (a.length - 1))] : null; };
-  const inputs = [];
-  for (const [k, meta] of Object.entries(Arch.PARAM_META)) {
-    const pv = m.params[k];
-    if (!pv) continue;
-    const comp = { U_window: 'windows', g_window: 'windows', U_wall: 'wall', U_roof: 'roof', U_floor: 'floor' }[k];
-    const rs = comp ? state.refurb[comp] : null, share = comp ? (rs === 'yes' ? 1 : rs === 'no' ? 0 : asg.mp[comp] || 0) : 0;
-    const refList = refs.refsFor(k, { param: pv, share, state: rs, residential: RES.includes(m.usage), system: systems[m.params.system.value] });
-    let range = null;
-    if (k.startsWith('WWR_') && q('wwrScale', 0.1) != null) range = [sig(pv.value * q('wwrScale', 0.1)), sig(pv.value * q('wwrScale', 0.9))];
-    else if (Arch.UNCERTAIN.includes(k) && q(k, 0.1) != null) range = [sig(q(k, 0.1)), sig(q(k, 0.9))];
-    inputs.push({
-      key: k, label: meta.label, group: meta.group,
-      value: k === 'system' ? pv.value : sig(pv.value, 4), value_label: k === 'system' ? systems[pv.value]?.label || pv.value : undefined, unit: meta.unit || null,
-      tier: TIER_OF[pv.source] || 'assumed', source: Arch.SOURCE_CN[pv.source] || pv.source, note: pv.note || null,
-      prior_p10_p90: range, prior_shares: k === 'system' && pv.source !== 'user' && sp ? Object.fromEntries(Object.entries(sp).sort((a, b) => b[1] - a[1]).map(([s, v]) => [s, rd(v, 3)])) : undefined,
-      references: refList.map((r) => ({ tier: TIER_OF[r.tier] || 'assumed', label: r.label, where: r.where || null, url: absUrl(r.url) })),
-    });
-  }
+  const band = (k, f = 1) => T.band(pr, k, f);
+  // every input with its value, tier, prior range and references (js/trace.js, shared with the exports)
+  const inputs = T.traceInputs(m, ageInfo, state, asg, { absUrl });
   const varLabel = (key) => (key === 'age' ? L('建成年代', 'Construction age', 'Baualtersklasse') : key === 'wwrScale' ? L('窗墙比', 'Window-to-wall ratio', 'Fensterflächenanteil') : key === 'hScale' ? L('层数（缺省）', 'Storeys (default)', 'Geschosse (Standardwert)') : key === 'anScale' ? L('参考面积（层高偏差）', 'Reference area (storey height bias)', 'Gebäudenutzfläche (Abweichung der Geschosshöhe)') : Arch.PARAM_META[key]?.label || key);
   const shares = prior.varShares(pr).slice(0, 10).map((it) => ({ input: it.key, label: varLabel(it.key), share: rd(it.share, 3), tier: TIER_OF[VAR_TIER[it.key] || (m.params[it.key]?.source === 'user' ? 'user' : 'archetype')] }));
   const GSRC = (s) => (s == null ? null : /^LoD2/.test(s) ? 'observed' : /^osm/.test(s) ? 'observed' : s === 'user' ? 'user_input' : 'assumed');
@@ -377,6 +356,8 @@ export async function buildingEnergy(where = {}, assume = {}, opts = {}) {
     licence: 'Results: CC BY-NC 4.0; code and model: PolyForm Noncommercial 1.0.0; third-party data under the licences in sources. Commercial use needs a licence (x.c.chen@tum.de).',
     cite: 'Open Energy Map, (c) 2026 Xia Chen, ' + REPO,
   };
+  // the export (agent/oem.mjs energy-ade) needs the model itself as well
+  if (opts.internal) return { json: out, m, res, fe, pr, p, ageInfo, asg, state, inputs, shares, prof };
   return opts.detail === 'summary' ? summary(out) : out;
 }
 
@@ -401,6 +382,23 @@ function identity(id, lod2Map) {
     lod2_buildings_under_outline: v ? v[9] : 0,
     outlines_sharing_lod2: v ? [...lod2Map].filter(([o, w]) => o !== id && w[8] === k).map(([o]) => o) : [],
   };
+}
+
+// ---------- CityGML 2.0 + Energy ADE 3.0 of one building (js/energyade.js, the same file as the Export tab) ----------
+export async function buildingEnergyADE(where = {}, assume = {}, opts = {}) {
+  const r = await buildingEnergy(where, assume, { ...opts, internal: true });
+  if (!r.m) return { json: r, xml: null };   // not modelled: a structure, or several buildings fit the address
+  const { m, res, fe, pr, inputs, prof, json } = r;
+  const { buildEnergyADE } = await import(new URL('js/energyade.js', ROOT).href);
+  const tags = m.osmTags || {};
+  const xml = buildEnergyADE(m, {
+    res, fe, pr, inputs, profile: prof,
+    bands: { heat: S.T.band(pr, 'heat'), fin: S.T.band(pr, 'fin'), co2: S.T.band(pr, 'co2', 1000) },
+    ids: { osm: m.id, lod2: m.lod2?.lod2 || null, osmSnapshot: toolInfo().osm_snapshot },
+    address: { street: tags['addr:street'] || json.matched_address?.address?.split(/ \d/)[0] || null, number: tags['addr:housenumber'] || null, postcode: tags['addr:postcode'] || null },
+    lod2Function: m.lod2?.fn || null, version: VERSION, site: SITE, mapUrl: json.building.map_url, weatherName: S.W.name || json.results.weather,
+  });
+  return { json, xml };
 }
 
 function toolInfo() {

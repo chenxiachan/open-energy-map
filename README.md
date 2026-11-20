@@ -39,7 +39,7 @@ Open Energy Map aligns open data building by building: the OpenStreetMap outline
 - **Bill calibration and retrofit.** Annual energy bills narrow the ranges through Bayesian calibration (sequential Monte Carlo). The retrofit tab compares measures on the same model, again with ranges.
 - **City layers.** The model results of 205,505 heated buildings, summed on the 100 m grid of the Zensus (27,295 cells): heating demand per m², heat demand density in the classes used for municipal heat planning (KEA-BW), the model compared with the bills of similar buildings, and the coverage of LoD2 geometry and street-level photos. Every coloured cell covers at least five heated buildings, so no colour stands for a single address.
 - **3D street view.** LoD2 buildings and single trees around the selected building, with street-level photos from Mapillary. Terrain and aerial photos are so far available around the TUM main building.
-- **Export.** EnergyPlus input (IDF) and weather (EPW) files for each building.
+- **Export.** EnergyPlus input (IDF) and weather (EPW) files for each building, and CityGML 2.0 with the Energy ADE 3.0 (beta 7): boundary surfaces, thermal and usage zone, constructions, heat generator and energy demand, with the range and source tier of every input as generic attributes.
 - **Languages.** English, German and Chinese, switched at the top right of the page.
 
 ## Method

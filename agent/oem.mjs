@@ -30,6 +30,8 @@ const HELP = `Open Energy Map: building energy you can trace to its source (firs
       --assume  age_class=A..L  system=gas_cond|gas_old|oil|district|hp_air|hp_ground|pellet|electric
                 usage=sfh|th|mfh|ab|office|education|retail|other  storeys=N  height_m=X
                 refurbished.windows|wall|roof|floor=yes|no  <input>=<number> (e.g. U_wall=0.3, T_heat=21)
+  node agent/oem.mjs energy-ade (the building as above) [--assume ...] [--out file.gml]
+      The same building as CityGML 2.0 with the Energy ADE 3.0 (beta 7), as the Export tab of the page.
   node agent/oem.mjs mcp
       MCP server on stdio with the tools find_building and building_energy.
 
@@ -64,6 +66,12 @@ async function cli() {
     const i = argv.indexOf('--at');
     const where = { address: opt('address'), osm_id: opt('id'), lod2_id: opt('lod2'), lat: i > -1 ? +argv[i + 1] : undefined, lon: i > -1 ? +argv[i + 2] : undefined };
     out(await core.buildingEnergy(where, parseAssume(), { samples: +opt('samples', 300), detail: flag('summary') ? 'summary' : 'full' }));
+  } else if (cmd === 'energy-ade') {
+    const i = argv.indexOf('--at');
+    const where = { address: opt('address'), osm_id: opt('id'), lod2_id: opt('lod2'), lat: i > -1 ? +argv[i + 1] : undefined, lon: i > -1 ? +argv[i + 2] : undefined };
+    const r = await core.buildingEnergyADE(where, parseAssume(), { samples: +opt('samples', 300) });
+    if (!r.xml) { out(r.json); return; }
+    if (opt('out')) { (await import('node:fs')).writeFileSync(opt('out'), r.xml); process.stderr.write(`${opt('out')}: ${r.xml.length} bytes\n`); } else process.stdout.write(r.xml);
   } else throw new core.UserError(`Unknown command ${cmd}. Run node agent/oem.mjs help`);
 }
 

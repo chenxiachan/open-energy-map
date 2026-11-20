@@ -12,7 +12,10 @@ node agent/oem.mjs building --address "Schellingstraße 51, München"
 node agent/oem.mjs building --at 48.148862 11.568004
 node agent/oem.mjs building --id w34107320 --assume refurbished.windows=yes --assume system=hp_air
 node agent/oem.mjs building --lod2 DEBY_LOD2_4958835
+node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out schellingstr51.gml
 ```
+
+`energy-ade` writes the same building as CityGML 2.0 with the Energy ADE 3.0 (beta 7), the file of the Export tab of the page: LoD2 boundary surfaces, the thermal zone and usage zone, the constructions, the heat generator and the energy demand with its hourly series. The ranges, tiers and references of the JSON are in the generic attribute sets `OEM_result_*`, `OEM_input_*` and `OEM_provenance` of the building, since Energy ADE 3.0 has no element for them.
 
 | Option | Meaning |
 |---|---|
