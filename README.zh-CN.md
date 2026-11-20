@@ -56,13 +56,19 @@ git clone https://github.com/chenxiachan/open-energy-map.git && cd open-energy-m
 **Claude Code**
 
 ```bash
-claude mcp add open-energy-map -- node agent/oem.mjs mcp     # 想在任何目录使用：加 --scope user，并写绝对路径
+claude mcp add open-energy-map -- node agent/oem.mjs mcp
 ```
+
+这样只对当前文件夹生效；加上 `--scope user` 并写 `agent/oem.mjs` 的绝对路径，就能在任何目录使用。
 
 **Claude Desktop、Cursor、Windsurf、Gemini CLI** 和大多数客户端，在各自的 MCP 配置文件的 `mcpServers` 下加同样一项：
 
 ```json
-{ "mcpServers": { "open-energy-map": { "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] } } }
+{
+  "mcpServers": {
+    "open-energy-map": { "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] }
+  }
+}
 ```
 
 <details>
@@ -71,7 +77,11 @@ claude mcp add open-energy-map -- node agent/oem.mjs mcp     # 想在任何目�
 VS Code，写在 `.vscode/mcp.json`：
 
 ```json
-{ "servers": { "open-energy-map": { "type": "stdio", "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] } } }
+{
+  "servers": {
+    "open-energy-map": { "type": "stdio", "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] }
+  }
+}
 ```
 
 Codex CLI，写在 `~/.codex/config.toml`：

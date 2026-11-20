@@ -56,13 +56,19 @@ git clone https://github.com/chenxiachan/open-energy-map.git && cd open-energy-m
 **Claude Code**
 
 ```bash
-claude mcp add open-energy-map -- node agent/oem.mjs mcp     # add --scope user and an absolute path to use it anywhere
+claude mcp add open-energy-map -- node agent/oem.mjs mcp
 ```
+
+This adds the server for the current folder; with `--scope user` and the absolute path of `agent/oem.mjs` it works in any folder.
 
 **Claude Desktop, Cursor, Windsurf, Gemini CLI** and most other clients take the same entry under `mcpServers` in their MCP configuration file:
 
 ```json
-{ "mcpServers": { "open-energy-map": { "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] } } }
+{
+  "mcpServers": {
+    "open-energy-map": { "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] }
+  }
+}
 ```
 
 <details>
@@ -71,7 +77,11 @@ claude mcp add open-energy-map -- node agent/oem.mjs mcp     # add --scope user 
 VS Code, in `.vscode/mcp.json`:
 
 ```json
-{ "servers": { "open-energy-map": { "type": "stdio", "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] } } }
+{
+  "servers": {
+    "open-energy-map": { "type": "stdio", "command": "node", "args": ["/path/to/open-energy-map/agent/oem.mjs", "mcp"] }
+  }
+}
 ```
 
 Codex CLI, in `~/.codex/config.toml`:
