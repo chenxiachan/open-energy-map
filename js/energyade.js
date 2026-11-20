@@ -28,6 +28,7 @@ const NS = {
   gml: 'http://www.opengis.net/gml', xlink: 'http://www.w3.org/1999/xlink', xAL: 'urn:oasis:names:tc:ciq:xsdschema:xAL:2.0',
   nrg3: 'http://www.citygml.org/ade/energy/3.0', xsi: 'http://www.w3.org/2001/XMLSchema-instance',
 };
+export const ENERGY_ADE_CITE = 'Agugiaro, G., Padsala, R. (2026). Further development of the CityGML Energy Application Domain Extension 3.0. ISPRS Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci., L-4/W2-2026, 1-8. https://doi.org/10.5194/isprs-archives-L-4-W2-2026-1-2026';
 export const ENERGY_ADE_XSD = 'https://raw.githubusercontent.com/tudelft3d/Energy_ADE/main/xsd/Energy_ADE_3.0_beta7.xsd';
 const SCHEMA_LOCATION = [
   NS.bldg, 'http://schemas.opengis.net/citygml/building/2.0/building.xsd',
@@ -184,6 +185,7 @@ export function buildEnergyADE(bm, ctx = {}) {
   out.push(`<!--\n${comment([
     `Open Energy Map${ctx.version ? ` (${ctx.version})` : ''}: building energy model of ${[address.street && `${address.street} ${address.number || ''}`.trim(), ids.osm && `OSM ${ids.osm}`].filter(Boolean).join(', ')}`,
     `CityGML 2.0 with the Energy ADE 3.0 beta 7 (${ENERGY_ADE_XSD})`,
+    `Energy ADE 3.0: TU Delft and HFT Stuttgart, https://github.com/tudelft3d/Energy_ADE. Cite: ${ENERGY_ADE_CITE}`,
     ctx.mapUrl ? `On the map: ${ctx.mapUrl}` : '',
     '',
     'Geometry: the thermal hull of the model as LoD2 boundary surfaces (OSM outline, heights from the Bavarian LoD2 model',
@@ -257,6 +259,7 @@ export function buildEnergyADE(bm, ctx = {}) {
     }
     w.wrap('gen:genericAttributeSet', { name: 'OEM_provenance' }, () => {
       gAttr.str('tool', `Open Energy Map${ctx.version ? ` ${ctx.version}` : ''}`);
+      gAttr.str('format', `CityGML 2.0 with the Energy ADE 3.0 beta 7 (TU Delft and HFT Stuttgart). Cite: ${ENERGY_ADE_CITE}`);
       gAttr.str('site', ctx.site);
       gAttr.str('map_url', ctx.mapUrl);
       gAttr.str('osm_id', ids.osm);

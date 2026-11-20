@@ -1575,6 +1575,14 @@ function download(name, text, type = 'text/plain') {
   const a = h('a', { href: URL.createObjectURL(new Blob([text], { type })), download: name });
   document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
+// the format of the CityGML export and the paper its authors ask to cite (github.com/tudelft3d/Energy_ADE)
+function energyAdeCredit() {
+  const a = (href, text) => h('a', { href, target: '_blank', rel: 'noopener' }, text);
+  return [L('CityGML 导出按 ', 'The CityGML export follows the ', 'Der CityGML-Export folgt der '), a('https://github.com/tudelft3d/Energy_ADE', 'CityGML Energy ADE 3.0'),
+    L('（TU Delft 与 HFT Stuttgart 开发）。引用：', ' (developed by TU Delft and HFT Stuttgart). Cite: ', ' (entwickelt von der TU Delft und der HFT Stuttgart). Zitieren: '),
+    'Agugiaro, G., Padsala, R. (2026). Further development of the CityGML Energy Application Domain Extension 3.0. ISPRS Archives L-4/W2-2026, 1–8. ',
+    a('https://doi.org/10.5194/isprs-archives-L-4-W2-2026-1-2026', 'doi:10.5194/isprs-archives-L-4-W2-2026-1-2026')];
+}
 function renderExport() {
   const P = $('#p-export'), m = S.model;
   const base = `munich_${m.id}`;
@@ -1602,6 +1610,7 @@ function renderExport() {
       for (let i = 0; i < 8760; i++) rows.push([i, S.weather.T[i].toFixed(1), S.res.hourly.T_air[i].toFixed(2), S.res.hourly.T_op[i].toFixed(2), S.res.hourly.Q_hc[i].toFixed(0), S.weather.GHI[i].toFixed(0)].join(','));
       download(`${base}_hourly.csv`, rows.join('\n'), 'text/csv');
     }, L('8760 行：室外温度、室内空气与操作温度、供暖/供冷功率', '8760 rows: outdoor temperature, indoor air and operative temperature, heating and cooling power', '8760 Zeilen: Außentemperatur, Raumluft- und operative Temperatur, Heiz- und Kühlleistung')),
+    h('p', { class: 'disclaimer', style: 'margin:10px 0 0' }, ...energyAdeCredit()),
     h('p', { class: 'note', id: 'exerr', style: 'color:var(--fail)' }),
   ));
   const btns = [...P.querySelectorAll('.card > button')];
