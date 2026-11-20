@@ -39,7 +39,7 @@ Open Energy Map aligns open data building by building: the OpenStreetMap outline
 - **Bills and retrofit.** Annual bills narrow the ranges by Bayesian calibration; retrofit measures are compared on the same model.
 - **City layers.** 205,505 heated buildings summed on the 100 m census grid (27,295 cells), including heat demand density for municipal heat planning. No colour stands for a single address.
 - **3D street view.** LoD2 buildings, single trees and street-level photos around the selected building.
-- **Export.** EnergyPlus (IDF, EPW), and CityGML 2.0 with the [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE) of TU Delft and HFT Stuttgart ([Agugiaro and Padsala 2026](https://doi.org/10.5194/isprs-archives-L-4-W2-2026-1-2026)), with the range and source tier of every input.
+- **Export.** EnergyPlus (IDF, EPW) and [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE), with the range and source tier of every input.
 - **For AI agents.** An MCP server returns the same model as JSON, so an agent can quote building energy it can trace (below).
 
 ## For AI agents
@@ -98,7 +98,7 @@ The file names and keys are those the clients documented as of November 2026; ch
 Then ask, for example: *How much heating energy does Schellingstraße 51 in Munich need, and how sure is that number?* The agent answers with the range, the inputs that drive it and their tiers, and a link to the building on the map. Tell it what you know (new windows, a heat pump) and it computes again with that as user input.
 
 > [!TIP]
-> **For an exact building, give its id instead of an address.** An address can name several buildings (a school and its sports hall), and the same street and number exist in several towns around Munich; the tool then returns the candidates instead of guessing. Two ids name one building: the **OSM id** (`w34107320`, in the address bar of the map as `#b=w34107320@…` and behind *OSM ↗*) and the **LoD2 id** (`DEBY_LOD2_4958835`, the `gml:id` of the Bavarian LoD2 CityGML, shown on hover over *LoD2 ↗* and in the geometry card of *Inputs & sources*).
+> **For an exact building, give its id instead of an address.** An address can name several buildings (a school and its sports hall), and the same street and number exist in several towns around Munich; the tool then returns the candidates instead of guessing. Two ids name one building: the [**OSM id**](https://www.openstreetmap.org/way/34107320) (`w34107320`, in the address bar of the map as `#b=w34107320@…` and behind *OSM ↗*) and the [**LoD2 id**](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=lod2) (`DEBY_LOD2_4958835`, the `gml:id` of the Bavarian LoD2 CityGML, shown on hover over *LoD2 ↗* and in the geometry card of *Inputs & sources*).
 
 <details>
 <summary>Tools and command line</summary>

@@ -39,7 +39,7 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 - **账单标定与改造。** 输入年度账单后用贝叶斯方法缩小区间；改造措施在同一模型上比较。
 - **全市图层。** 205,505 栋供暖建筑汇总到人口普查的 100 m 网格（27,295 格），包括地方供热规划用的热需求密度。任何颜色都不对应单一地址。
 - **三维街景。** 所选建筑周围的 LoD2 建筑、单棵树木和街景照片。
-- **导出。** EnergyPlus（IDF、EPW），以及 CityGML 2.0 加 TU Delft 和 HFT Stuttgart 的 [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE)（[Agugiaro 与 Padsala 2026](https://doi.org/10.5194/isprs-archives-L-4-W2-2026-1-2026)），带每项输入的区间和来源等级。
+- **导出。** EnergyPlus（IDF、EPW）和 [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE)，带每项输入的区间和来源等级。
 - **给 AI 智能体用。** MCP 服务以 JSON 返回同一个模型，智能体就能引用可追溯的建筑能耗（见下）。
 
 ## 给 AI 智能体用
@@ -98,7 +98,7 @@ args = ["/path/to/open-energy-map/agent/oem.mjs", "mcp"]
 然后直接问，比如："慕尼黑 Schellingstraße 51 一年要多少供暖能耗？这个数有多可靠？"智能体会给出区间、主要影响因素及其来源等级，以及这栋楼在地图上的链接。告诉它你知道的情况（换了窗、装了热泵），它会把这些作为用户填写再算一次。
 
 > [!TIP]
-> **要指定某一栋楼，给编号比给地址准。** 一个地址可能对应几栋楼（比如学校和它的体育馆），慕尼黑周边几个镇也有同名的街道和门牌；这时工具会返回候选，不会替你猜。两个编号都能唯一确定一栋楼：**OSM 编号**（`w34107320`，在地图地址栏的 `#b=w34107320@…` 里，也在 *OSM ↗* 链接背后）和 **LoD2 编号**（`DEBY_LOD2_4958835`，巴伐利亚 LoD2 CityGML 里的 `gml:id`，鼠标悬停 *LoD2 ↗* 或在"参数与来源"页签的几何卡片里可以看到）。
+> **要指定某一栋楼，给编号比给地址准。** 一个地址可能对应几栋楼（比如学校和它的体育馆），慕尼黑周边几个镇也有同名的街道和门牌；这时工具会返回候选，不会替你猜。两个编号都能唯一确定一栋楼：[**OSM 编号**](https://www.openstreetmap.org/way/34107320)（`w34107320`，在地图地址栏的 `#b=w34107320@…` 里，也在 *OSM ↗* 链接背后）和 [**LoD2 编号**](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=lod2)（`DEBY_LOD2_4958835`，巴伐利亚 LoD2 CityGML 里的 `gml:id`，鼠标悬停 *LoD2 ↗* 或在"参数与来源"页签的几何卡片里可以看到）。
 
 <details>
 <summary>工具和命令行</summary>
