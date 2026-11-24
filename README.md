@@ -1,12 +1,18 @@
-<picture>
+<a href="https://chenxiachan.github.io/open-energy-map/"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-dark.png">
   <img src="assets/readme/banner-light.png" alt="Open Energy Map: building energy you can trace to its source. First city: Munich">
-</picture>
+</picture></a>
 
 <p align="center">An interactive web map that estimates the heating demand of buildings from open data, building by building.<br>Results are given as ranges rather than single numbers, and every input can be traced back to its source.<br>The first city is Munich.</p>
 
 <p align="center">
-  <a href="https://chenxiachan.github.io/open-energy-map/"><img alt="Open the map" src="https://img.shields.io/badge/open_the_map-chenxiachan.github.io%2Fopen--energy--map-6b5ce7?style=flat-square"></a>
+  <a href="https://chenxiachan.github.io/open-energy-map/"><img alt="Open the map" src="https://img.shields.io/badge/Open_the_map_%E2%86%92-6b5ce7?style=for-the-badge" height="40"></a>
+</p>
+
+<p align="center"><a href="https://chenxiachan.github.io/open-energy-map/"><b>chenxiachan.github.io/open-energy-map</b></a><br>
+Runs in the browser, no installation or account. Click any building, or start with<br><a href="https://chenxiachan.github.io/open-energy-map/#b=w34107320@48.150707,11.573651">Schellingstraße 51</a> (an apartment block in Maxvorstadt) or the <a href="https://chenxiachan.github.io/open-energy-map/#b=w10053349@48.148842,11.567965">TUM main building</a>.</p>
+
+<p align="center">
   <a href="https://youtu.be/90e-aEyOkDE"><img alt="Video, 1 min" src="https://img.shields.io/badge/video-1_min-e08a3c?style=flat-square&logo=youtube&logoColor=white"></a>
   <a href="#citation-and-licence"><img alt="Licence: PolyForm Noncommercial 1.0.0 and CC BY-NC 4.0" src="https://img.shields.io/badge/licence-PolyForm_NC_%C2%B7_CC_BY--NC-59636e?style=flat-square"></a>
   <img alt="Languages: English, German, Chinese" src="https://img.shields.io/badge/languages-EN_%C2%B7_DE_%C2%B7_%E4%B8%AD%E6%96%87-59636e?style=flat-square">
@@ -28,10 +34,10 @@ Open Energy Map aligns open data building by building: the OpenStreetMap outline
 
 ## Features
 
-<picture>
+<a href="https://chenxiachan.github.io/open-energy-map/"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features-dark.jpg">
   <img src="assets/readme/features-light.jpg" alt="Four views of the map: one building with its 3D model and ranges, the table of inputs with their sources, the city layer of heating demand per m², and the 3D street view">
-</picture>
+</picture></a>
 
 - **Building model.** Click a building or search an address: an hourly thermal model gives heating demand, final energy, CO₂ and peak load as P10–P90 ranges.
 - **Traceable inputs.** Every input carries a source tier (observed, published table, assumed, user input, bill-calibrated) and its document and page. The page shows where the uncertainty comes from and which data would narrow it most.

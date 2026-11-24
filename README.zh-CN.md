@@ -1,12 +1,18 @@
-<picture>
+<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-zh-dark.png">
   <img src="assets/readme/banner-zh-light.png" alt="Open Energy Map：可追溯到来源的建筑能耗。首个城市：慕尼黑">
-</picture>
+</picture></a>
 
 <p align="center">一个交互式网络地图，基于开放数据逐栋估算建筑的供暖需求。<br>结果以区间而非单一数值给出，每一项输入都可以追溯到来源。<br>第一座城市是慕尼黑。</p>
 
 <p align="center">
-  <a href="https://chenxiachan.github.io/open-energy-map/"><img alt="打开地图" src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%E5%9C%B0%E5%9B%BE-chenxiachan.github.io%2Fopen--energy--map-6b5ce7?style=flat-square"></a>
+  <a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><img alt="打开地图" src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%E5%9C%B0%E5%9B%BE_%E2%86%92-6b5ce7?style=for-the-badge" height="40"></a>
+</p>
+
+<p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><b>chenxiachan.github.io/open-energy-map</b></a><br>
+在浏览器中运行，无需安装或注册，这里的链接直接打开中文界面。<br>点击任意一栋楼，或从 <a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w34107320@48.150707,11.573651">Schellingstraße 51</a>（马克斯福施塔特的一栋多户住宅）或<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w10053349@48.148842,11.567965">慕尼黑工业大学主楼</a>开始。</p>
+
+<p align="center">
   <a href="https://youtu.be/90e-aEyOkDE"><img alt="演示视频，1 分钟" src="https://img.shields.io/badge/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-1_%E5%88%86%E9%92%9F-e08a3c?style=flat-square&logo=youtube&logoColor=white"></a>
   <a href="#引用与许可"><img alt="许可：PolyForm Noncommercial 1.0.0 和 CC BY-NC 4.0" src="https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF-PolyForm_NC_%C2%B7_CC_BY--NC-59636e?style=flat-square"></a>
   <img alt="语言：英文、德文、中文" src="https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-EN_%C2%B7_DE_%C2%B7_%E4%B8%AD%E6%96%87-59636e?style=flat-square">
@@ -16,7 +22,7 @@
 
 <p align="center">
   <a href="https://youtu.be/90e-aEyOkDE"><img src="assets/readme/video.jpg" width="760" alt="演示视频：Open Energy Map: Munich，从一栋楼到整座城市（1 分钟，YouTube）"></a><br>
-  <sub>从一栋楼到整座城市 · YouTube 1 分钟，英文字幕 · 页面默认英文，可在右上角切换为中文或德文</sub>
+  <sub>从一栋楼到整座城市 · YouTube 1 分钟，英文字幕</sub>
 </p>
 
 > [!NOTE]
@@ -28,10 +34,10 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 
 ## 功能
 
-<picture>
+<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features-zh-dark.jpg">
   <img src="assets/readme/features-zh-light.jpg" alt="地图的四个画面：单栋建筑的三维模型和区间、带来源的输入参数表、全市单位面积供暖需求图层、三维街区漫游">
-</picture>
+</picture></a>
 
 - **单栋建模。** 点一栋楼或搜索地址，逐时热模型给出供暖需求、终端能源、CO₂ 和峰值负荷的 P10–P90 区间。
 - **可追溯的输入。** 每项输入都标注来源等级（实测、已发表表格、假设、用户输入、账单标定），并注明文献和页码。页面说明不确定性来自哪里，以及补充哪项数据最能缩小区间。
@@ -198,6 +204,6 @@ LICENSE       许可条款
 <br>
 
 <p align="center">
-  <a href="https://chenxiachan.github.io/open-energy-map/"><img src="assets/brand/logo.svg" width="44" alt="Open Energy Map"></a><br>
+  <a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><img src="assets/brand/logo.svg" width="44" alt="Open Energy Map"></a><br>
   <sub>由 <a href="https://chenxiachan.github.io/">Xia Chen</a> 在慕尼黑工业大学 <a href="https://www.mdsi.tum.de/gni/research-at-gni/">Georg Nemetschek Institute</a> 制作</sub>
 </p>
