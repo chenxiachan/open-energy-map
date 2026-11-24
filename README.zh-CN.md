@@ -1,7 +1,7 @@
-<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
+<p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-zh-dark.png">
   <img src="assets/readme/banner-zh-light.png" alt="Open Energy Map：可追溯到来源的建筑能耗。首个城市：慕尼黑">
-</picture></a>
+</picture></a></p>
 
 <p align="center">一个交互式网络地图，基于开放数据逐栋估算建筑的供暖需求。<br>结果以区间而非单一数值给出，每一项输入都可以追溯到来源。<br>第一座城市是慕尼黑。</p>
 
@@ -34,10 +34,10 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 
 ## 功能
 
-<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
+<p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features-zh-dark.jpg">
   <img src="assets/readme/features-zh-light.jpg" alt="地图的四个画面：单栋建筑的三维模型和区间、带来源的输入参数表、全市单位面积供暖需求图层、三维街区漫游">
-</picture></a>
+</picture></a></p>
 
 - **单栋建模。** 点一栋楼或搜索地址，逐时热模型给出供暖需求、终端能源、CO₂ 和峰值负荷的 P10–P90 区间。
 - **可追溯的输入。** 每项输入都标注来源等级（实测、已发表表格、假设、用户输入、账单标定），并注明文献和页码。页面说明不确定性来自哪里，以及补充哪项数据最能缩小区间。

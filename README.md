@@ -1,7 +1,7 @@
-<a href="https://chenxiachan.github.io/open-energy-map/"><picture>
+<p align="center"><a href="https://chenxiachan.github.io/open-energy-map/"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-dark.png">
   <img src="assets/readme/banner-light.png" alt="Open Energy Map: building energy you can trace to its source. First city: Munich">
-</picture></a>
+</picture></a></p>
 
 <p align="center">An interactive web map that estimates the heating demand of buildings from open data, building by building.<br>Results are given as ranges rather than single numbers, and every input can be traced back to its source.<br>The first city is Munich.</p>
 
@@ -34,10 +34,10 @@ Open Energy Map aligns open data building by building: the OpenStreetMap outline
 
 ## Features
 
-<a href="https://chenxiachan.github.io/open-energy-map/"><picture>
+<p align="center"><a href="https://chenxiachan.github.io/open-energy-map/"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/features-dark.jpg">
   <img src="assets/readme/features-light.jpg" alt="Four views of the map: one building with its 3D model and ranges, the table of inputs with their sources, the city layer of heating demand per m², and the 3D street view">
-</picture></a>
+</picture></a></p>
 
 - **Building model.** Click a building or search an address: an hourly thermal model gives heating demand, final energy, CO₂ and peak load as P10–P90 ranges.
 - **Traceable inputs.** Every input carries a source tier (observed, published table, assumed, user input, bill-calibrated) and its document and page. The page shows where the uncertainty comes from and which data would narrow it most.
