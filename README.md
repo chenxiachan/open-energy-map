@@ -6,7 +6,7 @@
 <p align="center">An interactive web map that estimates the heating demand of buildings from open data, building by building.<br>Results are given as ranges rather than single numbers, and every input can be traced back to its source.<br>The first city is Munich.</p>
 
 <p align="center">
-  <a href="https://chenxiachan.github.io/open-energy-map/"><img alt="Open the map" src="https://img.shields.io/badge/Open_the_map_%E2%86%92-6b5ce7?style=for-the-badge" height="40"></a>
+  <a href="https://chenxiachan.github.io/open-energy-map/"><img alt="Open the map" src="https://img.shields.io/badge/Open_the_map_%E2%86%92-6b5ce7?style=for-the-badge" width="198"></a>
 </p>
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/"><b>chenxiachan.github.io/open-energy-map</b></a><br>

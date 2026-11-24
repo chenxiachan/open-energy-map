@@ -6,7 +6,7 @@
 <p align="center">一个交互式网络地图，基于开放数据逐栋估算建筑的供暖需求。<br>结果以区间而非单一数值给出，每一项输入都可以追溯到来源。<br>第一座城市是慕尼黑。</p>
 
 <p align="center">
-  <a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><img alt="打开地图" src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%E5%9C%B0%E5%9B%BE_%E2%86%92-6b5ce7?style=for-the-badge" height="40"></a>
+  <a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><img alt="打开地图" src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%E5%9C%B0%E5%9B%BE_%E2%86%92-6b5ce7?style=for-the-badge" width="121"></a>
 </p>
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><b>chenxiachan.github.io/open-energy-map</b></a><br>
