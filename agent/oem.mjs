@@ -6,15 +6,20 @@
 //   node agent/oem.mjs building --address "Schellingstraße 51, München"
 //   node agent/oem.mjs building --at 48.150761 11.573679 --assume age_class=B --assume refurbished.windows=yes
 //   node agent/oem.mjs building --lod2 DEBY_LOD2_4958835
-//   node agent/oem.mjs mcp            (MCP server on stdio: tools find_building and building_energy)
+//   node agent/oem.mjs mcp            (MCP server on stdio for Munich and Singapore: tools find_building and building_energy)
+//   node agent/oem.mjs mcp --city sg  (Singapore only)
 //
 // Options: --lang en|de|zh (default en), --samples N (100–1000, default 300), --summary (shorter result), --compact (one line)
+
+import { spawn } from 'node:child_process';
 
 const argv = process.argv.slice(2);
 const flag = (k) => argv.includes('--' + k);
 const opt = (k, d) => { const i = argv.indexOf('--' + k); return i > -1 && i + 1 < argv.length ? argv[i + 1] : d; };
 const lang = ['en', 'de', 'zh'].includes(opt('lang')) ? opt('lang') : 'en';
 const city = String(opt('city', 'muc')).toLowerCase();   // muc (default) or sg
+// mcp without --city serves both cities: Munich in this process, Singapore through a child server (mcp --city sg)
+const BOTH = argv[0] === 'mcp' && !argv.includes('--city');
 const year = opt('year');   // Singapore only: weather year 2010–2025 (default: the typical year)
 const cmd = argv[0];
 
@@ -138,6 +143,51 @@ if (city === 'sg') {
     storeys: { type: 'integer', minimum: 1 },
     params: { type: 'object', description: 'Inputs by key, e.g. {"COP_cool": 4.2, "coolFrac": 0.8}; keys as in the inputs of the result', additionalProperties: { type: 'number' } } } };
 }
+// Both cities in one server (BOTH): each tool takes `city`; without it, Singapore is chosen for a point in Singapore or a
+// query that names it (a 6-digit postcode, "blk", "Singapore"), and an osm_id unknown in Munich is tried in Singapore.
+// The Singapore calls go to a child process running `mcp --city sg` (the page modules keep one city per process).
+const SG_BBOX = [103.59, 1.15, 104.10, 1.48];
+const SG_TEXT = /\bsingapore\b|新加坡|\bblk\b|\b\d{6}\b/i;
+function cityOf(name, a) {
+  if (a.city === 'sg' || a.city === 'muc') return a.city;
+  if (a.lat != null && a.lon != null && +a.lon >= SG_BBOX[0] && +a.lon <= SG_BBOX[2] && +a.lat >= SG_BBOX[1] && +a.lat <= SG_BBOX[3]) return 'sg';
+  return SG_TEXT.test(String((name === 'find_building' ? a.query : a.address) || '')) ? 'sg' : 'muc';
+}
+if (BOTH) {
+  const C = { type: 'string', enum: ['muc', 'sg'], description: 'muc: Munich and its surroundings (heating); sg: Singapore (cooling and electricity). Optional: a point in Singapore, a 6-digit postcode, "blk …" or "Singapore" in the text select Singapore, otherwise Munich.' };
+  TOOLS[0].description = 'Search addresses and building names in the cities Open Energy Map covers: Munich and its surroundings, and Singapore (also HDB block forms such as "blk 512 hougang ave 10" and 6-digit postcodes). Returns matches with OSM id, postcode, coordinates and a link to the map. Pass city, or let the query say it.';
+  TOOLS[0].inputSchema.properties.city = C;
+  TOOLS[1].description = 'The energy model of one building from open data, as on the Open Energy Map page. Munich: heating demand, final energy, CO2 and peak load. Singapore: cooling demand (sensible + latent), electricity by end use, CO2, peak cooling load and EUI per GFA. Each result has a P10-P90 range, every input its value, source tier (observed, published table, assumed, user input) and references. Identify the building by osm_id (with lat/lon), a point, an address or, in Munich, a LoD2 id.';
+  const P = TOOLS[1].inputSchema.properties, A = P.assume.properties;
+  P.city = C;
+  P.year = { type: 'integer', minimum: 2010, maximum: 2025, description: 'Singapore only: weather year (default: the typical year); the grid emission factor follows it' };
+  A.type = { type: 'string', enum: ['hdb', 'condo', 'landed', 'office', 'retail', 'hotel', 'mixed', 'education', 'healthcare', 'industrial', 'other'], description: 'Singapore only: building type' };
+  A.era = { type: 'string', description: 'Singapore only: era id of the type, e.g. hdb_1980_1989, condo_2008plus, nr_2008_2020' };
+  A.system.enum = [...A.system.enum, 'window', 'split', 'vrf', 'unitary', 'chw_water', 'chw_air', 'package_wc', 'dcs'];
+  A.system.description = 'Munich: heating system; Singapore: air-conditioning system';
+}
+// the child server for Singapore, started on the first Singapore call
+let sgChild = null;
+function sgServer() {
+  if (sgChild) return sgChild;
+  const proc = spawn(process.execPath, [new URL(import.meta.url).pathname, 'mcp', '--city', 'sg', '--lang', lang], { stdio: ['pipe', 'pipe', 'inherit'] });
+  const pending = new Map();
+  let buf = '', next = 1;
+  proc.stdout.setEncoding('utf8');
+  proc.stdout.on('data', (d) => {
+    buf += d; let i;
+    while ((i = buf.indexOf('\n')) > -1) {
+      const line = buf.slice(0, i).trim(); buf = buf.slice(i + 1);
+      if (!line) continue;
+      try { const m = JSON.parse(line); const p = pending.get(m.id); if (p) { pending.delete(m.id); p(m); } } catch { /* not ours */ }
+    }
+  });
+  proc.on('exit', () => { for (const p of pending.values()) p({ error: { message: 'the Singapore server stopped' } }); pending.clear(); sgChild = null; });
+  const call = (method, params) => new Promise((res) => { const id = next++; pending.set(id, res); proc.stdin.write(JSON.stringify({ jsonrpc: '2.0', id, method, params }) + '\n'); });
+  const ready = call('initialize', { protocolVersion: PROTOCOLS[0], capabilities: {}, clientInfo: { name: 'open-energy-map', version: '1' } });
+  sgChild = { call: async (method, params) => { await ready; return call(method, params); }, proc };
+  return sgChild;
+}
 const PROTOCOLS = ['2025-06-18', '2025-03-26', '2024-11-05'];
 
 async function mcp() {
@@ -151,12 +201,18 @@ async function mcp() {
       protocolVersion: PROTOCOLS.includes(params.protocolVersion) ? params.protocolVersion : PROTOCOLS[0],
       capabilities: { tools: {} },
       serverInfo: { name: 'open-energy-map', title: 'Open Energy Map', version: core.VERSION },
-      instructions: city === 'sg' ? SG_INSTRUCTIONS : 'Building energy you can trace to its source. building_energy returns ranges and the source tier of every input; report the range and the tiers, and link map_url so the user can check. An address can fit several buildings: if the result says status "ambiguous", do not pick silently; ask or explain your choice, then call again with the osm_id and lat/lon. Coverage so far: Munich and its surroundings.',
+      instructions: city === 'sg' ? SG_INSTRUCTIONS : (BOTH ? 'Two cities: Munich (heating) and Singapore (cooling and electricity); pass city or let the query or point say it. ' : '') + 'Building energy you can trace to its source. building_energy returns ranges and the source tier of every input; report the range and the tiers, and link map_url so the user can check. An address can fit several buildings: if the result says status "ambiguous", do not pick silently; ask or explain your choice, then call again with the osm_id and lat/lon. Coverage so far: Munich and its surroundings.',
     });
     if (method === 'ping') return reply(id, {});
     if (method === 'tools/list') return reply(id, { tools: TOOLS });
     if (method === 'tools/call') {
       const a = params.arguments || {};
+      const forward = async () => {   // to the Singapore server, without the city argument
+        const { city: _c, ...rest } = a;
+        const m = await sgServer().call('tools/call', { name: params.name, arguments: rest });
+        return m.error ? fail(id, m.error.code || -32603, m.error.message) : reply(id, m.result);
+      };
+      if (BOTH && cityOf(params.name, a) === 'sg') return forward();
       try {
         const r = params.name === 'find_building' ? { matches: await core.findBuildings(a.query || '', a.limit || 10) }
           : params.name === 'building_energy' ? await core.buildingEnergy({ address: a.address, lat: a.lat, lon: a.lon, osm_id: a.osm_id, lod2_id: a.lod2_id }, a.assume || {}, { samples: a.samples, detail: a.detail === 'full' ? 'full' : 'summary', ...(city === 'sg' && a.year ? { year: a.year } : {}) })
@@ -164,6 +220,8 @@ async function mcp() {
         if (!r) return fail(id, -32602, `Unknown tool ${params.name}`);
         return reply(id, { content: [{ type: 'text', text: JSON.stringify(r) }], structuredContent: r });
       } catch (e) {
+        // an osm_id that the Munich data do not have, with no city and no point: try Singapore
+        if (BOTH && !a.city && a.osm_id && a.lat == null && e instanceof core.UserError && /not in the local data/.test(e.message)) return forward();
         // errors of the input go back to the model as a tool result it can act on
         return reply(id, { content: [{ type: 'text', text: e instanceof core.UserError ? e.message : `Internal error: ${e.message}` }], isError: true });
       }
@@ -183,7 +241,7 @@ async function mcp() {
       chain = chain.then(() => handle(msg)).catch((e) => process.stderr.write(String(e && e.stack || e) + '\n'));
     }
   });
-  process.stdin.on('end', () => chain.then(() => process.exit(0)));
+  process.stdin.on('end', () => chain.then(() => { sgChild?.proc.kill(); process.exit(0); }));
 }
 
 try {

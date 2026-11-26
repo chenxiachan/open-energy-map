@@ -1,6 +1,6 @@
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-zh-dark.png">
-  <img src="assets/readme/banner-zh-light.png" alt="Open Energy Map：可追溯到来源的建筑能耗。首个城市：慕尼黑">
+  <img src="assets/readme/banner-zh-light.png" alt="Open Energy Map：可追溯到来源的建筑能耗。慕尼黑单位面积供暖需求（橙色）和新加坡单位面积制冷需求（蓝色）的真实 100 m 网格点阵">
 </picture></a></p>
 
 <p align="center">一个交互式网络地图，基于开放数据逐栋估算建筑能耗：<br>慕尼黑算供暖，新加坡算制冷和用电。<br>结果以区间而非单一数值给出，每一项输入都可以追溯到来源。</p>
@@ -10,7 +10,7 @@
 </p>
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><b>chenxiachan.github.io/open-energy-map</b></a><br>
-在浏览器中运行，无需安装或注册，这里的链接直接打开中文界面。左上角可以切换城市。点击任意一栋楼，或从下面几栋开始：<br><b>慕尼黑</b>：<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w34107320@48.150707,11.573651">Schellingstraße 51</a>（马克斯福施塔特的一栋多户住宅）或<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w10053349@48.148842,11.567965">慕尼黑工业大学主楼</a><br><b>新加坡</b>：<a href="https://chenxiachan.github.io/open-energy-map/?city=sg&lang=zh#b=w764434028@1.302473,103.908659">马林百列 62 座组屋</a>（1975 年建成）或 <a href="https://chenxiachan.github.io/open-energy-map/?city=sg&lang=zh#b=w171999304@1.283322,103.850374">Republic Plaza</a>（带实测能耗的办公塔楼）</p>
+在浏览器中运行，无需安装或注册，这里的链接直接打开中文界面。左上角可以切换城市。点击任意一栋楼，或从下面几栋开始：<br><b>慕尼黑</b>：<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w34107320@48.150707,11.573651">Schellingstraße 51</a>（马克斯福施塔特的一栋多户住宅）或<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w10053349@48.148842,11.567965">慕尼黑工业大学主楼</a><br><b>新加坡</b>：<a href="https://chenxiachan.github.io/open-energy-map/?city=sg&lang=zh#b=w764434028@1.302473,103.908659">马林百列 62 座组屋</a>（1975 年建成）或 <a href="https://chenxiachan.github.io/open-energy-map/?city=sg&lang=zh#b=w47345029@1.278429,103.848879">71 Robinson</a>（带实测能耗的办公楼）</p>
 
 <p align="center">
   <a href="https://youtu.be/90e-aEyOkDE"><img alt="演示视频，1 分钟" src="https://img.shields.io/badge/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-1_%E5%88%86%E9%92%9F-e08a3c?style=flat-square&logo=youtube&logoColor=white"></a>
@@ -34,6 +34,13 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 
 新加坡是第二座城市，也是第一座湿热气候的城市。那里的轮廓接上 HDB 组屋资料、URA 总体规划和卫星估计的楼高；热模型补上了制冷需要的部分：湿空气的潜热负荷，住宅只在夜里给卧室开空调，以及按用途分的用电和各类空调系统的能效。输入按 BCA 公布的商业楼实测能耗和 EMA 的住户用电标定，再在标定没用到的楼和年份上检验。
 
+## 城市
+
+| 城市 | 估算什么 | 建筑数 | 主要开放数据 | 对照的实测 | 打开 |
+|---|---|---|---|---|---|
+| **慕尼黑**（首个城市） | 供暖需求、终端能源、CO₂、峰值负荷 | 205,505 栋供暖建筑 | OpenStreetMap、巴伐利亚 LoD2、Zensus 2022、ERA5 | Heizspiegel München 2018 账单；公共建筑的能耗证书 | [地图](https://chenxiachan.github.io/open-energy-map/?lang=zh) |
+| **新加坡** | 制冷需求（显热和潜热）、按用途分的用电、CO₂、制冷峰值负荷 | 120,595 栋建筑 | OpenStreetMap、HDB、URA 2019 总体规划、BCA 清单、GlobalBuildingAtlas、ERA5 | BCA 公布的商业楼实测能耗；EMA 住户用电 | [地图](https://chenxiachan.github.io/open-energy-map/?city=sg&lang=zh) |
+
 ## 功能
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
@@ -45,7 +52,7 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
 - **可追溯的输入。** 每项输入都标注来源等级（实测、已发表表格、假设、用户输入、账单标定），并注明文献和页码。页面说明不确定性来自哪里，以及补充哪项数据最能缩小区间。
 - **热平衡和制冷平衡。** 按构件给出热损失和得热，也显示在三维立面上，太阳可调到一年中任意时刻。每个结果都能展开成算式，一直点到产生它的输入和系数。
 - **实测能耗并列。** 新加坡 BCA 名单里的商业楼，在模型旁边显示公布的实测能耗。
-- **账单标定与改造（慕尼黑）。** 输入年度账单后用贝叶斯方法缩小区间；改造措施在同一模型上比较。
+- **账单标定与改造。** 输入账单后用贝叶斯方法缩小区间：慕尼黑是供暖账单，新加坡是电费账单，可以是整栋楼、一户或一栋楼的全部住户。改造措施在同一模型上比较：慕尼黑是保温、换窗和热泵，新加坡是高效空调、隔热玻璃、遮阳、屋顶隔热、LED 和 25 °C 设定温度。
 - **全市图层。** 慕尼黑 205,505 栋供暖建筑汇总到人口普查的 100 m 网格（27,295 格），包括地方供热规划用的热需求密度；新加坡 120,595 栋建筑汇总到国家坐标系（SVY21）的 100 m 格，包括区域供冷用的冷需求密度。任何颜色都不对应单一地址。
 - **三维街景。** 在所选建筑周围的街区里漫游，并看街景照片；慕尼黑还有 LoD2 建筑、地形和单棵树木。
 - **导出（慕尼黑）。** EnergyPlus（IDF、EPW）和 [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE)，带每项输入的区间和来源等级。
@@ -68,11 +75,7 @@ git clone https://github.com/chenxiachan/open-energy-map.git && cd open-energy-m
 claude mcp add open-energy-map -- node agent/oem.mjs mcp
 ```
 
-这样只对当前文件夹生效；加上 `--scope user` 并写 `agent/oem.mjs` 的绝对路径，就能在任何目录使用。新加坡用 `--city sg` 再加一个服务：
-
-```bash
-claude mcp add open-energy-map-sg -- node agent/oem.mjs mcp --city sg
-```
+这样只对当前文件夹生效；加上 `--scope user` 并写 `agent/oem.mjs` 的绝对路径，就能在任何目录使用。一个服务同时覆盖两座城市：工具带 `city` 参数，问的是新加坡的地址、邮编或坐标时会自动选新加坡。
 
 **Claude Desktop、Cursor、Windsurf、Gemini CLI** 和大多数客户端，在各自的 MCP 配置文件的 `mcpServers` 下加同样一项：
 

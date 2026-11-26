@@ -269,6 +269,18 @@
     "ref": "Bruelisauer, M. et al. (2014): Stuck in a stack – Temperature measurements of the microclimate around split type condenser units in a high rise building in Singapore. Energy and Buildings 71:28–37, doi:10.1016/j.enbuild.2013.11.056 (not re-read).",
     "url": "https://doi.org/10.1016/j.enbuild.2013.11.056",
     "file": null
+   },
+   {
+    "id": "MSE_GO25",
+    "ref": "Ministry of Sustainability and the Environment, news release 16 May 2025: Launch of Go 25 National Movement (indoor air-conditioning at or above 25 °C; fans as alternatives; up to 12 % saving per degree from 23 to 25 °C in offices, Ngee Ann Polytechnic CfES study). Accessed 2026-11-26.",
+    "url": "https://www.mse.gov.sg/latest-news/launch-of-go25-national-movement/",
+    "file": null
+   },
+   {
+    "id": "NEA_HOME2016",
+    "ref": "NEA: Resource Efficiency Guide for New Home Owners (2016), p. 4 (install fans; ceiling fans more effective than standing fans; curtains, blinds or solar window films). Retrieved 2026-11-26.",
+    "url": "https://www.nea.gov.sg/docs/default-source/default-document-library/resource-efficiency-guide-for-homeowners.pdf",
+    "file": "~/EnergyMapData/sg/docs/nea/nea_resource_efficiency_guide_new_home_owners_2016.pdf"
    }
   ],
   "systemKeyMap": {
@@ -5847,5 +5859,320 @@
    }
   },
   "note": "GEF is per unit generated; no transmission loss uplift is applied by EMA. data.gov.sg d_3de362b5 gives 4-decimal values to 2020 (2019 0.4085, 2020 0.4080). Use the year of the weather/validation file; the TMY uses 2019."
+ },
+ "retrofit": {
+  "_note": "Retrofit measures of the Singapore page (js/retrofit_sg.js). Each measure sets one or more rc5 inputs to a target from a published source; the page applies it to the same parameter draws as the current state and reports the paired savings of electricity and CO₂ with P10-P90. A measure never makes an input worse: the new value is the better of the draw and the target (min for U_roof, g_window and P_light, max for COP_cool and T_cool). Tiers as in meta.tiers: 'published_table' when the target is read from a code or official table, 'assumed' when its derivation needs a judgement (rule says which). Left out because the model cannot express them or no source fixes them: a cool roof or cool facade paint (rc5 has no absorptance input; α 0.5 walls and 0.6 roof are fixed in js/rc5.js after ISO 13790 §11.3); internal blinds (shadeCtrl already stands for the curtains and blinds in use, and no published transmittance for Singapore blinds was read); LED lighting in flats (Green Mark lighting power budgets cover only the common areas of residential buildings, BCA_ETG2024 §12 p. 47, and common areas are not in the model).",
+  "ac": {
+   "note": "COP_cool of the system of the draw (systems.<key>.scope says what it covers). Unitary systems: the NEA 5-tick rated value times the field factor of the stock rule in systems.<key>.COP_cool.rule, so the new unit is derated as the stock is. Central plants: COP = 3.517 / TSE at the Green Mark Platinum level. District cooling: the building meter has the air side only.",
+   "unitary": {
+    "window": {
+     "value": 4.4,
+     "rated": 5.5,
+     "metric": "COP100%",
+     "fieldFactor": 0.8,
+     "source": "NEA_TICK (casement and window, 5 ticks: COP100% ≥ 5.50); field factor 0.8 of systems.window.COP_cool.rule",
+     "tier": "assumed",
+     "rule": "5.50 × 0.8; the field factor is the assumed one of the stock rule"
+    },
+    "split": {
+     "value": 4.4,
+     "rated": 5.5,
+     "metric": "Weighted COP (inverter) or COP100%",
+     "fieldFactor": 0.8,
+     "source": "NEA_TICK (single-split and multi-split, 5 ticks: weighted COP ≥ 5.50); BCA_ESC4 RB02-1 p. 6 (5-tick split units required in new residential buildings); field factor 0.8 of systems.split.COP_cool.rule",
+     "tier": "assumed",
+     "rule": "5.50 × 0.8; the field factor is the assumed one of the stock rule"
+    },
+    "vrf": {
+     "value": 4.61,
+     "rated": 6.15,
+     "metric": "IEER",
+     "fieldFactor": 0.75,
+     "source": "NEA_TICK (three-phase VRF, 5 ticks: IEER ≥ 6.15); field factor 0.75 of systems.vrf.COP_cool.rule",
+     "tier": "assumed",
+     "rule": "6.15 × 0.75; the field factor is the assumed one of the stock rule"
+    },
+    "unitary": {
+     "value": 4.51,
+     "source": "mean of the split and vrf targets, as systems.unitary.COP_cool",
+     "tier": "assumed",
+     "rule": "(4.40 + 4.61) / 2"
+    }
+   },
+   "plant": {
+    "unit": "kW/RT total system efficiency (TSE: chillers, pumps, cooling towers and air-side fans); COP = 3.517 / TSE",
+    "byType": {
+     "office": {
+      "value": 0.74,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Office Buildings\"",
+      "tier": "published_table"
+     },
+     "retail": {
+      "value": 0.74,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Retail Mall\"",
+      "tier": "published_table"
+     },
+     "hotel": {
+      "value": 0.74,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Hotel\"",
+      "tier": "published_table"
+     },
+     "mixed": {
+      "value": 0.74,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Office Buildings, Retail Mall\"",
+      "tier": "published_table"
+     },
+     "education": {
+      "value": 0.75,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"MOE Primary and Secondary Schools\"",
+      "tier": "published_table"
+     },
+     "healthcare": {
+      "value": 0.75,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Hospitals, Polyclinic, Nursing/ Youth Home\"",
+      "tier": "published_table"
+     },
+     "industrial": {
+      "value": 0.75,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Light Industrial\"",
+      "tier": "published_table"
+     },
+     "other": {
+      "value": 0.75,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Other Non-Residential Buildings\"",
+      "tier": "published_table"
+     }
+    },
+    "byVariant": {
+     "ihl": {
+      "value": 0.74,
+      "source": "BCA_ETG2024 §8 p. 33, Pathway 2 TSE table, Platinum column, row \"Institute of Higher Learning\"",
+      "tier": "published_table"
+     }
+    },
+    "residential": {
+     "value": 0.67,
+     "source": "BCA_ESC4 RB02-1 note 2, p. 6 (centralised cooling systems in residential buildings: 0.67 kW/RT)",
+     "tier": "assumed",
+     "rule": "taken as the total system; the code does not say whether 0.67 kW/RT includes the air side"
+    },
+    "systems": [
+     "chw_water",
+     "chw_air",
+     "package_wc"
+    ]
+   },
+   "dcs": {
+    "value": 0.18,
+    "unit": "kW/RT air side",
+    "source": "BCA_ETG2024 p. 10 (buildings on DCS, DDC or CCS: air-side efficiency in lieu of TSE; GoldPLUS 0.2, Platinum 0.18, SLE 0.16 kW/RT)",
+    "tier": "published_table",
+    "rule": "COP on the building meter = 3.517 / 0.18"
+   }
+  },
+  "glazing": {
+   "note": "Solar control film or low-e glazing to the deemed-to-satisfy shading coefficient of the Code for Environmental Sustainability at the window-to-wall ratio of the draw (above 0.50, the last row). g = 0.87 × SC (SC is relative to 3 mm clear glass, BCA_ENV2008 Appendix B, PDF p. 21).",
+   "gPerSC": 0.87,
+   "nonResidential": {
+    "rows": [
+     [
+      0.2,
+      0.51
+     ],
+     [
+      0.25,
+      0.41
+     ],
+     [
+      0.3,
+      0.35
+     ],
+     [
+      0.35,
+      0.3
+     ],
+     [
+      0.4,
+      0.27
+     ],
+     [
+      0.5,
+      0.22
+     ]
+    ],
+    "format": "[WWR below (the last: up to and including), SC_glass at most]",
+    "source": "BCA_ESC4 NRB01-1(b), Table 4.1(b), p. 7",
+    "tier": "published_table"
+   },
+   "residential": {
+    "rows": [
+     [
+      0.3,
+      0.67
+     ],
+     [
+      0.35,
+      0.59
+     ],
+     [
+      0.4,
+      0.52
+     ],
+     [
+      0.45,
+      0.48
+     ],
+     [
+      0.5,
+      0.43
+     ]
+    ],
+    "format": "[WWR below (the last: up to and including), SC_glass at most]",
+    "source": "BCA_ESC4 RB01-1(b), Table 4.1(a), p. 5",
+    "tier": "published_table"
+   }
+  },
+  "roof": {
+   "note": "Roof insulation to the maximum average U-value of the Code for Environmental Sustainability for the roof weight group of the type.",
+   "residential": {
+    "light": 0.8,
+    "medium": 1.1,
+    "heavy": 1.5,
+    "source": "BCA_ESC4 RB01-2, Table 4.1(a), p. 5 (light < 50, medium 50–230, heavy > 230 kg/m²)",
+    "tier": "published_table"
+   },
+   "nonResidential": {
+    "light": 0.5,
+    "medium": 0.8,
+    "heavy": 1.2,
+    "source": "BCA_ESC4 NRB01-2(b), Table 4.1(b), p. 7 (roof without skylights)",
+    "tier": "published_table"
+   },
+   "weightGroup": {
+    "hdb": {
+     "value": "heavy",
+     "source": "HDB_BTO2024 (\"Reinforced concrete roof slab with precast concrete secondary roofing\")",
+     "tier": "published_table"
+    },
+    "condo": {
+     "value": "heavy",
+     "source": "reinforced concrete flat roof assumed",
+     "tier": "assumed"
+    },
+    "landed": {
+     "value": "medium",
+     "source": "clay tiles over a ceiling or a reinforced concrete flat roof (types.landed U_roof note); medium taken",
+     "tier": "assumed"
+    },
+    "industrial": {
+     "value": "light",
+     "source": "metal deck (types.industrial U_roof note)",
+     "tier": "assumed"
+    },
+    "default": {
+     "value": "heavy",
+     "source": "reinforced concrete roof slab assumed for the other non-residential types",
+     "tier": "assumed"
+    }
+   }
+  },
+  "lighting": {
+   "note": "LED lighting to the Green Mark Platinum lighting power budget (BCA_ETG2024 Table 2A, column B, pp. 47–49). The type value of P_light is a mean during use per m² GFA, derived from SS 530 budgets or installed values (types.<type>.params.P_light); the target repeats that derivation with the Platinum budget in its place and is stored as a ratio to the type value, so variants and blended mixed developments follow. The page sets P_light to min(draw, ratio × the building value). Not for flats: Green Mark budgets for residential buildings cover only common areas (BCA_ETG2024 §12, p. 47).",
+   "byType": {
+    "office": {
+     "value": 4.81,
+     "ratio": 0.687,
+     "source": "BCA_ETG2024 Table 2A p. 47 (Offices: Platinum 5.5 W/m²); BCA_EMG2024 Table 2 (lighting mean 0.875 over 07–19)",
+     "tier": "published_table",
+     "rule": "the derivation of types.office P_light (installed about 8 W/m² × 0.875) with 5.5 W/m² installed: 0.875 × 5.5 = 4.81; ratio 4.81 / 7.0"
+    },
+    "retail": {
+     "value": 6.53,
+     "ratio": 0.467,
+     "source": "BCA_ETG2024 Table 2A p. 48 (Retail (General Lighting): Platinum 7, SS 530 15 W/m²)",
+     "tier": "assumed",
+     "rule": "the type value 14 stands for the SS 530 retail budgets (general 15, specialty 20–35, corridors 7); scaled by 7 / 15. Specialty shops (Platinum totals 11–19 W/m²) are not separated"
+    },
+    "hotel": {
+     "value": 2.33,
+     "ratio": 0.583,
+     "source": "BCA_ETG2024 Table 2A p. 48 (Hotel Guest Rooms: Platinum 7, SS 530 12 W/m²)",
+     "tier": "assumed",
+     "rule": "the type value 4.0 is a 24-h mean of guest rooms (12), lobbies (10) and corridors (7) at SS 530; scaled by the guest-room ratio 7 / 12"
+    },
+    "mixed": {
+     "value": 4.75,
+     "ratio": 0.559,
+     "source": "the office and retail targets above, blended as types.mixed P_light",
+     "tier": "assumed",
+     "rule": "0.647 × 4.81 × 11/14 + 0.353 × 6.53, the weights that give the type value 8.5 from office 7 and retail 14"
+    },
+    "education": {
+     "value": 2.75,
+     "ratio": 0.458,
+     "source": "BCA_ETG2024 Table 2A p. 47 (Classrooms, Lecture Theatre: Platinum 5.5, SS 530 12 W/m²)",
+     "tier": "assumed",
+     "rule": "the type values (school 6, IHL 8) stand for the SS 530 classroom budget with daylight use; scaled by 5.5 / 12"
+    },
+    "healthcare": {
+     "value": 2.76,
+     "ratio": 0.46,
+     "source": "BCA_ETG2024 Table 2A pp. 47–48 (Offices 5.5/12, Lobby 4.5/10, Toilets 5/10 W/m², Platinum/SS 530)",
+     "tier": "assumed",
+     "rule": "the type values stand for SS 530 budgets of 10–12 W/m²; scaled by the mean Platinum/SS 530 ratio of those rows, 0.46"
+    },
+    "industrial": {
+     "value": 2.5,
+     "ratio": 0.5,
+     "source": "BCA_ETG2024 Table 2A p. 49 (Manufacturing (general): Platinum 6.5, SS 530 13 W/m²)",
+     "tier": "assumed",
+     "rule": "scaled by 6.5 / 13; warehouses (5 / 7) are not separated"
+    },
+    "other": {
+     "value": 2.63,
+     "ratio": 0.438,
+     "source": "BCA_ETG2024 Table 2A p. 48 (Multi Purpose Hall: Platinum 7, SS 530 16 W/m²)",
+     "tier": "assumed",
+     "rule": "the type value stands for SS 530 hall budgets of 10–16 W/m²; scaled by 7 / 16"
+    }
+   }
+  },
+  "setpoint": {
+   "T_cool": {
+    "value": 25,
+    "source": "MSE_GO25 (setting indoor air-conditioning at or above 25 °C, with alternatives such as fans); NEA_ACMV p. 162–163 (SS 553 design dry bulb 23–25 °C)",
+    "tier": "published_table",
+    "rule": "T_cool = max(draw, 25)"
+   },
+   "fans": {
+    "value": 2.4,
+    "unit": "W per m² of air-conditioned floor while the AC runs",
+    "types": [
+     "hdb",
+     "condo",
+     "landed"
+    ],
+    "minRaise": 1.0,
+    "source": "NEA_HOME2016 p. 4 (install fans; ceiling fans are more effective than standing fans); fan power assumed",
+    "tier": "assumed",
+    "rule": "a 30 W ceiling fan per AC bedroom of 12.5 m² (the master bedroom of households.byDwelling.*.bedroomArea), counted only where the set point rises by 1 K or more (a smaller change is one step of the remote control); its heat is removed by the AC, so its electricity is × (1 + 1/COP). Non-residential: no fans, as 25 °C is within the SS 553 design range"
+   }
+  },
+  "shading": {
+   "note": "External horizontal shading over every window (overhangs or ledges), as the effective shading coefficient SC2 of the Envelope Code: g × SC2 (SC = SC1 × SC2, BCA_ENV2008 Appendix B2.1, p. 21). SC2 of each facade by its orientation, weighted by the solar irradiation on its windows in the model (after shading by the neighbours).",
+   "R1": {
+    "value": 0.5,
+    "source": "assumed: a projection half the window height (for example 0.75 m over a 1.5 m window), no inclination",
+    "tier": "assumed"
+   },
+   "SC2": {
+    "N": 0.721,
+    "S": 0.721,
+    "E": 0.7248,
+    "W": 0.7248,
+    "source": "BCA_ENV2008 Table C12 p. 42 (North & South, R1 0.5, 0 °: 0.7210) and Table C13 p. 43 (East & West: 0.7248)",
+    "tier": "published_table"
+   }
+  }
  }
 }

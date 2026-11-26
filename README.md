@@ -1,6 +1,6 @@
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/"><picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-dark.png">
-  <img src="assets/readme/banner-light.png" alt="Open Energy Map: building energy you can trace to its source. First city: Munich">
+  <img src="assets/readme/banner-light.png" alt="Open Energy Map: building energy you can trace to its source. Dot maps of real 100 m cells: heating demand per m² in Munich (orange) and cooling demand per m² in Singapore (blue)">
 </picture></a></p>
 
 <p align="center">An interactive web map that estimates the energy demand of buildings from open data, building by building:<br>heating in Munich, cooling and electricity in Singapore.<br>Results are given as ranges rather than single numbers, and every input can be traced back to its source.</p>
@@ -10,7 +10,7 @@
 </p>
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/"><b>chenxiachan.github.io/open-energy-map</b></a><br>
-Runs in the browser, no installation or account. The switch at the top left changes the city. Click any building, or start with<br><b>Munich</b>: <a href="https://chenxiachan.github.io/open-energy-map/#b=w34107320@48.150707,11.573651">Schellingstraße 51</a> (an apartment block in Maxvorstadt) or the <a href="https://chenxiachan.github.io/open-energy-map/#b=w10053349@48.148842,11.567965">TUM main building</a><br><b>Singapore</b>: <a href="https://chenxiachan.github.io/open-energy-map/?city=sg#b=w764434028@1.302473,103.908659">HDB Blk 62 Marine Drive</a> (a public housing block of 1975) or <a href="https://chenxiachan.github.io/open-energy-map/?city=sg#b=w171999304@1.283322,103.850374">Republic Plaza</a> (an office tower with its measured energy use).</p>
+Runs in the browser, no installation or account. The switch at the top left changes the city. Click any building, or start with<br><b>Munich</b>: <a href="https://chenxiachan.github.io/open-energy-map/#b=w34107320@48.150707,11.573651">Schellingstraße 51</a> (an apartment block in Maxvorstadt) or the <a href="https://chenxiachan.github.io/open-energy-map/#b=w10053349@48.148842,11.567965">TUM main building</a><br><b>Singapore</b>: <a href="https://chenxiachan.github.io/open-energy-map/?city=sg#b=w764434028@1.302473,103.908659">HDB Blk 62 Marine Drive</a> (a public housing block of 1975) or <a href="https://chenxiachan.github.io/open-energy-map/?city=sg#b=w47345029@1.278429,103.848879">71 Robinson</a> (an office building with its measured energy use).</p>
 
 <p align="center">
   <a href="https://youtu.be/90e-aEyOkDE"><img alt="Video, 1 min" src="https://img.shields.io/badge/video-1_min-e08a3c?style=flat-square&logo=youtube&logoColor=white"></a>
@@ -34,6 +34,13 @@ Open Energy Map aligns open data building by building: the OpenStreetMap outline
 
 Singapore is the second city, and the first in a hot and humid climate. There the outline is joined with the HDB property records, the URA master plan and satellite building heights, and the thermal model adds what cooling needs: the latent load of humid air, flats with air conditioning in the bedrooms at night, and electricity by end use with the efficiency of each kind of air-conditioning plant. Its inputs are calibrated on the measured energy use of commercial buildings published by BCA and on EMA household electricity, and checked on years and buildings held out of the calibration.
 
+## Cities
+
+| City | Estimates | Buildings | Main open data | Checked against | Open |
+|---|---|---|---|---|---|
+| **Munich** (first city) | Heating demand, final energy, CO₂, peak load | 205,505 heated buildings | OpenStreetMap, Bavarian LoD2, Zensus 2022, ERA5 | Heizspiegel München 2018 bills; consumption certificates of public buildings | [map](https://chenxiachan.github.io/open-energy-map/) |
+| **Singapore** | Cooling demand (sensible and latent), electricity by end use, CO₂, peak cooling load | 120,595 buildings | OpenStreetMap, HDB, URA Master Plan 2019, BCA listings, GlobalBuildingAtlas, ERA5 | BCA measured energy use of commercial buildings; EMA household electricity | [map](https://chenxiachan.github.io/open-energy-map/?city=sg) |
+
 ## Features
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/"><picture>
@@ -45,7 +52,7 @@ Singapore is the second city, and the first in a hot and humid climate. There th
 - **Traceable inputs.** Every input carries a source tier (observed, published table, assumed, user input, bill-calibrated) and its document and page. The page shows where the uncertainty comes from and which data would narrow it most.
 - **Heat and cooling balance.** Losses and gains by element, also on the 3D facades, with the sun at any hour of the year. Every result opens as a calculation chain down to the inputs and coefficients that produce it.
 - **Measured energy beside the model.** In Singapore, commercial buildings in the BCA listing show their published energy use next to the estimate.
-- **Bills and retrofit (Munich).** Annual bills narrow the ranges by Bayesian calibration; retrofit measures are compared on the same model.
+- **Bills and retrofit.** Bills narrow the ranges by Bayesian calibration: heating bills in Munich, electricity bills in Singapore for the building, one flat or the households of a block. Retrofit measures are compared on the same model: insulation, windows and heat pumps in Munich; efficient air conditioning, solar control glazing, shading, roof insulation, LED lighting and a 25 °C set point in Singapore.
 - **City layers.** In Munich, 205,505 heated buildings summed on the 100 m census grid (27,295 cells), including heat demand density for municipal heat planning; in Singapore, 120,595 buildings on 100 m cells of the national grid (SVY21), including cooling demand density for district cooling. No colour stands for a single address.
 - **3D street view.** A walk through the streets around the selected building, with street-level photos; in Munich with LoD2 buildings, terrain and single trees.
 - **Export (Munich).** EnergyPlus (IDF, EPW) and [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE), with the range and source tier of every input.
@@ -68,11 +75,7 @@ git clone https://github.com/chenxiachan/open-energy-map.git && cd open-energy-m
 claude mcp add open-energy-map -- node agent/oem.mjs mcp
 ```
 
-This adds the server for the current folder; with `--scope user` and the absolute path of `agent/oem.mjs` it works in any folder. For Singapore, add a second server with `--city sg`:
-
-```bash
-claude mcp add open-energy-map-sg -- node agent/oem.mjs mcp --city sg
-```
+This adds the server for the current folder; with `--scope user` and the absolute path of `agent/oem.mjs` it works in any folder. The one server covers both cities: the tools take a `city` argument, and a Singapore address, postcode or point selects Singapore by itself.
 
 **Claude Desktop, Cursor, Windsurf, Gemini CLI** and most other clients take the same entry under `mcpServers` in their MCP configuration file:
 

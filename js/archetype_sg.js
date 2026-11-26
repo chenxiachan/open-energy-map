@@ -111,8 +111,9 @@ export const RES_TYPES = ['hdb', 'condo', 'landed'];
 // rc5 knows the residential mixed mode by these usage codes (js/rc5.js prepare)
 export const RC5_USAGE = { hdb: 'ab', condo: 'ab', landed: 'sfh', office: 'office', retail: 'retail', education: 'education', hotel: 'other', mixed: 'other', healthcare: 'other', industrial: 'other', other: 'other' };
 
-export const TIER_LABEL = { observed: L('真实值', 'Observed', 'Erfasst'), published_table: L('查表', 'Published table', 'Tabellenwert'), assumed: L('估算', 'Assumed', 'Annahme'), estimate: L('模型估计', 'Estimate', 'Schätzung'), user: L('用户填写', 'User input', 'Eigene Eingabe'), calibrated: L('实测标定', 'Calibrated', 'Kalibriert') };
-export const TIER_CLASS = { observed: 'osm', published_table: 'archetype', assumed: 'default', estimate: 'default', user: 'user', calibrated: 'calibrated' };
+// billcal: posterior of the bill calibration of this building (js/sg_app.js), distinct from 'calibrated' (BCA and EMA, data/sg/calib_*.json)
+export const TIER_LABEL = { observed: L('真实值', 'Observed', 'Erfasst'), published_table: L('查表', 'Published table', 'Tabellenwert'), assumed: L('估算', 'Assumed', 'Annahme'), estimate: L('模型估计', 'Estimate', 'Schätzung'), user: L('用户填写', 'User input', 'Eigene Eingabe'), calibrated: L('实测标定', 'Calibrated', 'Kalibriert'), billcal: L('账单标定', 'Bill-calibrated', 'An Abrechnung kalibriert') };
+export const TIER_CLASS = { observed: 'osm', published_table: 'archetype', assumed: 'default', estimate: 'default', user: 'user', calibrated: 'calibrated', billcal: 'billcal' };
 export const SOURCE_CN = TIER_LABEL;
 
 const G = { env: L('围护', 'Envelope', 'Gebäudehülle'), air: L('通风与湿度', 'Air and humidity', 'Luft und Feuchte'), use: L('使用', 'Occupancy', 'Nutzung'), el: L('用电', 'Electricity', 'Strom'), sys: L('制冷系统', 'Cooling system', 'Kälteanlage') };
@@ -371,8 +372,9 @@ export function storeys(rec, type, eraId, parts) {
     const gfa = (fp - ground) * base + pts.reduce((s, p) => s + p.fp * p.own, 0), eq = gfa / fp;
     if (eq > base * 1.1) {
       const top = Math.max(...pts.map((p) => (p.h > 0 ? p.h : p.lv * fh)));
-      return res(eq, +(Math.round(eq) * fh).toFixed(1), L(`OSM building:part ×${pts.length}（最高约 ${Math.round(Math.max(...pts.map((p) => p.lv)))} 层）：塔楼楼面摊到整个轮廓，相当 ${eq.toFixed(1)} 层`, `OSM building:part ×${pts.length} (up to about ${Math.round(Math.max(...pts.map((p) => p.lv)))} storeys): the floor area of the tower parts spread over the outline, ${eq.toFixed(1)} storeys equivalent`, `OSM building:part ×${pts.length} (bis etwa ${Math.round(Math.max(...pts.map((p) => p.lv)))} Geschosse): die Geschossfläche der Turmteile über den Umriss verteilt, ${eq.toFixed(1)} Geschosse gleichwertig`),
-        L(`等效层数 × ${fhTxt}（实际塔顶约 ${Math.round(top)} m）`, `equivalent storeys × ${fhTxt} (tower top about ${Math.round(top)} m)`, `gleichwertige Geschosse × ${fhTxt} (Turmspitze etwa ${Math.round(top)} m)`), 'observed', 'estimate');
+      // equivalent storeys, not the real ones: the tier is an estimate and the page says "equivalent" (bcaStoreys keeps them)
+      return { ...res(eq, +(Math.round(eq) * fh).toFixed(1), L(`OSM building:part ×${pts.length}（最高约 ${Math.round(Math.max(...pts.map((p) => p.lv)))} 层）：塔楼楼面摊到整个轮廓，相当 ${eq.toFixed(1)} 层`, `OSM building:part ×${pts.length} (up to about ${Math.round(Math.max(...pts.map((p) => p.lv)))} storeys): the floor area of the tower parts spread over the outline, ${eq.toFixed(1)} storeys equivalent`, `OSM building:part ×${pts.length} (bis etwa ${Math.round(Math.max(...pts.map((p) => p.lv)))} Geschosse): die Geschossfläche der Turmteile über den Umriss verteilt, ${eq.toFixed(1)} Geschosse gleichwertig`),
+        L(`等效层数 × ${fhTxt}（实际塔顶约 ${Math.round(top)} m）`, `equivalent storeys × ${fhTxt} (tower top about ${Math.round(top)} m)`, `gleichwertige Geschosse × ${fhTxt} (Turmspitze etwa ${Math.round(top)} m)`), 'estimate', 'estimate'), equivalent: { top: Math.round(top), levels: Math.round(Math.max(...pts.map((p) => p.lv))), parts: pts.length } };
     }
   }
   if (lv > 0) {
@@ -429,6 +431,7 @@ function flatArea(kind, year) {
   }
 }
 const ROW_OF = { r1: 'hdb_1r2r', r2: 'hdb_1r2r', st: 'hdb_1r2r', rent: 'hdb_1r2r', r3: 'hdb_3r', r4: 'hdb_4r', r5: 'hdb_5r_ex', ex: 'hdb_5r_ex', mg: 'hdb_5r_ex' };
+export const DWELLING_OF_UNIT = ROW_OF;   // HDB unit code (x.hdb.units) → households.byDwelling row
 // HDB block: Σ units / n × flat area, and the household rows weighted by that area
 export function hdbFlats(hdb) {
   const n = hdb.n > 1 ? hdb.n : 1, rows = {}, parts = [];
@@ -544,17 +547,20 @@ export function assign(m, eraInfo, state = {}, ctx = {}) {
   for (const k of Object.keys(P)) if (P[k]?.tier === 'observed') P[k] = { ...P[k], tier: 'published_table', note: [P[k].note, TYPE_STAT()].filter(Boolean).join(' · ') };
   const eraTxt = eras ? (eras.find((e) => e.id === eraId)?.label_en || eraId) : '';
   for (const [k, p] of Object.entries(P)) if (p && p.p10 != null) { p.note = [p.note, eras && ['U_wall', 'U_roof', 'U_window', 'g_window', 'WWR', 'floorHeight', 'n50'].includes(k) ? eraTxt : ''].filter(Boolean).join(' · '); }
-  // HDB block: the household rows weighted by this block's flat area (table note: recompute per block)
-  if (type === 'hdb' && m.x?.hdb) {
-    const f = hdbFlats(m.x.hdb), H = A.households.byDwelling, tot = Object.values(f.rows).reduce((s, v) => s + v, 0);
+  // HDB block: the household rows weighted by this block's flat area (table note: recompute per block). state.dwelling
+  // (the bill of one flat, js/sg_app.js): the row of that flat type alone
+  const oneRow = type === 'hdb' && state.dwelling && A.households.byDwelling[state.dwelling] ? { [state.dwelling]: 1 } : null;
+  if (type === 'hdb' && (m.x?.hdb || oneRow)) {
+    const rows = oneRow || hdbFlats(m.x.hdb).rows, H = A.households.byDwelling, tot = Object.values(rows).reduce((s, v) => s + v, 0);
     if (tot > 0) {
-      const mix = Object.entries(f.rows).map(([r, a]) => `${H[r].label_en} ${Math.round((100 * a) / tot)}%`).join(', ');
+      const mix = Object.entries(rows).map(([r, a]) => `${H[r].label_en} ${Math.round((100 * a) / tot)}%`).join(', ');
       for (const k of ['coolFrac', 'Q_int', 'Q_lat', 'P_light', 'P_equip', 'E_other']) {
         if (A.types.hdb.calib?.[k]) continue;   // a calibrated type value wins over the per-block weighting
-        const w = (q) => Object.entries(f.rows).reduce((s, [r, a]) => s + (a / tot) * H[r][k][q], 0);
-        const cal = Object.keys(f.rows).some((r) => H[r][k].tier === 'calibrated');   // calibrated rows (mergeCalib)
+        const w = (q) => Object.entries(rows).reduce((s, [r, a]) => s + (a / tot) * H[r][k][q], 0);
+        const cal = Object.keys(rows).some((r) => H[r][k].tier === 'calibrated');   // calibrated rows (mergeCalib)
         P[k] = { ...P[k], value: +w('value').toFixed(4), p10: +w('p10').toFixed(4), p90: +w('p90').toFixed(4), tier: cal ? 'calibrated' : 'assumed',
-          source: `${H[Object.keys(f.rows)[0]][k].source}`, note: L(`按本楼各户型的面积加权：${mix}`, `weighted by the flat area of this block's flat types: ${mix}`, `gewichtet nach der Wohnfläche der Wohnungstypen dieses Blocks: ${mix}`) };
+          source: `${H[Object.keys(rows)[0]][k].source}`, note: oneRow ? L(`一户的账单：只用 ${H[state.dwelling].label_en} 这一户型的值`, `bill of one flat: the values of ${H[state.dwelling].label_en} alone`, `Abrechnung einer Wohnung: nur die Werte von ${H[state.dwelling].label_en}`)
+            : L(`按本楼各户型的面积加权：${mix}`, `weighted by the flat area of this block's flat types: ${mix}`, `gewichtet nach der Wohnfläche der Wohnungstypen dieses Blocks: ${mix}`) };
       }
     }
   }
@@ -591,6 +597,15 @@ export function assign(m, eraInfo, state = {}, ctx = {}) {
   if (bca?.occ) for (const k of ['Q_int', 'Q_lat', 'P_equip']) if (P[k]) { const s = bca.occ.scale; P[k] = { ...P[k], value: +(P[k].value * s).toFixed(3), p10: P[k].p10 * s, p90: P[k].p90 * s, note: [P[k].note, L(`× ${s.toFixed(2)}（${bca.occ.src}；按入住率缩放是假设）`, `× ${s.toFixed(2)} (${bca.occ.src}; scaling by occupancy assumed)`, `× ${s.toFixed(2)} (${bca.occ.src}; Skalierung mit der Belegung angenommen)`)].filter(Boolean).join(' · ') }; }
   // infiltration factor of rc5
   if (A.meta.defaults?.e_inf) P.e_inf = P_(A.meta.defaults.e_inf);
+  // the bill calibration written back (js/sg_app.js applyCalib): state.bill.values holds the posterior median, P10–P90 and
+  // narrowing (posterior ÷ prior standard deviation) of each drawn input; the ranges of the page then come from the
+  // posterior particles (model_sg.js particleMC)
+  for (const [k, e] of Object.entries(state.bill?.values || {})) {
+    if (!P[k] || typeof P[k].value !== 'number' || !e || !Number.isFinite(e.value)) continue;
+    const pr = P[k];
+    P[k] = { ...pr, value: e.value, p10: e.p10, p90: e.p90, tier: 'billcal', source: 'bill', prior: { value: pr.value, p10: pr.p10, p90: pr.p90, source: pr.source, tier: pr.tier },
+      note: [state.bill.note, e.shrink != null ? L(`区间收窄到先验的 ${e.shrink.toFixed(2)}`, `range narrowed to ${e.shrink.toFixed(2)} of the prior`, `Bereich auf ${e.shrink.toFixed(2)} des Priors eingeengt`) : '', L(`标定前 ${+(+pr.value).toPrecision(3)}（${+(+pr.p10).toPrecision(3)}–${+(+pr.p90).toPrecision(3)}，${TIER_LABEL[pr.tier] || pr.tier}）`, `before ${+(+pr.value).toPrecision(3)} (${+(+pr.p10).toPrecision(3)}–${+(+pr.p90).toPrecision(3)}, ${TIER_LABEL[pr.tier] || pr.tier})`, `vorher ${+(+pr.value).toPrecision(3)} (${+(+pr.p10).toPrecision(3)}–${+(+pr.p90).toPrecision(3)}, ${TIER_LABEL[pr.tier] || pr.tier})`)].filter(Boolean).join(' · ') };
+  }
   // the type's AC hours: non-residential AC follows use (rc5); residential acStart/acEnd as given
   // user input: point masses
   for (const [k, v] of Object.entries(state.user || {})) if (P[k] && v != null && Number.isFinite(+v)) P[k] = { ...P[k], value: +v, p10: +v, p90: +v, tier: 'user', source: 'user', note: L('用户填写', 'User input', 'Eigene Eingabe') };

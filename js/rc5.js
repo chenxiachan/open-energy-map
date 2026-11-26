@@ -100,7 +100,9 @@
 //   occupants, lighting and equipment; and, with two zones, the flow through the partitions from the uncooled zone's
 //   surface node. Each is times the cooled share. Their sum differs from the hourly sensible load: the difference is heat
 //   that the walls, floors and furniture stored while the AC was off and give back once it is on (positive), or take up
-//   (negative), plus the AC hours in which the room stays below the set point. The latent terms are exact: outdoor air
+//   (negative), plus the AC hours in which the room stays below the set point. massRelease is the part the mass node
+//   itself gives off in the AC hours, C_m × its temperature drop (exact); the rest of the storage term is the gap between
+//   the set-point estimate and the actual surface and air temperatures. The latent terms are exact: outdoor air
 //   (infiltration and ventilation) 2459 · H · max(0, x_e − x_i), internal Q_lat, and the pull-down at AC start; they add
 //   up to annual.coolLat. Nothing here changes a result; without the tropical terms it is not computed.
 
@@ -288,7 +290,7 @@ export function run(ctx, p, opts = {}) {
   // cooling balance (header), full-building scale of the cooled zone until the share fc is applied at the end
   const cbOn = detail && trop && coolOK, qPeople = split ? (p.Q_int || 0) * Af : 0;
   let cbN = 0, cbOcc = 0, cbDT = 0, cbVent = 0, cbSolW = 0, cbOpq = 0, cbPeople = 0, cbLight = 0, cbEquip = 0, cbCu = 0;
-  let cbAir = 0, cbHve = 0, cbDx = 0, cbAirDx = 0, cbLatInt = 0, cbPull = 0, cbPullDx = 0, cbTe = 0, cbStarts = 0, cbStartT = 0, cbPrev = false;
+  let cbAir = 0, cbHve = 0, cbDx = 0, cbAirDx = 0, cbLatInt = 0, cbPull = 0, cbPullDx = 0, cbTe = 0, cbStarts = 0, cbStartT = 0, cbPrev = false, cbMass = 0;
   const nf = ctx.model.facades.length;
   const solWin = detail ? new Float64Array(nf) : null;
   let thM = 20, prevAir = 20, thMU = 20, sU = 20, airU = 20;
@@ -339,6 +341,7 @@ export function run(ctx, p, opts = {}) {
         phi = (phi10 * (target - a0)) / (rA - a0);
         solve(phi, thM);
       }
+      const dMass = cbOn ? (Cm * (thM - rMt)) / 3600 : 0;   // heat the cooled zone's mass gave off this hour, Wh (cooling balance)
       thM = rMt;
       prevAir = rA;
       const zA = rA, zS = rS, zN = N;     // the (cooled) zone; the uncooled zone below reuses the solver
@@ -394,7 +397,7 @@ export function run(ctx, p, opts = {}) {
           const dT = te - Tcool, inUse = o || resid;
           cbN++; cbDT += dT; cbTe += te; if (o) cbOcc++;
           if (!cbPrev) { cbStarts++; cbStartT += a0; }   // free-running air temperature of the cooled zone at AC start
-          cbVent += (zN.Hve - hveInf) * dT; cbHve += zN.Hve - hveInf;
+          cbVent += (zN.Hve - hveInf) * dT; cbHve += zN.Hve - hveInf; cbMass += dMass;
           cbSolW += phiSolW; cbOpq += phiSol - phiSolW;
           if (!split) cbPeople += qint;
           else if (inUse) { cbPeople += qPeople; cbLight += pLight; cbEquip += pEquip; } else cbEquip += eBase * pEquip;
@@ -466,6 +469,8 @@ export function run(ctx, p, opts = {}) {
       res.coolBalance = {
         hours: cbN, occHours: cbOcc, sumDT: cbDT, meanTe: cbN ? cbTe / cbN : null, Tcool, fc, twoZone,
         starts: cbStarts, startT: cbStarts ? cbStartT / cbStarts : null, Cm: p.Cm,
+        // the part of the storage term that the mass node itself gives off in the AC hours (C_m × its temperature drop)
+        massRelease: k(cbMass),
         sensible: kWh(coolS), latent: kWh(coolL), sens, lat,
         H: res.H, A: { wall: Aop, window: Awin, roof: ctx.Aroof, floor: ctx.Afloor, env: Aenv, Vair, Af },
         // outdoor air in the AC hours (zone scale, before fc): infiltration and mean ventilation conductance in W/K (sensible,

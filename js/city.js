@@ -5,9 +5,10 @@
 // does this for --city sg). Safe to import anywhere: no top-level await, location is guarded (as in i18n.js).
 //
 // Choices: Munich keeps its paths exactly as before (data/…), so its fetches are byte for byte the old ones. Singapore has
-// no LoD2, Zensus, terrain, tree or Heizspiegel layer, no bill calibration, retrofit or export yet; its street walk has flat
-// ground and no trees (js/walk.js reads terrain and trees only where `layers` has them); `layers` says which exist, and
-// the page hides the rest. Its city grid layer (data/sg/city/grid.json, tools/sg/city_run_sg.mjs)
+// no LoD2, Zensus, terrain or Heizspiegel layer and no export yet; its bill calibration and retrofit are its own
+// (js/calib_sg.js, js/retrofit_sg.js: electricity bills and cooling measures); its street walk has flat
+// ground and the trees OSM maps (js/walk.js reads terrain and trees only where `layers` has them); `layers` says which
+// exist, and the page hides the rest. Its city grid layer (data/sg/city/grid.json, tools/sg/city_run_sg.mjs)
 // is on 100 m cells of SVY21 (EPSG:3414) instead of the Zensus grid.
 
 const MUC = {
@@ -44,7 +45,8 @@ const SG = {
   climate: 'cooling',
   // EMA grid emission factor (data/archetypes_sg.json gridEF.byYear); the typical year takes 2019 (gridEF note)
   gridEF: { table: 'gridEF', tmyYear: 2019 },
-  layers: { lod2: false, zensus: false, terrain: false, trees: false, heizspiegel: false, cityGrid: true, photos: true, walk: true, calib: false, retrofit: false, export: false },
+  trees: 'data/sg/trees/',        // street walk trees: OSM trees and tree rows in SVY21 tiles (tools/sg/trees_sg.py)
+  layers: { lod2: false, zensus: false, terrain: false, trees: true, heizspiegel: false, cityGrid: true, photos: true, walk: true, calib: true, retrofit: true, export: false },
 };
 
 export const CITIES = { muc: MUC, sg: SG };

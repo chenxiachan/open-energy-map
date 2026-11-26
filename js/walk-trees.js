@@ -1,13 +1,25 @@
 // Trees of the street walk (js/walk.js): the Bavarian single-tree data (data/trees, tools/trees_build.py; Einzelbäume 2024, CC BY 4.0) give
-// measured positions and heights; the data have no crown size, so the crown follows the height (treeMesh)
+// measured positions and heights; the data have no crown size, so the crown follows the height (treeMesh). Singapore
+// (CITY.trees, data/sg/trees, tools/sg/trees_sg.py): the trees and tree rows OSM maps, height from the OSM tag or 10 m.
 import * as THREE from 'three';
 import { utmFrame } from './terrain.js';
 import { inside } from './walk-common.js';
+import { CITY } from './city.js';
+import { toSVY21 } from './svy21.js';
+
+// The walk's frame against the SVY21 grid of the Singapore trees (data/sg/trees, tools/sg/trees_sg.py: OSM trees and
+// tree rows), an affine fit of three exact projections as utmFrame does for UTM 32; same names, so the loader is shared
+function svyFrame(F) {
+  const u0 = toSVY21(F.lon0, F.lat0), ue = toSVY21(...F.toLonLat(1000, 0)), un = toSVY21(...F.toLonLat(0, 1000));
+  const a = (ue[0] - u0[0]) / 1000, b = (un[0] - u0[0]) / 1000, c = (ue[1] - u0[1]) / 1000, d = (un[1] - u0[1]) / 1000, det = a * d - b * c;
+  return { toUTM: (x, y) => [u0[0] + a * x + b * y, u0[1] + c * x + d * y], fromUTM: (E, N) => { const dx = E - u0[0], dy = N - u0[1]; return [(d * dx - b * dy) / det, (-c * dx + a * dy) / det]; } };
+}
 
 export async function loadTrees(F, R) {
   let idx;
-  try { const r = await fetch('data/trees/index.json'); if (!r.ok) return []; idx = await r.json(); } catch { return []; }
-  const { toUTM, fromUTM } = utmFrame(F);
+  const root = CITY.trees || 'data/trees/';   // Munich: data/trees (UTM 32); Singapore: data/sg/trees (SVY21)
+  try { const r = await fetch(`${root}index.json`); if (!r.ok) return []; idx = await r.json(); } catch { return []; }
+  const { toUTM, fromUTM } = idx.srs === 'EPSG:3414' ? svyFrame(F) : utmFrame(F);
   const cs = [[-R, -R], [R, -R], [R, R], [-R, R]].map(([x, y]) => toUTM(x, y));
   const e0 = Math.floor(Math.min(...cs.map((c) => c[0])) / 1000), e1 = Math.floor(Math.max(...cs.map((c) => c[0])) / 1000);
   const n0 = Math.floor(Math.min(...cs.map((c) => c[1])) / 1000), n1 = Math.floor(Math.max(...cs.map((c) => c[1])) / 1000);
@@ -15,7 +27,7 @@ export async function loadTrees(F, R) {
   for (let e = e0; e <= e1; e++) for (let n = n0; n <= n1; n++) if (have.has(`${e}_${n}`)) keys.push([e, n]);
   const out = [];
   await Promise.all(keys.map(async ([e, n]) => {
-    const r = await fetch(`data/trees/t_${e}_${n}.bin`);
+    const r = await fetch(`${root}t_${e}_${n}.bin`);
     if (!r.ok) return;
     const dv = new DataView(await r.arrayBuffer());
     for (let o = 0; o + 5 <= dv.byteLength; o += 5) {

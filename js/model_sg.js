@@ -64,14 +64,14 @@ export function buildModel(rec0, nbRecs, state = {}, data = {}) {
   const st = SG.storeys(rec, type, eraId, parts);
   const fromGfa = bcaStoreys(rec, nbRecs, type, bcaRow, st, A);
   if (fromGfa) Object.assign(st, fromGfa);
-  if (state.floors > 0) { st.floors = Math.round(state.floors); st.height = +(st.voidDeck + st.floors * st.fh).toFixed(1); st.src.floors = 'user'; st.tier.floors = 'user'; st.h10 = st.h90 = st.height; }
+  if (state.floors > 0) { st.floors = Math.round(state.floors); st.height = +(st.voidDeck + st.floors * st.fh).toFixed(1); st.src.floors = 'user'; st.tier.floors = 'user'; st.equivalent = null; st.h10 = st.h90 = st.height; }
   const m = buildGeometry(rec, nbRecs, { heightOf: SG.neighbourHeight });
   const t = rec.tags || {};
   Object.assign(m, {
     sgType: type, sgVariant: cls.variant || null, x: rec.x || {}, usage: cls.rc5 || SG.RC5_USAGE[type], profile: null,
     height: st.height, floors: st.floors, floorHeight: +((st.height - st.voidDeck) / st.floors).toFixed(2), voidDeck: st.voidDeck,
     roof: { shape: t['roof:shape'] && t['roof:shape'] !== 'flat' ? t['roof:shape'] : 'flat', ridgeHeight: 0, attic: 'none', roofLevels: 0 },
-    basement: 'none', hGBias: 0, floorsPrior: null, heated: true, usageSrc: cls.src, usageTier: cls.tier, geomSrc: st.src, geomTier: st.tier,
+    basement: 'none', hGBias: 0, floorsPrior: null, heated: true, usageSrc: cls.src, usageTier: cls.tier, geomSrc: st.src, geomTier: st.tier, floorsEquivalent: st.equivalent || null,
     address: sgAddress(t, rec.x), structure: null, noLoD2: false,
   });
   m.nbLonLat = nbRecs.filter((n) => !n.part).map((n) => n.outer);
@@ -97,7 +97,7 @@ export function buildModel(rec0, nbRecs, state = {}, data = {}) {
 // levels, parts or height): storeys = BCA GFA / (refAreaFactor × footprint of the listing's outlines), the range from
 // the refAreaFactor P10–P90. Uses only the BCA GFA, never the EUI. (Fix of 2026-11-26, qa/sg_bca_validation.md §5.)
 function bcaStoreys(rec, nbRecs, type, row, st, A) {
-  if (!row || !(row.gfa > 0) || SG.RES_TYPES.includes(type) || st.tier.floors === 'observed' || st.tier.height === 'observed') return null;
+  if (!row || !(row.gfa > 0) || SG.RES_TYPES.includes(type) || st.tier.floors === 'observed' || st.tier.height === 'observed' || st.equivalent) return null;
   const rf = A.types[type]?.params?.refAreaFactor;
   if (!rf) return null;
   const ids = new Set(row.osm_all || (row.osm ? [row.osm] : []));
@@ -241,31 +241,43 @@ export function summarize(m, ctx, p, res, gef) {
 
 // prior Monte Carlo: draws of every input (archetype_sg.js makePrior); cond fixes the era at the one of the point value
 export function priorMC(b, sim, gef, n = 300, seeds = [42, 43], state = {}) {
-  const q = (arr, f) => { const s = arr.filter((v) => v != null && Number.isFinite(v)).sort((x, y) => x - y); return s.length ? s[Math.round(f * (s.length - 1))] : null; };
-  const t3 = (arr) => [q(arr, 0.1), q(arr, 0.5), q(arr, 0.9)];
   const one = (st, seed) => {
     const draw = SG.makePrior(b.m, b.eraInfo, st, b.asg, { bca: b.bca }), r = SG.rng(seed);
-    const K = ['cool', 'coolSens', 'coolLat', 'eui', 'co2t', 'peakWm2'], E = ['cooling', 'lighting', 'equipment', 'other', 'total'];
-    const acc = Object.fromEntries([...K, ...E.map((k) => 'e_' + k)].map((k) => [k, []]));
-    const mCool = Array.from({ length: 12 }, () => []), mElec = Array.from({ length: 12 }, () => []), xs = [];
-    for (let i = 0; i < n; i++) {
-      const d = draw(r), rr = runModel(b.m, sim.ctx, d.p), s = summarize(b.m, sim.ctx, d.p, rr, gef);
-      for (const k of K) acc[k].push(s[k]);
-      for (const k of E) acc['e_' + k].push(s.elec[k]);
-      rr.monthly.cool.forEach((v, m) => mCool[m].push(v));
-      (rr.monthly.elec?.total || []).forEach((v, m) => mElec[m].push(v));
-      xs.push({ ...d.p, era: d.ageClass, system: d.system, y: s.elec.total });
-    }
-    const o = Object.fromEntries(Object.entries(acc).map(([k, v]) => [k, t3(v)]));
-    o.monthlyCool = mCool.map((v) => [q(v, 0.1), q(v, 0.9)]); o.monthlyElec = mElec.map((v) => [q(v, 0.1), q(v, 0.9)]);
-    o.draws = { xs, y: acc.e_total };
-    return o;
+    return mcOf(b, sim, gef, Array.from({ length: n }, () => draw(r)));   // the draws use r alone, so drawing first changes nothing
   };
   const full = one(state, seeds[0]);
   const eraKnown = !!state.era || b.eraInfo.kind !== 'prior';
   full.cond = eraKnown ? null : one({ ...state, era: b.asg.eraId }, seeds[1]);
   full.n = n;
   return full;
+}
+// the same summary over given parameter sets: the posterior particles of a bill calibration (js/calib_sg.js), with the
+// user's inputs on top (they win, as in assign)
+export function particleMC(b, sim, gef, particles, user = {}) {
+  const u = Object.entries(user || {}).filter(([k, v]) => v != null && Number.isFinite(+v) && b.m.params[k]);
+  const ds = particles.map((d) => (u.length ? { ...d, p: { ...d.p, ...Object.fromEntries(u.map(([k, v]) => [k, +v])) } } : d));
+  const o = mcOf(b, sim, gef, ds);
+  o.cond = null; o.n = ds.length; o.posterior = true;
+  return o;
+}
+function mcOf(b, sim, gef, draws) {
+  const q = (arr, f) => { const s = arr.filter((v) => v != null && Number.isFinite(v)).sort((x, y) => x - y); return s.length ? s[Math.round(f * (s.length - 1))] : null; };
+  const t3 = (arr) => [q(arr, 0.1), q(arr, 0.5), q(arr, 0.9)];
+  const K = ['cool', 'coolSens', 'coolLat', 'eui', 'co2t', 'peakWm2'], E = ['cooling', 'lighting', 'equipment', 'other', 'total'];
+  const acc = Object.fromEntries([...K, ...E.map((k) => 'e_' + k)].map((k) => [k, []]));
+  const mCool = Array.from({ length: 12 }, () => []), mElec = Array.from({ length: 12 }, () => []), xs = [];
+  for (const d of draws) {
+    const rr = runModel(b.m, sim.ctx, d.p), s = summarize(b.m, sim.ctx, d.p, rr, gef);
+    for (const k of K) acc[k].push(s[k]);
+    for (const k of E) acc['e_' + k].push(s.elec[k]);
+    rr.monthly.cool.forEach((v, m) => mCool[m].push(v));
+    (rr.monthly.elec?.total || []).forEach((v, m) => mElec[m].push(v));
+    xs.push({ ...d.p, era: d.ageClass, system: d.system, y: s.elec.total });
+  }
+  const o = Object.fromEntries(Object.entries(acc).map(([k, v]) => [k, t3(v)]));
+  o.monthlyCool = mCool.map((v) => [q(v, 0.1), q(v, 0.9)]); o.monthlyElec = mElec.map((v) => [q(v, 0.1), q(v, 0.9)]);
+  o.draws = { xs, y: acc.e_total };
+  return o;
 }
 
 // first-order share of each sampled input in the variance of the electricity per m² (η² over 8 quantile bins, bias-corrected)

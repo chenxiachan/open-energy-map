@@ -204,6 +204,11 @@ details.voi[open] > summary { margin-bottom: 8px; }
 .src.default { background: var(--warn-soft); color: var(--warn); }
 .src.user { background: var(--surface-2); color: var(--fg-2); border-color: var(--line-2); }
 .src.calibrated { background: var(--cal-soft); color: var(--cal); }
+.src.billcal { background: var(--cal-soft); color: var(--cal); border-color: var(--cal); }   /* Singapore: posterior of this building's bills */
+.small-multiples button.sm { text-align: left; font: inherit; color: inherit; background: var(--surface); cursor: pointer; }
+.small-multiples button.sm:hover, .small-multiples button.sm:focus-visible { border-color: var(--accent); outline: none; }
+table.t tr.go { cursor: pointer; }
+table.t tr.go:hover > td, table.t tr.go.on > td { background: var(--surface-2); }
 .tip { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; margin-left: 6px; border-radius: 50%; border: 1px solid var(--line-2); color: var(--muted); font-size: 10.5px; font-weight: 600; font-style: normal; cursor: help; vertical-align: 2px; }
 .tip:hover, .tip:focus { color: var(--accent); border-color: var(--accent); outline: none; }
 .card-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 14px; margin-bottom: 8px; }

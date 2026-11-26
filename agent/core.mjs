@@ -575,6 +575,8 @@ async function buildingEnergySG(where = {}, assume = {}, opts = {}) {
       planning_area: m.x?.pa || null, subzone: m.x?.sz || null, land_use: m.x?.lu || null, gross_plot_ratio: m.x?.gpr ?? m.x?.gprt ?? null,
       type: m.sgType, type_label: SGA.TYPE_CN[m.sgType], variant: m.sgVariant || null, type_source: m.usageSrc, type_tier: TIER_SG[m.usageTier] || m.usageTier, rc5_usage: m.usage,
       storeys: m.floors, height_m: rd(m.height, 1), storey_height_m: rd(m.floorHeight, 2), void_deck_m: m.voidDeck || 0,
+      // a tower on a podium: the parts' floor area spread over the outline, so storeys and height are equivalent, not real
+      storeys_equivalent: m.floorsEquivalent ? { tower_top_m: m.floorsEquivalent.top, tower_levels: m.floorsEquivalent.levels, parts: m.floorsEquivalent.parts } : undefined,
       geometry_sources: { storeys: m.geomSrc.floors, height: m.geomSrc.height, tier: { storeys: TIER_SG[m.geomTier.floors], height: TIER_SG[m.geomTier.height] }, height_p10_p90_m: m.geomPrior.h90 > m.geomPrior.h10 ? [rd(m.geomPrior.h10), rd(m.geomPrior.h90)] : null },
       era: era ? { used: era.id, period: SGA.eraLabel(era), label: era.label_en, year: b.eraInfo.year || null, source: b.eraInfo.src, tier: TIER_SG[state.era ? 'user' : b.eraInfo.tier], prior: b.eraInfo.kind === 'prior' && !state.era ? Object.fromEntries(Object.entries(b.eraInfo.p).map(([k, v]) => [k, rd(v, 3)])) : undefined } : null,
       footprint_m2: Math.round(a.footprint), reference_area_m2: Math.round(a.netFloor), reference_area_basis: a.refBasis, reference_area_source: a.refSrc, reference_area_tier: TIER_SG[a.refTier] || a.refTier,

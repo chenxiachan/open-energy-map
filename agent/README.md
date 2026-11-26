@@ -13,6 +13,8 @@ node agent/oem.mjs building --at 48.148862 11.568004
 node agent/oem.mjs building --id w34107320 --assume refurbished.windows=yes --assume system=hp_air
 node agent/oem.mjs building --lod2 DEBY_LOD2_4958835
 node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out schellingstr51.gml
+node agent/oem.mjs building --city sg --address "blk 512 hougang ave 10"
+node agent/oem.mjs building --city sg --id w47345029 --year 2019
 ```
 
 `energy-ade` writes the same building as CityGML 2.0 with the Energy ADE 3.0 (beta 7), the file of the Export tab of the page: LoD2 boundary surfaces, the thermal zone and usage zone, the constructions, the heat generator and the energy demand with its hourly series. The ranges, tiers and references of the JSON are in the generic attribute sets `OEM_result_*`, `OEM_input_*` and `OEM_provenance` of the building, since Energy ADE 3.0 has no element for them.
@@ -24,6 +26,7 @@ node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out sc
 | `--summary` | A shorter result: each input with its tier, prior range and first reference |
 | `--samples N` | Draws of the prior for the ranges (100 to 1000, default 300) |
 | `--lang en\|de\|zh` | Language of labels and notes (default English) |
+| `--city muc\|sg` | The city (default Munich). Singapore gives cooling demand (sensible + latent), electricity by end use, CO₂, peak cooling load and EUI per GFA; it takes `--year 2010…2025` for the weather of that year and `--assume type=… era=… system=…` |
 
 ## MCP server
 
@@ -35,6 +38,8 @@ The server speaks MCP over stdio and offers two tools:
 
 - `find_building` searches addresses and building names and returns OSM ids, coordinates and links to the map.
 - `building_energy` returns the model of one building. Arguments: `osm_id` (with `lat` and `lon`), `lod2_id`, `lat` and `lon`, or `address`; optional `assume`, `samples` and `detail` (`summary`, the default, or `full`).
+
+Both tools serve Munich and Singapore. They take an optional `city` (`muc` or `sg`); without it a point in Singapore, a 6-digit postcode, "blk …" or "Singapore" in the text selects Singapore, and an `osm_id` that the Munich data do not have is looked up in Singapore. The Singapore calls run in a child process (`mcp --city sg`, which also works on its own), because the page modules keep one city per process. Singapore takes `year` and the `assume` keys `type`, `era` and `system`.
 
 Claude Code:
 
