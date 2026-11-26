@@ -77,6 +77,13 @@
 //   ideal controller would keep the windows shut through the afternoon, while in naturally ventilated flats the windows
 //   stay open in the non-AC hours and fans move the air; the ideal rule would understate the warm-up before the AC
 //   starts. This is an assumption on behaviour, not a measured rule; natCtrl 1 is there to test it.
+//   Daytime AC (p.acDayT, the Singapore housing table): outside the AC hours a share aC of the cooled zone runs its AC
+//   when the flat is hot, aC = clamp((θ − acDayT) / acDayBand, 0, 1) × acDayMax, θ = the uncooled zone's air temperature
+//   of the previous hour (one zone: the cooled zone's free-running air temperature of the previous hour). The share aC
+//   has its windows closed and is held at T_cool, the rest runs free with the windows open: the air conductances mix as
+//   aC · closed + (1 − aC) · open, and the zone load at T_cool is scaled by aC. The latent load and the pull-down count
+//   the share aC. Optional, as an offline study: night AC by the weather (p.acNightT, acNightBand, acNightMin), the
+//   same share rule inside the AC hours. Without acDayT and acNightT every hour is all or nothing, as before.
 // - Non-residential: AC during use with the windows closed (ventilation as above), off outside use; with n_nat given
 //   the uncooled share (stairs, corridors, toilets) has its windows open.
 // - Electricity. Lighting P_light (W/m²) during use, 0 outside; equipment P_equip during use and equipBase · P_equip
@@ -104,7 +111,9 @@
 //   itself gives off in the AC hours, C_m × its temperature drop (exact); the rest of the storage term is the gap between
 //   the set-point estimate and the actual surface and air temperatures. The latent terms are exact: outdoor air
 //   (infiltration and ventilation) 2459 · H · max(0, x_e − x_i), internal Q_lat, and the pull-down at AC start; they add
-//   up to annual.coolLat. Nothing here changes a result; without the tropical terms it is not computed.
+//   up to annual.coolLat. Hours with a share aC < 1 of the cooled zone on (daytime AC) count with the weight aC, with
+//   the closed-window air flows of that share: the hours of the balance are AC-equivalent hours Σ aC, and Σ(θ_e − T_cool)
+//   is Σ aC · (θ_e − T_cool). Nothing here changes a result; without the tropical terms it is not computed.
 
 import { daysOff, weekdayOf, cityCalendar, TMY_YEAR } from './holidays.js';
 
@@ -244,6 +253,14 @@ export function run(ctx, p, opts = {}) {
   const acS = p.acStart ?? ctx.profile?.acStart, acE = p.acEnd ?? ctx.profile?.acEnd;
   const mixed = resid && coolOK && acS != null && acE != null;
   const acWrap = mixed && acS > acE;
+  // daytime AC (optional, offline studies; header 'Mixed mode'): outside the AC hours a share of the cooled zone is
+  // air-conditioned when the flat is hot, clamp((θ − acDayT) / acDayBand, 0, 1) × acDayMax, θ = the uncooled zone's air
+  // temperature of the previous hour (one zone: the free-running air temperature of the previous hour). That share
+  // has the windows closed and is held at T_cool; the rest of the zone runs free with open windows.
+  const dayAC = mixed && p.acDayT != null, dayBand = p.acDayBand ?? 2, dayMax = p.acDayMax ?? 1;
+  // night AC by the weather (optional): in the AC hours the share is clamp((θ − acNightT) / acNightBand, 0, 1) with the
+  // same θ, so on cooler nights fewer flats run the AC and it falls as the flat cools (timers, switching to fans)
+  const nightAC = mixed && p.acNightT != null, nightBand = p.acNightBand ?? 2, nightMin = p.acNightMin ?? 0;   // share on the coolest nights
   const hasNat = p.n_nat != null;
   const natRes = hasNat && resid;          // residential: windows open whenever the zone's AC is off
   const natCtrl = (p.natCtrl || 0) === 1;  // 1: open only when the outdoor air is cooler than the zone air
@@ -262,6 +279,10 @@ export function run(ctx, p, opts = {}) {
 
   const amAt = Am / At, stFac = 1 - Am / At - Hw / (9.1 * At);
   const shadeOn = p.shadeCtrl < 1;
+  // offline studies only (tools/sg/smartwin_sg.mjs): the trigger of the movable shading (default 250 W/m², 23 °C) and a
+  // second stage on top of it, e.g. an electrochromic glazing (shadeCtrl at its own trigger) behind curtains (shade2*)
+  const shIrr = p.shadeIrr ?? 250, shT = p.shadeT ?? 23, sh2On = p.shade2Ctrl != null && p.shade2Ctrl < 1;
+  const perFac = !!p.shadePerFacade && (shadeOn || sh2On) && !!ctx.irr;   // offline: trigger per facade
   // ventilation states → precompute the network coefficients. Hve: air-node conductance to the outdoor air; Hs: from the
   // surface node to the other zone's surface node (two zones, full-building scale: H_cu / share; it enters the network
   // like a second window conductance); La: air flow for the latent load; kx: share of the room air's moisture left after
@@ -278,10 +299,11 @@ export function run(ctx, p, opts = {}) {
   // moisture pull-down at AC start (header): room air humidity of the cooled zone, tracked while it runs free
   const xTrack = trop && !!xOut;
   const pullK = fc * LAT_PER_H * 0.34 * Vair;   // Wh per (kg/kg) of the cooled share's air
-  let xRoom = xOut ? xOut[8760 - 337] : 0, acPrev = false;
+  let xRoom = xOut ? xOut[8760 - 337] : 0, aPrev = 0, prevFree = 20, acEq = 0;
   const keepHourly = !!opts.hourly, detail = !!opts.detail;
   const Tair = keepHourly ? new Float32Array(8760) : null, Top = keepHourly ? new Float32Array(8760) : null, Qhc = keepHourly ? new Float32Array(8760) : null;
   const Qlat = keepHourly && trop ? new Float32Array(8760) : null, TairU = keepHourly && twoZone ? new Float32Array(8760) : null;
+  const TopU = TairU ? new Float32Array(8760) : null;   // operative temperature of the uncooled zone (comfort studies)
   const mHeat = new Float64Array(12), mCool = new Float64Array(12);
   const mSens = trop ? new Float64Array(12) : null, mLat = trop ? new Float64Array(12) : null;
   let heat = 0, cool = 0, peakH = 0, peakC = 0, over26 = 0, occHours = 0;
@@ -290,7 +312,7 @@ export function run(ctx, p, opts = {}) {
   // cooling balance (header), full-building scale of the cooled zone until the share fc is applied at the end
   const cbOn = detail && trop && coolOK, qPeople = split ? (p.Q_int || 0) * Af : 0;
   let cbN = 0, cbOcc = 0, cbDT = 0, cbVent = 0, cbSolW = 0, cbOpq = 0, cbPeople = 0, cbLight = 0, cbEquip = 0, cbCu = 0;
-  let cbAir = 0, cbHve = 0, cbDx = 0, cbAirDx = 0, cbLatInt = 0, cbPull = 0, cbPullDx = 0, cbTe = 0, cbStarts = 0, cbStartT = 0, cbPrev = false, cbMass = 0;
+  let cbAir = 0, cbHve = 0, cbDx = 0, cbAirDx = 0, cbLatInt = 0, cbPull = 0, cbPullDx = 0, cbTe = 0, cbStarts = 0, cbStartT = 0, cbPrev = false, cbMass = 0, cbDay = 0;
   const nf = ctx.model.facades.length;
   const solWin = detail ? new Float64Array(nf) : null;
   let thM = 20, prevAir = 20, thMU = 20, sU = 20, airU = 20;
@@ -318,14 +340,33 @@ export function run(ctx, p, opts = {}) {
       const night = resid ? (hl >= 22 || hl < 6) : !o;
       const tH = night ? Tset - sb : Tset;
       const inAC = mixed && (acWrap ? hl >= acS || hl < acE : hl >= acS && hl < acE);
-      const coolOn = coolOK && (mixed ? inAC : (resid || o));
+      let aC = inAC ? 1 : 0;   // share of the cooled zone with the AC on (1 or 0 without daytime AC)
+      if (dayAC && !inAC) aC = Math.min(dayMax, Math.max(0, ((twoZone ? airU : prevFree) - p.acDayT) / dayBand));
+      if (nightAC && inAC) aC = nightMin + (1 - nightMin) * Math.min(1, Math.max(0, ((twoZone ? airU : prevFree) - p.acNightT) / nightBand));
+      const coolOn = coolOK && (mixed ? aC > 0 : (resid || o));
+      if (!mixed) aC = 1;
       const openC = natRes && !coolOn && (!natCtrl || te < prevAir);
       N = openC ? NNat : o ? NOcc : NOff;
+      if (coolOn && aC < 1 && NNat) { const c = o ? NOcc : NOff; N = mk(aC * c.Hve + (1 - aC) * NNat.Hve, HcC, aC * c.La + (1 - aC) * NNat.La); }
       tO = sU;
       const tOc = sU;   // the other zone's surface node as the cooled zone sees it this hour (cooling balance)
       const qint = o ? qintOcc : qintOff;
       const sw = hs * ws * Swin[i], so = hs * (Sop[i] + (1 - ws) * Swin[i]);
-      const fsh = shadeOn && sw / awin > 250 && prevAir > 23 ? p.shadeCtrl : 1;
+      let fsh = 1;
+      if (perFac) {                       // per facade: each facade's own irradiance decides (as EnergyPlus per window)
+        let s = 0;
+        for (let f = 0; f < nf; f++) {
+          const aw = ctx.winArea[f], I = ctx.irr.facade[f][i];
+          if (!(aw > 0) || !(I > 0)) continue;
+          let k = shadeOn && I > shIrr && prevAir > shT ? p.shadeCtrl : 1;
+          if (sh2On && I > (p.shade2Irr ?? 250) && prevAir > (p.shade2T ?? 23)) k *= p.shade2Ctrl;
+          s += aw * I * k;
+        }
+        fsh = Swin[i] > 0 ? s / Swin[i] : 1;
+      } else {
+        fsh = shadeOn && sw / awin > shIrr && prevAir > shT ? p.shadeCtrl : 1;
+        if (sh2On && sw / awin > (p.shade2Irr ?? 250) && prevAir > (p.shade2T ?? 23)) fsh *= p.shade2Ctrl;
+      }
       const phiSolW = gEff * sw * fsh;
       let phiSol = phiSolW + radW * so - skyW;
       if (roofGHI) phiSol += radR * roofGHI[i] - skyR;
@@ -340,10 +381,12 @@ export function run(ctx, p, opts = {}) {
         solve(phi10, thM);                // ISO 13790 C.4.2: linear in Φ_HC
         phi = (phi10 * (target - a0)) / (rA - a0);
         solve(phi, thM);
+        if (phi < 0 && aC < 1) { phi *= aC; solve(phi, thM); }   // only the share aC is held at T_cool
       }
       const dMass = cbOn ? (Cm * (thM - rMt)) / 3600 : 0;   // heat the cooled zone's mass gave off this hour, Wh (cooling balance)
       thM = rMt;
       prevAir = rA;
+      prevFree = a0;
       const zA = rA, zS = rS, zN = N;     // the (cooled) zone; the uncooled zone below reuses the solver
       let phiU = 0;
       if (twoZone) {
@@ -360,11 +403,11 @@ export function run(ctx, p, opts = {}) {
       let pull = 0;
       if (xTrack) {
         // first AC hour after the AC was off: remove the moisture the room air took up (well-mixed air, no furnishings)
-        if (coolOn && !acPrev && xRoom > xIn) { pull = pullK * (xRoom - xIn); if (cbOn && pass === 1) cbPullDx += xRoom - xIn; }
+        if (coolOn && aC > aPrev && xRoom > xIn) { pull = pullK * (aC - aPrev) * (xRoom - xIn); if (cbOn && pass === 1) cbPullDx += (aC - aPrev) * (xRoom - xIn); }
         const xeq = xOut[i] + (o && qlatOcc > 0 && zN.La > 0 ? qlatOcc / (LAT_PER_H * zN.La) : 0);
         xRoom = xeq + (xRoom - xeq) * zN.kx;
-        if (coolOn && xRoom > xIn) xRoom = xIn;
-        acPrev = coolOn;
+        if (coolOn && xRoom > xIn) xRoom = aC * xIn + (1 - aC) * xRoom;
+        aPrev = coolOn ? aC : 0;
       }
       if (pass === 0) continue;
       const m = MONTH_OF_HOUR[i];
@@ -381,10 +424,11 @@ export function run(ctx, p, opts = {}) {
         const cs = phi < 0 ? -fc * phi : 0;
         let cl = 0;
         if (coolOn) {
-          acHours++;
+          acHours++; acEq += aC;
           if (latOn) {
             const dx = xOut ? xOut[i] - xIn : 0;
-            cl = fc * ((dx > 0 ? zN.La * LAT_PER_H * dx : 0) + (o ? qlatOcc : 0)) + pull;
+            const La = aC < 1 ? (o ? NOcc : NOff).La : zN.La;   // the AC share has its windows closed
+            cl = fc * aC * ((dx > 0 ? La * LAT_PER_H * dx : 0) + (o ? qlatOcc : 0)) + pull;
             if (cl > 0 && cs === 0) latOnly++;
           }
         }
@@ -394,22 +438,23 @@ export function run(ctx, p, opts = {}) {
           if (c > peakC) peakC = c; if (cs > peakS) peakS = cs; if (cl > peakL) peakL = cl;
         }
         if (cbOn && coolOn) {
-          const dT = te - Tcool, inUse = o || resid;
-          cbN++; cbDT += dT; cbTe += te; if (o) cbOcc++;
+          // weight w = the share of the cooled zone with the AC on (1 but for daytime AC), its air flows windows closed
+          const dT = te - Tcool, inUse = o || resid, w = aC, Nb = aC < 1 ? (o ? NOcc : NOff) : zN;
+          cbN += w; cbDT += w * dT; cbTe += w * te; if (o) cbOcc += w; if (!inAC) cbDay += w;
           if (!cbPrev) { cbStarts++; cbStartT += a0; }   // free-running air temperature of the cooled zone at AC start
-          cbVent += (zN.Hve - hveInf) * dT; cbHve += zN.Hve - hveInf; cbMass += dMass;
-          cbSolW += phiSolW; cbOpq += phiSol - phiSolW;
-          if (!split) cbPeople += qint;
-          else if (inUse) { cbPeople += qPeople; cbLight += pLight; cbEquip += pEquip; } else cbEquip += eBase * pEquip;
-          if (twoZone) cbCu += HcC * (tOc - zS);
-          cbAir += zN.La;
-          if (latOn && xOut) { const dx = xOut[i] - xIn; if (dx > 0) { cbDx += dx; cbAirDx += zN.La * dx; } }
-          if (latOn && o) cbLatInt += qlatOcc;
+          cbVent += w * (Nb.Hve - hveInf) * dT; cbHve += w * (Nb.Hve - hveInf); cbMass += w * dMass;
+          cbSolW += w * phiSolW; cbOpq += w * (phiSol - phiSolW);
+          if (!split) cbPeople += w * qint;
+          else if (inUse) { cbPeople += w * qPeople; cbLight += w * pLight; cbEquip += w * pEquip; } else cbEquip += w * eBase * pEquip;
+          if (twoZone) cbCu += w * HcC * (tOc - zS);
+          cbAir += w * Nb.La;
+          if (latOn && xOut) { const dx = xOut[i] - xIn; if (dx > 0) { cbDx += w * dx; cbAirDx += w * Nb.La * dx; } }
+          if (latOn && o) cbLatInt += w * qlatOcc;
           cbPull += pull;
         }
         cbPrev = coolOn;
         if (o) { occHours++; if (thOp > 26) over26++; if (twoZone && 0.3 * airU + 0.7 * rS > 26) over26U++; }
-        if (keepHourly) { Tair[i] = zA; Top[i] = thOp; Qhc[i] = h - cs; Qlat[i] = cl; if (TairU) TairU[i] = airU; }
+        if (keepHourly) { Tair[i] = zA; Top[i] = thOp; Qhc[i] = h - cs; Qlat[i] = cl; if (TairU) { TairU[i] = airU; TopU[i] = 0.3 * airU + 0.7 * rS; } }
       }
       if (detail && hday[i]) {
         // monthly-method convention: losses at the set-point temperature, gains counted in full, η = (L − Q_H) / G
@@ -438,7 +483,7 @@ export function run(ctx, p, opts = {}) {
     Object.assign(a, {
       coolSens: kWh(coolS), coolLat: kWh(coolL), coolSensPerM2: kWh(coolS) / Af, coolLatPerM2: kWh(coolL) / Af,
       peakCoolSens: peakS, peakCoolLat: peakL, acHours, latOnlyHours: latOnly, coolFrac: coolOK ? fc : 0,
-      overheatHoursUncooled: twoZone ? over26U : null,
+      overheatHoursUncooled: twoZone ? over26U : null, acHoursEq: acEq,
     });
     const cop = p.COP_cool > 0 ? p.COP_cool : null;
     const mE = { cooling: [], lighting: [], equipment: [], other: [], total: [] };
@@ -468,6 +513,8 @@ export function run(ctx, p, opts = {}) {
       const lat = { infiltration: k(LAT_PER_H * hveInf * cbDx), ventilation: k(LAT_PER_H * (cbAirDx - hveInf * cbDx)), internal: k(cbLatInt), pulldown: kWh(cbPull) };
       res.coolBalance = {
         hours: cbN, occHours: cbOcc, sumDT: cbDT, meanTe: cbN ? cbTe / cbN : null, Tcool, fc, twoZone,
+        // AC-equivalent hours outside the AC hours (daytime AC), and whether any hour ran a share aC < 1
+        dayHours: cbDay, partial: dayAC || nightAC,
         starts: cbStarts, startT: cbStarts ? cbStartT / cbStarts : null, Cm: p.Cm,
         // the part of the storage term that the mass node itself gives off in the AC hours (C_m × its temperature drop)
         massRelease: k(cbMass),
@@ -508,7 +555,7 @@ export function run(ctx, p, opts = {}) {
   if (keepHourly) {
     res.hourly = { T_air: Tair, T_op: Top, Q_hc: Qhc };
     if (Qlat) res.hourly.Q_lat = Qlat;
-    if (TairU) res.hourly.T_airU = TairU;
+    if (TairU) { res.hourly.T_airU = TairU; res.hourly.T_opU = TopU; }
   }
   return res;
 }

@@ -72,6 +72,8 @@ re-read are marked as secondary in the text.
 | BCA_DFMA2020 | BCA: Factsheet on Design for Manufacturing and Assembly (DfMA), Annex B, March 2020. | https://isomer-user-content.by.gov.sg/338/5af1f7e8-f086-466c-b8db-5ba6a00df72b/annex-b.pdf | bca/bca_2020-03_annexB_DfMA_factsheet.pdf |
 | DENG2022 | Deng, J.-Y.; Wong, N.H. et al. (2022): Indoor Thermal Environment in Different Generations of Naturally Ventilated Public Residential Buildings in Singapore. Atmosphere 13(12):2118, doi:10.3390/atmos13122118 (simulation study). | https://doi.org/10.3390/atmos13122118 | papers/deng2022_atmosphere_13_2118_HDB_generations.pdf |
 | SUTD2026 | SUTD Lee Kuan Yew Centre for Innovative Cities (2026): Towards a Climate Resilient Citizenry, WG1 Technical Report (416 HDB households; research report, not peer-reviewed). | https://www.sutd.edu.sg/lkycic/wp-content/uploads/sites/16/2026/05/CRC-WG1-Technical-Report_Final.pdf | papers/sutd_lkycic_CRC_WG1_technical_report_2026.pdf |
+| SUTD2026_WG2 | SUTD Lee Kuan Yew Centre for Innovative Cities (2026): Towards a Climate Resilient Citizenry, WG2 Technical Report, "Everyday Life in Urban Heat: A Physio-Ethnographic Household Study" (39 HDB households, 60 adults; indoor sensors, wearables, diaries, interviews; research report, not peer-reviewed). Page numbers are PDF page indices. | https://www.sutd.edu.sg/lkycic/wp-content/uploads/sites/2/2026/09/CRC-WG2-Technical-Report_Final.pdf | sutd/CRC-WG2-Technical-Report_Final.pdf |
+| ASHRAE55 | ASHRAE Standard 55-2020: Thermal Environmental Conditions for Human Occupancy, §5.4 adaptive model (comfort 0.31 t_pma + 17.8 °C, 80 % acceptability ± 3.5 K, elevated air speed +1.2 K at 0.6 m/s). | https://www.ashrae.org/technical-resources/bookstore/standard-55-thermal-environmental-conditions-for-human-occupancy | – |
 | HAPPLE2017 | Happle, G.; Wilhelm, E.; Fonseca, J.A.; Schlueter, A. (2017): Determining air-conditioning usage patterns in Singapore from distributed, portable sensors. Energy Procedia 122:313–318, doi:10.1016/j.egypro.2017.07.328. | https://doi.org/10.3929/ethz-b-000185718 | papers/Happle2017_EnergyProcedia_AC_usage_SG.pdf |
 | CHUA2010 | Chua, K.J.; Chou, S.K. (2010): Energy performance of residential buildings in Singapore. Energy 35(2):667–678, doi:10.1016/j.energy.2009.10.039 (paywalled; cited via HAPPLE2017). | https://doi.org/10.1016/j.energy.2009.10.039 | – |
 | YANG2017 | Yang, B.; Olofsson, T. (2017): Indoor Built Environ 26(1):21–31, doi:10.1177/1420326X15604206 (229 questionnaires; abstract and HAPPLE2017 citation only). | https://doi.org/10.1177/1420326X15604206 | – |
@@ -183,9 +185,33 @@ m² of dwelling floor area.
 - **AC hours.** acStart 22 (21–23), acEnd 6 (5–8): CHUA2010 as cited by HAPPLE2017 (switched on between 21:00 and 23:00,
   off between 06:00 and 08:00; about 100 households; paywalled, secondary); HAPPLE2017 measured the share of students
   exposed to AC (peak 60 % at 21:00–22:00, mean exposure 6.2 h/day); NEA_LABEL assumes 8 h/day.
-- **Set point.** T_cool 25 °C: NEA_HECS2017 infographic (read by a subagent): 54 % of households set the AC to 25 °C or
-  higher in 2017 (49 % in 2012), so the median setting is at about 25 °C. WONG2002 (three HDB 5-room flats, overnight):
-  AC bedrooms measured 23–28 °C although all units were set at 22 °C. p10/p90 23–27 °C (assumed from that spread).
+- **AC by the room temperature (since 2026-11-26; rc5 header "Mixed mode"; qa/sg_ema_validation.md §10).** The share of
+  the AC rooms that run follows the room air temperature θ of the uncooled rooms in the previous hour.
+  - Night hours (acStart–acEnd): share = acNightMin + (1 − acNightMin) × clamp((θ − acNightT) / acNightBand, 0, 1).
+    acNightMin 0.47 (0.35–0.6): SUTD2026_WG2 PDF p. 28, participants relying only on fans or natural ventilation for
+    sleep rose from 15 on hotter nights to 39 on cooler nights (60 adults), so (60 − 39) / (60 − 15) = 0.47; of the 45
+    who used AC on hotter nights, 16 ran it through the sleep and 29 used timers, switched off or pre-cooled.
+    acNightT 27.0 °C (26.5–28.0, `calibrated`): the lowest 2018–2019 EMA residual after calibration among 26.5–28.5 °C,
+    a grid that spans the model's own 21:00 room temperatures of the featured flats. acNightBand 1.5 K (assumed: about
+    the P25–P75 spread of those temperatures).
+  - Other hours: share = acDayMax × clamp((θ − acDayT) / acDayBand, 0, 1). acDayMax 0.2 (0.12–0.3): SUTD2026 §7.5.3,
+    Fig. 7.7 (PDF p. 55), AC alone or with fans is the main daytime cooling practice of 12.2 % of the 416 households and
+    the main night practice of 61.2 %, 12.2 / 61.2 = 0.2 (individuals, Fig. 6.11: awake regularly 14.2 %, sleep often or
+    always 52.7 %, ratio 0.27). acDayT 31.2 °C (30.2–32.2): ASHRAE55 adaptive 80 % upper limit 0.31 t_pma + 21.3 =
+    29.5–30.5 °C by month on the typical year, plus 1.2 K for fans at 0.6 m/s (fans: SUTD2026 p. 46, 76.4 % often or
+    always). acDayBand 2 K (assumed).
+  - SUTD2026_WG2 PDF p. 24, use intensity of the 39 households: 15 % no AC, 35 % low (occasional), 38 % medium (daily,
+    mainly at night), 12 % high (daily, including daytime).
+  - Chosen against EMA with the 0.5-month billing kernel (qa/sg_ema_validation.md §10): this structure, AC only at night,
+    daytime AC from 29–33 °C for all AC rooms, and the day cap alone were compared; the structure here is within 0.2
+    points of the lowest monthly error, and its calibrated coolFrac stays near the table (0.82–0.97 ×); every behaviour
+    value in it but acNightT and the two ramps comes from a survey.
+- **Set point.** T_cool 24.8 °C (since 2026-11-26; hdb, condo, landed): SUTD2026_WG2 PDF p. 28, participants who use AC
+  while sleeping set it to a mean of 24.8 °C (median 24.5 °C); p. 65, AC users' mean setting 24.7 °C; p. 56, measured
+  night bedroom temperature of the AC archetype 24.9 ± 2.3 °C (median 24.9). Before: 25 °C from NEA_HECS2017 (54 % of
+  households set the AC to 25 °C or higher in 2017, 49 % in 2012), kept under `previous`. WONG2002 (three HDB 5-room
+  flats, overnight): AC bedrooms measured 23–28 °C although all units were set at 22 °C. p10/p90 23–27 °C (assumed from
+  that spread).
 - **RH.** Split units have no humidistat; 0.60 (0.50–0.70) assumed. FERIADI2002 Table 1 (538 Singapore samples in
   naturally ventilated homes): air 28.5 °C / RH 75.1 % (rainy season), 29.7 °C / 71.2 % (hot season); WONG2002: NV
   bedrooms 29–30 °C, RH 70–75 %.

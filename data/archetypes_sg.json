@@ -281,6 +281,17 @@
     "ref": "NEA: Resource Efficiency Guide for New Home Owners (2016), p. 4 (install fans; ceiling fans more effective than standing fans; curtains, blinds or solar window films). Retrieved 2026-11-26.",
     "url": "https://www.nea.gov.sg/docs/default-source/default-document-library/resource-efficiency-guide-for-homeowners.pdf",
     "file": "~/EnergyMapData/sg/docs/nea/nea_resource_efficiency_guide_new_home_owners_2016.pdf"
+   },
+   {
+    "id": "ASHRAE55",
+    "ref": "ASHRAE Standard 55-2020: Thermal Environmental Conditions for Human Occupancy, section 5.4 (adaptive model for occupant-controlled naturally conditioned spaces: comfort 0.31 t_pma + 17.8 °C, 80 % acceptability ± 3.5 K; elevated air speed +1.2 K at 0.6 m/s).",
+    "url": "https://www.ashrae.org/technical-resources/bookstore/standard-55-thermal-environmental-conditions-for-human-occupancy"
+   },
+   {
+    "id": "SUTD2026_WG2",
+    "ref": "SUTD Lee Kuan Yew Centre for Innovative Cities (2026): Towards a Climate Resilient Citizenry, WG2 Technical Report, Physio-Ethnographic Household Study (39 HDB households, 60 adults; indoor temperature and humidity sensors, wearables, diaries, interviews; research report, not peer-reviewed). Page numbers are PDF page indices.",
+    "url": "https://www.sutd.edu.sg/lkycic/wp-content/uploads/sites/2/2026/09/CRC-WG2-Technical-Report_Final.pdf",
+    "file": "~/EnergyMapData/sg/docs/sutd/CRC-WG2-Technical-Report_Final.pdf"
    }
   ],
   "systemKeyMap": {
@@ -882,12 +893,19 @@
      "tier": "assumed"
     },
     "T_cool": {
-     "value": 25.0,
-     "p10": 23.0,
-     "p90": 27.0,
-     "source": "NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017) for the value; WONG2002 (AC bedrooms measured 23–28 °C with units set at 22 °C) for the range",
+     "value": 24.8,
+     "p10": 23,
+     "p90": 27,
      "tier": "observed",
-     "note": "room air temperature held at night; p10/p90 assumed from the measured spread"
+     "source": "SUTD2026_WG2 PDF p. 28 (participants who use AC while sleeping set a mean of 24.8 °C, median 24.5 °C; p. 65: AC users' mean setting 24.7 °C; p. 56: measured night bedroom temperature of the AC archetype 24.9 ± 2.3 °C) for the value; WONG2002 (AC bedrooms measured 23-28 °C with units set at 22 °C) for the range; NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017)",
+     "note": "room air temperature held in the AC rooms; p10/p90 assumed from the measured spread",
+     "previous": {
+      "value": 25.0,
+      "p10": 23.0,
+      "p90": 27.0,
+      "source": "NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017) for the value; WONG2002 (AC bedrooms measured 23–28 °C with units set at 22 °C) for the range",
+      "tier": "observed"
+     }
     },
     "RH_cool": {
      "value": 0.6,
@@ -911,6 +929,52 @@
      "source": "CHUA2010 via HAPPLE2017 (off between 06:00 and 08:00); NEA_LABEL (label assumes 8 h/day)",
      "tier": "observed",
      "note": "local hour; 22–06 gives the label's 8 h"
+    },
+    "acNightT": {
+     "value": 27,
+     "p10": 26.5,
+     "p90": 28,
+     "tier": "calibrated",
+     "source": "EMA_SES household electricity per account, national monthly 2018-2019 (qa/sg_ema_validation.md §10): of 26.5, 27.0, 27.5, 28.0 and 28.5 °C, 27.0 °C gives the lowest residual after calibration; the grid spans the model's own 21:00 room air temperatures of the featured flats (P25 27.7-28.1 °C)",
+     "note": "in the night AC hours the share of the AC rooms that run rises from acNightMin at this room air temperature (uncooled rooms, previous hour) to 1 at acNightT + acNightBand; P10-P90 = the grid with a residual within 0.0005 of the best"
+    },
+    "acNightBand": {
+     "value": 1.5,
+     "p10": 1.5,
+     "p90": 1.5,
+     "tier": "assumed",
+     "source": "assumed: the spread between P25 and P75 of the model's 21:00 room air temperature of the featured flats (about 1.5 K)"
+    },
+    "acNightMin": {
+     "value": 0.47,
+     "p10": 0.35,
+     "p90": 0.6,
+     "tier": "observed",
+     "source": "SUTD2026_WG2 PDF p. 28 (39 HDB households, 60 adults): participants relying only on fans or natural ventilation for sleep rose from 15 on hotter nights to 39 on cooler nights, so AC sleepers on cooler nights ÷ hotter nights = (60 - 39) ÷ (60 - 15) = 0.47; of the 45 who used AC on hotter nights, 16 ran it through the sleep, 29 used timers, switched off or pre-cooled",
+     "note": "share of the AC rooms that run on the coolest nights; P10-P90 assumed (60 adults)"
+    },
+    "acDayT": {
+     "value": 31.2,
+     "p10": 30.2,
+     "p90": 32.2,
+     "tier": "published_table",
+     "source": "ASHRAE55 adaptive model on the Singapore typical year: 80 % upper limit 0.31 t_pma + 17.8 + 3.5 = 29.5-30.5 °C by month, plus 1.2 K for fans at 0.6 m/s (fans are the common practice: SUTD2026 p. 46, 76.4 % often or always)",
+     "note": "room air temperature (uncooled rooms, previous hour) above which the daytime share of the AC rooms starts to run outside the night AC hours; P10-P90 ±1 K assumed"
+    },
+    "acDayBand": {
+     "value": 2,
+     "p10": 2,
+     "p90": 2,
+     "tier": "assumed",
+     "source": "assumed: the share rises linearly from 0 at acDayT to acDayMax at acDayT + 2 K"
+    },
+    "acDayMax": {
+     "value": 0.2,
+     "p10": 0.12,
+     "p90": 0.3,
+     "tier": "observed",
+     "source": "SUTD2026 section 7.5.3, Fig. 7.7 (416 HDB households, 2024-2025): AC alone or with fans is the main daytime cooling practice of 12.2 % of households and the main night practice of 61.2 %; 12.2 / 61.2 = 0.2 of the night AC rooms; individuals: AC while awake regularly 14.2 %, during sleep often or always 52.7 % (Fig. 6.11, ratio 0.27)",
+     "note": "share of the AC rooms that run by day on the hottest afternoons; P10-P90 0.12-0.3 assumed around the two survey ratios (households 0.2, individuals 0.27)"
     },
     "start": {
      "value": 0,
@@ -1315,12 +1379,19 @@
      "tier": "assumed"
     },
     "T_cool": {
-     "value": 25.0,
-     "p10": 23.0,
-     "p90": 27.0,
-     "source": "NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017) for the value; WONG2002 (AC bedrooms measured 23–28 °C with units set at 22 °C) for the range",
+     "value": 24.8,
+     "p10": 23,
+     "p90": 27,
      "tier": "observed",
-     "note": "room air temperature held at night; p10/p90 assumed from the measured spread"
+     "source": "SUTD2026_WG2 PDF p. 28 (participants who use AC while sleeping set a mean of 24.8 °C, median 24.5 °C; p. 65: AC users' mean setting 24.7 °C; p. 56: measured night bedroom temperature of the AC archetype 24.9 ± 2.3 °C) for the value; WONG2002 (AC bedrooms measured 23-28 °C with units set at 22 °C) for the range; NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017)",
+     "note": "room air temperature held in the AC rooms; p10/p90 assumed from the measured spread",
+     "previous": {
+      "value": 25.0,
+      "p10": 23.0,
+      "p90": 27.0,
+      "source": "NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017) for the value; WONG2002 (AC bedrooms measured 23–28 °C with units set at 22 °C) for the range",
+      "tier": "observed"
+     }
     },
     "RH_cool": {
      "value": 0.6,
@@ -1344,6 +1415,52 @@
      "source": "CHUA2010 via HAPPLE2017 (off between 06:00 and 08:00); NEA_LABEL (label assumes 8 h/day)",
      "tier": "observed",
      "note": "local hour; 22–06 gives the label's 8 h"
+    },
+    "acNightT": {
+     "value": 27,
+     "p10": 26.5,
+     "p90": 28,
+     "tier": "calibrated",
+     "source": "EMA_SES household electricity per account, national monthly 2018-2019 (qa/sg_ema_validation.md §10): of 26.5, 27.0, 27.5, 28.0 and 28.5 °C, 27.0 °C gives the lowest residual after calibration; the grid spans the model's own 21:00 room air temperatures of the featured flats (P25 27.7-28.1 °C)",
+     "note": "in the night AC hours the share of the AC rooms that run rises from acNightMin at this room air temperature (uncooled rooms, previous hour) to 1 at acNightT + acNightBand; P10-P90 = the grid with a residual within 0.0005 of the best"
+    },
+    "acNightBand": {
+     "value": 1.5,
+     "p10": 1.5,
+     "p90": 1.5,
+     "tier": "assumed",
+     "source": "assumed: the spread between P25 and P75 of the model's 21:00 room air temperature of the featured flats (about 1.5 K)"
+    },
+    "acNightMin": {
+     "value": 0.47,
+     "p10": 0.35,
+     "p90": 0.6,
+     "tier": "observed",
+     "source": "SUTD2026_WG2 PDF p. 28 (39 HDB households, 60 adults): participants relying only on fans or natural ventilation for sleep rose from 15 on hotter nights to 39 on cooler nights, so AC sleepers on cooler nights ÷ hotter nights = (60 - 39) ÷ (60 - 15) = 0.47; of the 45 who used AC on hotter nights, 16 ran it through the sleep, 29 used timers, switched off or pre-cooled",
+     "note": "share of the AC rooms that run on the coolest nights; P10-P90 assumed (60 adults)"
+    },
+    "acDayT": {
+     "value": 31.2,
+     "p10": 30.2,
+     "p90": 32.2,
+     "tier": "published_table",
+     "source": "ASHRAE55 adaptive model on the Singapore typical year: 80 % upper limit 0.31 t_pma + 17.8 + 3.5 = 29.5-30.5 °C by month, plus 1.2 K for fans at 0.6 m/s (fans are the common practice: SUTD2026 p. 46, 76.4 % often or always)",
+     "note": "room air temperature (uncooled rooms, previous hour) above which the daytime share of the AC rooms starts to run outside the night AC hours; P10-P90 ±1 K assumed"
+    },
+    "acDayBand": {
+     "value": 2,
+     "p10": 2,
+     "p90": 2,
+     "tier": "assumed",
+     "source": "assumed: the share rises linearly from 0 at acDayT to acDayMax at acDayT + 2 K"
+    },
+    "acDayMax": {
+     "value": 0.2,
+     "p10": 0.12,
+     "p90": 0.3,
+     "tier": "observed",
+     "source": "SUTD2026 section 7.5.3, Fig. 7.7 (416 HDB households, 2024-2025): AC alone or with fans is the main daytime cooling practice of 12.2 % of households and the main night practice of 61.2 %; 12.2 / 61.2 = 0.2 of the night AC rooms; individuals: AC while awake regularly 14.2 %, during sleep often or always 52.7 % (Fig. 6.11, ratio 0.27)",
+     "note": "share of the AC rooms that run by day on the hottest afternoons; P10-P90 0.12-0.3 assumed around the two survey ratios (households 0.2, individuals 0.27)"
     },
     "start": {
      "value": 0,
@@ -1644,12 +1761,19 @@
      "tier": "assumed"
     },
     "T_cool": {
-     "value": 25.0,
-     "p10": 23.0,
-     "p90": 27.0,
-     "source": "NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017) for the value; WONG2002 (AC bedrooms measured 23–28 °C with units set at 22 °C) for the range",
+     "value": 24.8,
+     "p10": 23,
+     "p90": 27,
      "tier": "observed",
-     "note": "room air temperature held at night; p10/p90 assumed from the measured spread"
+     "source": "SUTD2026_WG2 PDF p. 28 (participants who use AC while sleeping set a mean of 24.8 °C, median 24.5 °C; p. 65: AC users' mean setting 24.7 °C; p. 56: measured night bedroom temperature of the AC archetype 24.9 ± 2.3 °C) for the value; WONG2002 (AC bedrooms measured 23-28 °C with units set at 22 °C) for the range; NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017)",
+     "note": "room air temperature held in the AC rooms; p10/p90 assumed from the measured spread",
+     "previous": {
+      "value": 25.0,
+      "p10": 23.0,
+      "p90": 27.0,
+      "source": "NEA_HECS2017 (54 % of households set the AC to 25 °C or higher, 2017) for the value; WONG2002 (AC bedrooms measured 23–28 °C with units set at 22 °C) for the range",
+      "tier": "observed"
+     }
     },
     "RH_cool": {
      "value": 0.6,
@@ -1673,6 +1797,52 @@
      "source": "CHUA2010 via HAPPLE2017 (off between 06:00 and 08:00); NEA_LABEL (label assumes 8 h/day)",
      "tier": "observed",
      "note": "local hour; 22–06 gives the label's 8 h"
+    },
+    "acNightT": {
+     "value": 27,
+     "p10": 26.5,
+     "p90": 28,
+     "tier": "calibrated",
+     "source": "EMA_SES household electricity per account, national monthly 2018-2019 (qa/sg_ema_validation.md §10): of 26.5, 27.0, 27.5, 28.0 and 28.5 °C, 27.0 °C gives the lowest residual after calibration; the grid spans the model's own 21:00 room air temperatures of the featured flats (P25 27.7-28.1 °C)",
+     "note": "in the night AC hours the share of the AC rooms that run rises from acNightMin at this room air temperature (uncooled rooms, previous hour) to 1 at acNightT + acNightBand; P10-P90 = the grid with a residual within 0.0005 of the best"
+    },
+    "acNightBand": {
+     "value": 1.5,
+     "p10": 1.5,
+     "p90": 1.5,
+     "tier": "assumed",
+     "source": "assumed: the spread between P25 and P75 of the model's 21:00 room air temperature of the featured flats (about 1.5 K)"
+    },
+    "acNightMin": {
+     "value": 0.47,
+     "p10": 0.35,
+     "p90": 0.6,
+     "tier": "observed",
+     "source": "SUTD2026_WG2 PDF p. 28 (39 HDB households, 60 adults): participants relying only on fans or natural ventilation for sleep rose from 15 on hotter nights to 39 on cooler nights, so AC sleepers on cooler nights ÷ hotter nights = (60 - 39) ÷ (60 - 15) = 0.47; of the 45 who used AC on hotter nights, 16 ran it through the sleep, 29 used timers, switched off or pre-cooled",
+     "note": "share of the AC rooms that run on the coolest nights; P10-P90 assumed (60 adults)"
+    },
+    "acDayT": {
+     "value": 31.2,
+     "p10": 30.2,
+     "p90": 32.2,
+     "tier": "published_table",
+     "source": "ASHRAE55 adaptive model on the Singapore typical year: 80 % upper limit 0.31 t_pma + 17.8 + 3.5 = 29.5-30.5 °C by month, plus 1.2 K for fans at 0.6 m/s (fans are the common practice: SUTD2026 p. 46, 76.4 % often or always)",
+     "note": "room air temperature (uncooled rooms, previous hour) above which the daytime share of the AC rooms starts to run outside the night AC hours; P10-P90 ±1 K assumed"
+    },
+    "acDayBand": {
+     "value": 2,
+     "p10": 2,
+     "p90": 2,
+     "tier": "assumed",
+     "source": "assumed: the share rises linearly from 0 at acDayT to acDayMax at acDayT + 2 K"
+    },
+    "acDayMax": {
+     "value": 0.2,
+     "p10": 0.12,
+     "p90": 0.3,
+     "tier": "observed",
+     "source": "SUTD2026 section 7.5.3, Fig. 7.7 (416 HDB households, 2024-2025): AC alone or with fans is the main daytime cooling practice of 12.2 % of households and the main night practice of 61.2 %; 12.2 / 61.2 = 0.2 of the night AC rooms; individuals: AC while awake regularly 14.2 %, during sleep often or always 52.7 % (Fig. 6.11, ratio 0.27)",
+     "note": "share of the AC rooms that run by day on the hottest afternoons; P10-P90 0.12-0.3 assumed around the two survey ratios (households 0.2, individuals 0.27)"
     },
     "start": {
      "value": 0,

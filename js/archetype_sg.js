@@ -142,6 +142,13 @@ export const PARAM_META = {
   coolFrac: { label: L('空调面积比例', 'Air-conditioned share of the floor area', 'Klimatisierter Flächenanteil'), unit: '–', group: G.use },
   acStart: { label: L('空调开启（当地时）', 'AC on (local hour)', 'Klimaanlage ein (Ortszeit)'), unit: 'h', group: G.use },
   acEnd: { label: L('空调关闭（当地时）', 'AC off (local hour)', 'Klimaanlage aus (Ortszeit)'), unit: 'h', group: G.use },
+  // daytime and night AC by the room temperature (rc5 header 'Mixed mode'): the share of the cooled rooms with the AC on
+  acDayT: { label: L('白天开空调的室温', 'Room temperature for daytime AC', 'Raumtemperatur für Klimatisierung am Tag'), unit: '°C', group: G.use },
+  acDayBand: { label: L('白天开机的升温区间', 'Daytime AC ramp', 'Anstiegsbereich Klimatisierung am Tag'), unit: 'K', group: G.use },
+  acDayMax: { label: L('白天开机比例上限', 'Daytime AC share at most', 'Höchstanteil Klimatisierung am Tag'), unit: '–', group: G.use },
+  acNightT: { label: L('夜间开空调的室温', 'Room temperature for night AC', 'Raumtemperatur für Klimatisierung nachts'), unit: '°C', group: G.use },
+  acNightBand: { label: L('夜间开机的升温区间', 'Night AC ramp', 'Anstiegsbereich Klimatisierung nachts'), unit: 'K', group: G.use },
+  acNightMin: { label: L('凉夜开机比例', 'Night AC share on cool nights', 'Klimatisierungsanteil in kühlen Nächten'), unit: '–', group: G.use },
   Q_int: { label: L('人员显热', 'Occupant sensible gains', 'Sensible Wärme der Personen'), unit: 'W/m²', group: G.use },
   Q_lat: { label: L('室内潜热', 'Internal latent gains', 'Latente innere Lasten'), unit: 'W/m²', group: G.use },
   hPart: { label: L('隔墙传热', 'Partition conductance', 'Leitwert der Innenwände'), unit: 'W/(m²·K)', group: G.use },
@@ -156,9 +163,10 @@ export const PARAM_META = {
 };
 // keys rc5 reads from p (the rest of a type's params are profile, geometry or information)
 const RC5_KEYS = ['U_wall', 'U_roof', 'U_floor', 'U_window', 'g_window', 'frameFrac', 'dU_tb', 'Cm', 'F_floor', 'F_roof', 'shadeCtrl', 'dT_sky', 'n50', 'e_inf', 'n_vent', 'n_nat', 'natCtrl', 'hr_eff',
-  'RH_cool', 'T_cool', 'coolFrac', 'acStart', 'acEnd', 'Q_int', 'Q_lat', 'hPart', 'P_light', 'P_equip', 'equipBase', 'E_other', 'COP_cool', 'useScale'];
+  'RH_cool', 'T_cool', 'coolFrac', 'acStart', 'acEnd', 'Q_int', 'Q_lat', 'hPart', 'P_light', 'P_equip', 'equipBase', 'E_other', 'COP_cool', 'useScale',
+  'acDayT', 'acDayBand', 'acDayMax', 'acNightT', 'acNightBand', 'acNightMin'];
 export const UNCERTAIN = RC5_KEYS.filter((k) => !['hr_eff', 'natCtrl'].includes(k)).concat(['WWR']);
-const FRACTION = new Set(['g_window', 'frameFrac', 'WWR', 'shadeCtrl', 'F_floor', 'F_roof', 'RH_cool', 'coolFrac', 'equipBase', 'hr_eff']);
+const FRACTION = new Set(['g_window', 'frameFrac', 'WWR', 'shadeCtrl', 'F_floor', 'F_roof', 'RH_cool', 'coolFrac', 'equipBase', 'hr_eff', 'acDayMax', 'acNightMin']);
 
 // ---------- random numbers (the generator of js/archetype.js) ----------
 export function rng(seed = 1) {
