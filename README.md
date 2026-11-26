@@ -182,7 +182,7 @@ Published tables and standards (IWU / TABULA, DIN V 18599, GEG 2024, Heizspiegel
 
 ## Running locally
 
-The map is a static site without a build step: serve the folder with any static web server, for example `python3 -m http.server 8000`, and open <http://127.0.0.1:8000/>. The repository is about 100 MB, mostly prepared geodata; MapLibre GL JS, three.js and the base map load from the internet.
+The map is a static site without a build step: serve the folder with any static web server, for example `python3 -m http.server 8000`, and open <http://127.0.0.1:8000/>. The repository is about 185 MB, mostly prepared geodata of the two cities; MapLibre GL JS, three.js and the base map load from the internet.
 
 <details>
 <summary>Repository structure</summary>

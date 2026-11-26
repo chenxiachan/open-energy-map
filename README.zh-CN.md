@@ -182,7 +182,7 @@ node agent/oem.mjs building --city sg --address "blk 512 hougang ave 10"
 
 ## 本地运行
 
-地图是静态网站，没有构建步骤：用任意静态网页服务器打开这个文件夹即可，例如 `python3 -m http.server 8000`，然后访问 <http://127.0.0.1:8000/>。仓库约 100 MB，大部分是整理好的地理数据；MapLibre GL JS、three.js 和底图从网上加载。
+地图是静态网站，没有构建步骤：用任意静态网页服务器打开这个文件夹即可，例如 `python3 -m http.server 8000`，然后访问 <http://127.0.0.1:8000/>。仓库约 185 MB，大部分是两座城市整理好的地理数据；MapLibre GL JS、three.js 和底图从网上加载。
 
 <details>
 <summary>目录结构</summary>
