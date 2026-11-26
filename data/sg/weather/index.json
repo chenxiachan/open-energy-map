@@ -1,0 +1,2025 @@
+{
+ "climate": "cooling",
+ "radiation": "GHI from ERA5; DHI and DNI derived from GHI with the Erbs et al. (1982) diffuse-fraction correlation (ERA5's own split gives about 1.5x the satellite-based DNI in Singapore); GHI scaled by monthly factors (0.904-0.954) to the Solargis long-term GHI (1648 kWh/m2 a), after the split (all three components)",
+ "temperature": "dry bulb bias-corrected per year and month to the Changi station mean daily max and min (MSS); dew point from ERA5 unchanged, RH recomputed",
+ "corrections": {
+  "T": {
+   "2010": [
+    {
+     "a": 1.087,
+     "b": 0.765,
+     "era5_Tmax": 28.36,
+     "era5_Tmin": 24.51,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 24.4,
+     "climatology": false
+    },
+    {
+     "a": 1.852,
+     "b": 0.837,
+     "era5_Tmax": 29.53,
+     "era5_Tmin": 25.18,
+     "changi_Tmax": 33.5,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 1.495,
+     "b": 0.842,
+     "era5_Tmax": 29.48,
+     "era5_Tmin": 25.14,
+     "changi_Tmax": 33.1,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 0.96,
+     "b": 0.952,
+     "era5_Tmax": 29.58,
+     "era5_Tmin": 25.59,
+     "changi_Tmax": 32.8,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    },
+    {
+     "a": 1.494,
+     "b": 1.003,
+     "era5_Tmax": 29.71,
+     "era5_Tmin": 26.06,
+     "changi_Tmax": 33.2,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.048,
+     "b": 0.982,
+     "era5_Tmax": 28.77,
+     "era5_Tmin": 25.64,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 0.952,
+     "b": 1.003,
+     "era5_Tmax": 28.31,
+     "era5_Tmin": 25.17,
+     "changi_Tmax": 30.9,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 0.896,
+     "b": 1.031,
+     "era5_Tmax": 28.52,
+     "era5_Tmin": 25.27,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.621,
+     "b": 1.016,
+     "era5_Tmax": 28.33,
+     "era5_Tmin": 24.9,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 24.9,
+     "climatology": false
+    },
+    {
+     "a": 1.362,
+     "b": 0.986,
+     "era5_Tmax": 28.58,
+     "era5_Tmin": 25.25,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 1.267,
+     "b": 1.114,
+     "era5_Tmax": 28.12,
+     "era5_Tmin": 24.62,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 24.2,
+     "climatology": false
+    },
+    {
+     "a": 0.916,
+     "b": 0.882,
+     "era5_Tmax": 27.89,
+     "era5_Tmin": 24.23,
+     "changi_Tmax": 30.8,
+     "changi_Tmin": 23.9,
+     "climatology": false
+    }
+   ],
+   "2011": [
+    {
+     "a": 0.936,
+     "b": 0.87,
+     "era5_Tmax": 27.0,
+     "era5_Tmin": 23.69,
+     "changi_Tmax": 29.7,
+     "changi_Tmin": 23.5,
+     "climatology": false
+    },
+    {
+     "a": 1.287,
+     "b": 0.684,
+     "era5_Tmax": 28.58,
+     "era5_Tmin": 24.07,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 24.1,
+     "climatology": false
+    },
+    {
+     "a": 0.736,
+     "b": 0.857,
+     "era5_Tmax": 28.5,
+     "era5_Tmin": 24.52,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 23.9,
+     "climatology": false
+    },
+    {
+     "a": 1.218,
+     "b": 0.791,
+     "era5_Tmax": 28.83,
+     "era5_Tmin": 24.76,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.663,
+     "b": 1.051,
+     "era5_Tmax": 28.8,
+     "era5_Tmin": 25.28,
+     "changi_Tmax": 32.4,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.169,
+     "b": 0.978,
+     "era5_Tmax": 28.52,
+     "era5_Tmin": 25.44,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.665,
+     "b": 1.247,
+     "era5_Tmax": 28.41,
+     "era5_Tmin": 25.56,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 1.553,
+     "b": 0.813,
+     "era5_Tmax": 28.2,
+     "era5_Tmin": 25.22,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.074,
+     "b": 0.858,
+     "era5_Tmax": 28.43,
+     "era5_Tmin": 25.31,
+     "changi_Tmax": 30.9,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 1.371,
+     "b": 1.246,
+     "era5_Tmax": 28.11,
+     "era5_Tmin": 24.64,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 24.1,
+     "climatology": false
+    },
+    {
+     "a": 1.266,
+     "b": 0.893,
+     "era5_Tmax": 27.98,
+     "era5_Tmin": 24.54,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.012,
+     "b": 0.573,
+     "era5_Tmax": 27.67,
+     "era5_Tmin": 24.24,
+     "changi_Tmax": 29.9,
+     "changi_Tmin": 24.5,
+     "climatology": false
+    }
+   ],
+   "2012": [
+    {
+     "a": 1.059,
+     "b": 0.634,
+     "era5_Tmax": 28.06,
+     "era5_Tmin": 24.2,
+     "changi_Tmax": 30.6,
+     "changi_Tmin": 24.3,
+     "climatology": false
+    },
+    {
+     "a": 1.522,
+     "b": 0.596,
+     "era5_Tmax": 28.19,
+     "era5_Tmin": 24.25,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 0.957,
+     "b": 0.669,
+     "era5_Tmax": 28.57,
+     "era5_Tmin": 24.56,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 24.4,
+     "climatology": false
+    },
+    {
+     "a": 1.367,
+     "b": 0.763,
+     "era5_Tmax": 28.56,
+     "era5_Tmin": 24.82,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.031,
+     "b": 0.885,
+     "era5_Tmax": 28.97,
+     "era5_Tmin": 25.31,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.376,
+     "b": 0.774,
+     "era5_Tmax": 28.98,
+     "era5_Tmin": 25.99,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 26.3,
+     "climatology": false
+    },
+    {
+     "a": 1.404,
+     "b": 0.884,
+     "era5_Tmax": 28.08,
+     "era5_Tmin": 25.16,
+     "changi_Tmax": 30.8,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 1.35,
+     "b": 0.984,
+     "era5_Tmax": 28.19,
+     "era5_Tmin": 25.36,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    },
+    {
+     "a": 1.487,
+     "b": 0.791,
+     "era5_Tmax": 28.44,
+     "era5_Tmin": 25.09,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 1.62,
+     "b": 0.727,
+     "era5_Tmax": 28.55,
+     "era5_Tmin": 24.79,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.369,
+     "b": 0.908,
+     "era5_Tmax": 28.13,
+     "era5_Tmin": 24.62,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 24.7,
+     "climatology": false
+    },
+    {
+     "a": 1.219,
+     "b": 0.974,
+     "era5_Tmax": 27.52,
+     "era5_Tmin": 24.38,
+     "changi_Tmax": 30.6,
+     "changi_Tmin": 24.4,
+     "climatology": false
+    }
+   ],
+   "2013": [
+    {
+     "a": 1.122,
+     "b": 0.616,
+     "era5_Tmax": 28.24,
+     "era5_Tmin": 24.41,
+     "changi_Tmax": 30.8,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.117,
+     "b": 0.811,
+     "era5_Tmax": 27.39,
+     "era5_Tmin": 24.19,
+     "changi_Tmax": 30.1,
+     "changi_Tmin": 24.3,
+     "climatology": false
+    },
+    {
+     "a": 1.758,
+     "b": 0.622,
+     "era5_Tmax": 29.13,
+     "era5_Tmin": 24.94,
+     "changi_Tmax": 32.4,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.281,
+     "b": 0.863,
+     "era5_Tmax": 29.1,
+     "era5_Tmin": 25.45,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 1.311,
+     "b": 0.799,
+     "era5_Tmax": 29.02,
+     "era5_Tmin": 25.57,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.443,
+     "b": 0.581,
+     "era5_Tmax": 29.87,
+     "era5_Tmin": 25.63,
+     "changi_Tmax": 32.6,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.065,
+     "b": 0.847,
+     "era5_Tmax": 28.58,
+     "era5_Tmin": 25.39,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.259,
+     "b": 0.935,
+     "era5_Tmax": 28.27,
+     "era5_Tmin": 25.22,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 0.976,
+     "b": 0.868,
+     "era5_Tmax": 28.16,
+     "era5_Tmin": 25.06,
+     "changi_Tmax": 30.6,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.259,
+     "b": 0.793,
+     "era5_Tmax": 28.49,
+     "era5_Tmin": 24.7,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.243,
+     "b": 0.834,
+     "era5_Tmax": 28.25,
+     "era5_Tmin": 24.55,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 24.5,
+     "climatology": false
+    },
+    {
+     "a": 0.87,
+     "b": 0.815,
+     "era5_Tmax": 27.69,
+     "era5_Tmin": 24.33,
+     "changi_Tmax": 30.2,
+     "changi_Tmin": 24.1,
+     "climatology": false
+    }
+   ],
+   "2014": [
+    {
+     "a": 1.021,
+     "b": 0.47,
+     "era5_Tmax": 27.49,
+     "era5_Tmin": 23.68,
+     "changi_Tmax": 29.6,
+     "changi_Tmin": 24.0,
+     "climatology": false
+    },
+    {
+     "a": 1.087,
+     "b": 0.283,
+     "era5_Tmax": 29.82,
+     "era5_Tmin": 24.06,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 24.5,
+     "climatology": false
+    },
+    {
+     "a": 1.327,
+     "b": 0.442,
+     "era5_Tmax": 30.09,
+     "era5_Tmin": 24.75,
+     "changi_Tmax": 32.8,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 1.447,
+     "b": 0.655,
+     "era5_Tmax": 29.34,
+     "era5_Tmin": 25.18,
+     "changi_Tmax": 32.4,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 1.551,
+     "b": 0.906,
+     "era5_Tmax": 28.94,
+     "era5_Tmin": 25.64,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.306,
+     "b": 0.85,
+     "era5_Tmax": 29.39,
+     "era5_Tmin": 26.25,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 26.3,
+     "climatology": false
+    },
+    {
+     "a": 1.26,
+     "b": 0.914,
+     "era5_Tmax": 28.85,
+     "era5_Tmin": 25.81,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.374,
+     "b": 0.769,
+     "era5_Tmax": 27.87,
+     "era5_Tmin": 24.93,
+     "changi_Tmax": 30.4,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.515,
+     "b": 0.775,
+     "era5_Tmax": 28.85,
+     "era5_Tmin": 25.42,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 25.7,
+     "climatology": false
+    },
+    {
+     "a": 1.758,
+     "b": 0.681,
+     "era5_Tmax": 28.92,
+     "era5_Tmin": 25.12,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.7,
+     "climatology": false
+    },
+    {
+     "a": 1.678,
+     "b": 0.947,
+     "era5_Tmax": 28.05,
+     "era5_Tmin": 24.55,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.182,
+     "b": 0.759,
+     "era5_Tmax": 27.85,
+     "era5_Tmin": 24.5,
+     "changi_Tmax": 30.6,
+     "changi_Tmin": 24.7,
+     "climatology": false
+    }
+   ],
+   "2015": [
+    {
+     "a": 1.357,
+     "b": 0.552,
+     "era5_Tmax": 28.0,
+     "era5_Tmin": 24.07,
+     "changi_Tmax": 30.7,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.708,
+     "b": 0.69,
+     "era5_Tmax": 27.96,
+     "era5_Tmin": 23.88,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 24.4,
+     "climatology": false
+    },
+    {
+     "a": 1.805,
+     "b": 0.591,
+     "era5_Tmax": 29.18,
+     "era5_Tmin": 24.78,
+     "changi_Tmax": 32.5,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 2.393,
+     "b": 0.79,
+     "era5_Tmax": 29.02,
+     "era5_Tmin": 24.94,
+     "changi_Tmax": 33.2,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 2.318,
+     "b": 0.819,
+     "era5_Tmax": 28.59,
+     "era5_Tmin": 25.4,
+     "changi_Tmax": 32.2,
+     "changi_Tmin": 26.4,
+     "climatology": false
+    },
+    {
+     "a": 1.951,
+     "b": 0.964,
+     "era5_Tmax": 28.68,
+     "era5_Tmin": 25.93,
+     "changi_Tmax": 32.0,
+     "changi_Tmin": 26.6,
+     "climatology": false
+    },
+    {
+     "a": 1.98,
+     "b": 0.886,
+     "era5_Tmax": 28.68,
+     "era5_Tmin": 25.92,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 26.7,
+     "climatology": false
+    },
+    {
+     "a": 1.801,
+     "b": 0.719,
+     "era5_Tmax": 28.3,
+     "era5_Tmin": 25.28,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 26.0,
+     "climatology": false
+    },
+    {
+     "a": 1.873,
+     "b": 0.606,
+     "era5_Tmax": 28.78,
+     "era5_Tmin": 25.55,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 26.5,
+     "climatology": false
+    },
+    {
+     "a": 1.827,
+     "b": 0.603,
+     "era5_Tmax": 29.13,
+     "era5_Tmin": 25.32,
+     "changi_Tmax": 32.2,
+     "changi_Tmin": 26.1,
+     "climatology": false
+    },
+    {
+     "a": 2.096,
+     "b": 0.854,
+     "era5_Tmax": 28.27,
+     "era5_Tmin": 24.71,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 1.278,
+     "b": 0.801,
+     "era5_Tmax": 28.5,
+     "era5_Tmin": 24.89,
+     "changi_Tmax": 31.5,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    }
+   ],
+   "2016": [
+    {
+     "a": 1.76,
+     "b": 0.679,
+     "era5_Tmax": 28.65,
+     "era5_Tmin": 25.19,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 26.0,
+     "climatology": false
+    },
+    {
+     "a": 1.523,
+     "b": 0.657,
+     "era5_Tmax": 28.26,
+     "era5_Tmin": 24.94,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 2.073,
+     "b": 0.758,
+     "era5_Tmax": 29.38,
+     "era5_Tmin": 25.68,
+     "changi_Tmax": 33.1,
+     "changi_Tmin": 26.6,
+     "climatology": false
+    },
+    {
+     "a": 2.094,
+     "b": 0.784,
+     "era5_Tmax": 29.72,
+     "era5_Tmin": 25.96,
+     "changi_Tmax": 33.4,
+     "changi_Tmin": 26.7,
+     "climatology": false
+    },
+    {
+     "a": 1.938,
+     "b": 0.846,
+     "era5_Tmax": 29.46,
+     "era5_Tmin": 25.94,
+     "changi_Tmax": 33.0,
+     "changi_Tmin": 26.5,
+     "climatology": false
+    },
+    {
+     "a": 1.25,
+     "b": 0.853,
+     "era5_Tmax": 29.0,
+     "era5_Tmin": 26.04,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 26.1,
+     "climatology": false
+    },
+    {
+     "a": 1.357,
+     "b": 0.95,
+     "era5_Tmax": 28.85,
+     "era5_Tmin": 25.82,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.533,
+     "b": 0.918,
+     "era5_Tmax": 28.89,
+     "era5_Tmin": 25.97,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 1.272,
+     "b": 0.969,
+     "era5_Tmax": 28.95,
+     "era5_Tmin": 25.44,
+     "changi_Tmax": 32.0,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 1.449,
+     "b": 0.968,
+     "era5_Tmax": 28.84,
+     "era5_Tmin": 25.33,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.159,
+     "b": 0.754,
+     "era5_Tmax": 28.09,
+     "era5_Tmin": 24.79,
+     "changi_Tmax": 30.7,
+     "changi_Tmin": 24.9,
+     "climatology": false
+    },
+    {
+     "a": 1.048,
+     "b": 0.878,
+     "era5_Tmax": 28.61,
+     "era5_Tmin": 24.94,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 24.7,
+     "climatology": false
+    }
+   ],
+   "2017": [
+    {
+     "a": 1.153,
+     "b": 0.238,
+     "era5_Tmax": 28.88,
+     "era5_Tmin": 24.04,
+     "changi_Tmax": 30.7,
+     "changi_Tmin": 24.7,
+     "climatology": false
+    },
+    {
+     "a": 1.229,
+     "b": 0.189,
+     "era5_Tmax": 28.92,
+     "era5_Tmin": 23.87,
+     "changi_Tmax": 30.7,
+     "changi_Tmin": 24.7,
+     "climatology": false
+    },
+    {
+     "a": 1.094,
+     "b": 0.149,
+     "era5_Tmax": 29.55,
+     "era5_Tmin": 24.16,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 24.9,
+     "climatology": false
+    },
+    {
+     "a": 1.0,
+     "b": 0.467,
+     "era5_Tmax": 29.6,
+     "era5_Tmin": 24.96,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    },
+    {
+     "a": 0.884,
+     "b": 0.509,
+     "era5_Tmax": 29.53,
+     "era5_Tmin": 25.88,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.077,
+     "b": 0.372,
+     "era5_Tmax": 29.69,
+     "era5_Tmin": 25.54,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.068,
+     "b": 0.412,
+     "era5_Tmax": 29.14,
+     "era5_Tmin": 25.6,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 26.0,
+     "climatology": false
+    },
+    {
+     "a": 1.485,
+     "b": 0.336,
+     "era5_Tmax": 28.83,
+     "era5_Tmin": 25.01,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.193,
+     "b": 0.434,
+     "era5_Tmax": 29.07,
+     "era5_Tmin": 25.03,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    },
+    {
+     "a": 1.269,
+     "b": 0.347,
+     "era5_Tmax": 29.45,
+     "era5_Tmin": 24.77,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 0.87,
+     "b": 0.327,
+     "era5_Tmax": 29.05,
+     "era5_Tmin": 24.38,
+     "changi_Tmax": 30.8,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.031,
+     "b": 0.255,
+     "era5_Tmax": 29.02,
+     "era5_Tmin": 24.08,
+     "changi_Tmax": 30.8,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    }
+   ],
+   "2018": [
+    {
+     "a": 1.001,
+     "b": 0.211,
+     "era5_Tmax": 28.21,
+     "era5_Tmin": 23.42,
+     "changi_Tmax": 29.8,
+     "changi_Tmin": 24.0,
+     "climatology": false
+    },
+    {
+     "a": 1.534,
+     "b": 0.038,
+     "era5_Tmax": 29.53,
+     "era5_Tmin": 23.37,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.661,
+     "b": 0.205,
+     "era5_Tmax": 30.08,
+     "era5_Tmin": 24.27,
+     "changi_Tmax": 32.4,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    },
+    {
+     "a": 2.237,
+     "b": 0.456,
+     "era5_Tmax": 29.65,
+     "era5_Tmin": 24.57,
+     "changi_Tmax": 33.2,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.966,
+     "b": 0.445,
+     "era5_Tmax": 29.39,
+     "era5_Tmin": 25.1,
+     "changi_Tmax": 32.4,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 1.139,
+     "b": 0.573,
+     "era5_Tmax": 29.06,
+     "era5_Tmin": 25.44,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.2,
+     "b": 0.534,
+     "era5_Tmax": 29.09,
+     "era5_Tmin": 25.64,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 26.0,
+     "climatology": false
+    },
+    {
+     "a": 1.367,
+     "b": 0.536,
+     "era5_Tmax": 29.25,
+     "era5_Tmin": 25.6,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 26.1,
+     "climatology": false
+    },
+    {
+     "a": 1.248,
+     "b": 0.339,
+     "era5_Tmax": 29.17,
+     "era5_Tmin": 24.77,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 1.821,
+     "b": 0.414,
+     "era5_Tmax": 29.03,
+     "era5_Tmin": 24.29,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.225,
+     "b": 0.449,
+     "era5_Tmax": 28.65,
+     "era5_Tmin": 24.23,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.835,
+     "b": 0.307,
+     "era5_Tmax": 28.93,
+     "era5_Tmin": 24.11,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    }
+   ],
+   "2019": [
+    {
+     "a": 1.891,
+     "b": 0.17,
+     "era5_Tmax": 29.32,
+     "era5_Tmin": 24.11,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.541,
+     "b": 0.099,
+     "era5_Tmax": 30.89,
+     "era5_Tmin": 24.16,
+     "changi_Tmax": 32.8,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    },
+    {
+     "a": 1.25,
+     "b": 0.021,
+     "era5_Tmax": 32.16,
+     "era5_Tmin": 24.42,
+     "changi_Tmax": 33.5,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.795,
+     "b": 0.405,
+     "era5_Tmax": 29.85,
+     "era5_Tmin": 25.0,
+     "changi_Tmax": 32.7,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 2.009,
+     "b": 0.559,
+     "era5_Tmax": 29.52,
+     "era5_Tmin": 25.55,
+     "changi_Tmax": 32.7,
+     "changi_Tmin": 26.5,
+     "climatology": false
+    },
+    {
+     "a": 1.43,
+     "b": 0.559,
+     "era5_Tmax": 28.86,
+     "era5_Tmin": 25.53,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 26.1,
+     "climatology": false
+    },
+    {
+     "a": 2.244,
+     "b": 0.291,
+     "era5_Tmax": 29.25,
+     "era5_Tmin": 25.22,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 26.9,
+     "climatology": false
+    },
+    {
+     "a": 2.023,
+     "b": 0.316,
+     "era5_Tmax": 29.95,
+     "era5_Tmin": 25.69,
+     "changi_Tmax": 32.7,
+     "changi_Tmin": 27.1,
+     "climatology": false
+    },
+    {
+     "a": 1.787,
+     "b": 0.128,
+     "era5_Tmax": 30.83,
+     "era5_Tmin": 25.15,
+     "changi_Tmax": 33.0,
+     "changi_Tmin": 26.6,
+     "climatology": false
+    },
+    {
+     "a": 2.118,
+     "b": 0.514,
+     "era5_Tmax": 29.18,
+     "era5_Tmin": 24.29,
+     "changi_Tmax": 32.7,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 2.061,
+     "b": 0.438,
+     "era5_Tmax": 29.1,
+     "era5_Tmin": 24.3,
+     "changi_Tmax": 32.3,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    },
+    {
+     "a": 1.171,
+     "b": 0.138,
+     "era5_Tmax": 28.55,
+     "era5_Tmin": 23.71,
+     "changi_Tmax": 30.1,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    }
+   ],
+   "2020": [
+    {
+     "a": 1.513,
+     "b": 0.133,
+     "era5_Tmax": 29.75,
+     "era5_Tmin": 24.01,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.586,
+     "b": 0.159,
+     "era5_Tmax": 29.62,
+     "era5_Tmin": 24.1,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 1.62,
+     "b": 0.077,
+     "era5_Tmax": 31.0,
+     "era5_Tmin": 24.5,
+     "changi_Tmax": 32.9,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.908,
+     "b": 0.282,
+     "era5_Tmax": 30.24,
+     "era5_Tmin": 24.78,
+     "changi_Tmax": 33.0,
+     "changi_Tmin": 26.0,
+     "climatology": false
+    },
+    {
+     "a": 1.408,
+     "b": 0.363,
+     "era5_Tmax": 29.91,
+     "era5_Tmin": 25.43,
+     "changi_Tmax": 32.2,
+     "changi_Tmin": 26.1,
+     "climatology": false
+    },
+    {
+     "a": 1.165,
+     "b": 0.618,
+     "era5_Tmax": 28.7,
+     "era5_Tmin": 25.31,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 1.505,
+     "b": 0.51,
+     "era5_Tmax": 28.5,
+     "era5_Tmin": 24.86,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 1.271,
+     "b": 0.433,
+     "era5_Tmax": 29.24,
+     "era5_Tmin": 25.4,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.256,
+     "b": 0.613,
+     "era5_Tmax": 28.47,
+     "era5_Tmin": 24.68,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 24.9,
+     "climatology": false
+    },
+    {
+     "a": 1.457,
+     "b": 0.468,
+     "era5_Tmax": 29.11,
+     "era5_Tmin": 25.02,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.434,
+     "b": 0.384,
+     "era5_Tmax": 28.62,
+     "era5_Tmin": 24.28,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    },
+    {
+     "a": 1.384,
+     "b": 0.437,
+     "era5_Tmax": 28.88,
+     "era5_Tmin": 24.01,
+     "changi_Tmax": 31.5,
+     "changi_Tmin": 24.5,
+     "climatology": false
+    }
+   ],
+   "2021": [
+    {
+     "a": 0.854,
+     "b": 0.129,
+     "era5_Tmax": 27.9,
+     "era5_Tmin": 23.2,
+     "changi_Tmax": 29.1,
+     "changi_Tmin": 23.8,
+     "climatology": false
+    },
+    {
+     "a": 1.245,
+     "b": -0.088,
+     "era5_Tmax": 30.73,
+     "era5_Tmin": 23.27,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.83,
+     "b": 0.234,
+     "era5_Tmax": 30.15,
+     "era5_Tmin": 23.84,
+     "changi_Tmax": 32.8,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    },
+    {
+     "a": 1.639,
+     "b": 0.392,
+     "era5_Tmax": 29.65,
+     "era5_Tmin": 24.55,
+     "changi_Tmax": 32.4,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 1.791,
+     "b": 0.395,
+     "era5_Tmax": 29.39,
+     "era5_Tmin": 25.01,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 26.0,
+     "climatology": false
+    },
+    {
+     "a": 1.722,
+     "b": 0.658,
+     "era5_Tmax": 29.06,
+     "era5_Tmin": 25.14,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.807,
+     "b": 0.442,
+     "era5_Tmax": 29.08,
+     "era5_Tmin": 25.19,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 1.266,
+     "b": 0.75,
+     "era5_Tmax": 28.33,
+     "era5_Tmin": 24.79,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.614,
+     "b": 0.456,
+     "era5_Tmax": 29.06,
+     "era5_Tmin": 24.87,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.6,
+     "climatology": false
+    },
+    {
+     "a": 1.767,
+     "b": 0.338,
+     "era5_Tmax": 29.54,
+     "era5_Tmin": 24.75,
+     "changi_Tmax": 32.2,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.487,
+     "b": 0.382,
+     "era5_Tmax": 29.19,
+     "era5_Tmin": 24.12,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.929,
+     "b": 0.141,
+     "era5_Tmax": 29.04,
+     "era5_Tmin": 23.79,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    }
+   ],
+   "2022": [
+    {
+     "a": 1.707,
+     "b": 0.007,
+     "era5_Tmax": 29.87,
+     "era5_Tmin": 23.21,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 24.9,
+     "climatology": false
+    },
+    {
+     "a": 1.411,
+     "b": 0.083,
+     "era5_Tmax": 29.5,
+     "era5_Tmin": 23.59,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 24.8,
+     "climatology": false
+    },
+    {
+     "a": 1.405,
+     "b": 0.241,
+     "era5_Tmax": 30.43,
+     "era5_Tmin": 24.31,
+     "changi_Tmax": 32.7,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 1.289,
+     "b": 0.183,
+     "era5_Tmax": 30.21,
+     "era5_Tmin": 24.29,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 1.692,
+     "b": 0.326,
+     "era5_Tmax": 30.31,
+     "era5_Tmin": 25.26,
+     "changi_Tmax": 32.9,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 1.513,
+     "b": 0.305,
+     "era5_Tmax": 28.83,
+     "era5_Tmin": 24.38,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    },
+    {
+     "a": 1.346,
+     "b": 0.352,
+     "era5_Tmax": 29.53,
+     "era5_Tmin": 25.16,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.717,
+     "b": 0.257,
+     "era5_Tmax": 28.9,
+     "era5_Tmin": 24.6,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.425,
+     "b": 0.418,
+     "era5_Tmax": 28.77,
+     "era5_Tmin": 24.75,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    },
+    {
+     "a": 1.485,
+     "b": 0.409,
+     "era5_Tmax": 28.91,
+     "era5_Tmin": 24.09,
+     "changi_Tmax": 31.5,
+     "changi_Tmin": 24.7,
+     "climatology": false
+    },
+    {
+     "a": 1.199,
+     "b": 0.364,
+     "era5_Tmax": 29.13,
+     "era5_Tmin": 24.0,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 24.4,
+     "climatology": false
+    },
+    {
+     "a": 1.284,
+     "b": 0.126,
+     "era5_Tmax": 28.62,
+     "era5_Tmin": 23.47,
+     "changi_Tmax": 30.3,
+     "changi_Tmin": 24.5,
+     "climatology": false
+    }
+   ],
+   "2023": [
+    {
+     "a": 1.424,
+     "b": 0.081,
+     "era5_Tmax": 28.43,
+     "era5_Tmin": 23.25,
+     "changi_Tmax": 30.1,
+     "changi_Tmin": 24.5,
+     "climatology": false
+    },
+    {
+     "a": 1.445,
+     "b": 0.129,
+     "era5_Tmax": 29.12,
+     "era5_Tmin": 23.36,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 24.5,
+     "climatology": false
+    },
+    {
+     "a": 1.556,
+     "b": 0.151,
+     "era5_Tmax": 28.87,
+     "era5_Tmin": 23.4,
+     "changi_Tmax": 30.9,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.591,
+     "b": 0.151,
+     "era5_Tmax": 30.5,
+     "era5_Tmin": 24.6,
+     "changi_Tmax": 32.6,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.538,
+     "b": 0.289,
+     "era5_Tmax": 30.61,
+     "era5_Tmin": 25.8,
+     "changi_Tmax": 32.9,
+     "changi_Tmin": 26.7,
+     "climatology": false
+    },
+    {
+     "a": 1.398,
+     "b": 0.255,
+     "era5_Tmax": 30.07,
+     "era5_Tmin": 25.28,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 26.1,
+     "climatology": false
+    },
+    {
+     "a": 2.029,
+     "b": -0.055,
+     "era5_Tmax": 29.84,
+     "era5_Tmin": 24.34,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 26.5,
+     "climatology": false
+    },
+    {
+     "a": 2.086,
+     "b": -0.013,
+     "era5_Tmax": 29.85,
+     "era5_Tmin": 24.08,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 1.887,
+     "b": -0.002,
+     "era5_Tmax": 30.42,
+     "era5_Tmin": 24.41,
+     "changi_Tmax": 32.3,
+     "changi_Tmin": 26.3,
+     "climatology": false
+    },
+    {
+     "a": 2.268,
+     "b": -0.08,
+     "era5_Tmax": 31.37,
+     "era5_Tmin": 23.65,
+     "changi_Tmax": 33.3,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 2.014,
+     "b": -0.012,
+     "era5_Tmax": 30.54,
+     "era5_Tmin": 23.45,
+     "changi_Tmax": 32.5,
+     "changi_Tmin": 25.5,
+     "climatology": false
+    },
+    {
+     "a": 1.585,
+     "b": -0.003,
+     "era5_Tmax": 29.53,
+     "era5_Tmin": 23.51,
+     "changi_Tmax": 31.1,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    }
+   ],
+   "2024": [
+    {
+     "a": 1.355,
+     "b": 0.028,
+     "era5_Tmax": 28.95,
+     "era5_Tmin": 23.31,
+     "changi_Tmax": 30.4,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.954,
+     "b": -0.067,
+     "era5_Tmax": 30.51,
+     "era5_Tmin": 23.64,
+     "changi_Tmax": 32.2,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.851,
+     "b": -0.091,
+     "era5_Tmax": 31.75,
+     "era5_Tmin": 23.93,
+     "changi_Tmax": 33.2,
+     "changi_Tmin": 26.1,
+     "climatology": false
+    },
+    {
+     "a": 2.297,
+     "b": -0.021,
+     "era5_Tmax": 31.08,
+     "era5_Tmin": 24.34,
+     "changi_Tmax": 33.3,
+     "changi_Tmin": 26.7,
+     "climatology": false
+    },
+    {
+     "a": 1.624,
+     "b": 0.001,
+     "era5_Tmax": 30.77,
+     "era5_Tmin": 24.88,
+     "changi_Tmax": 32.4,
+     "changi_Tmin": 26.5,
+     "climatology": false
+    },
+    {
+     "a": 1.744,
+     "b": 0.047,
+     "era5_Tmax": 30.01,
+     "era5_Tmin": 24.28,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.882,
+     "b": 0.025,
+     "era5_Tmax": 30.35,
+     "era5_Tmin": 25.27,
+     "changi_Tmax": 32.3,
+     "changi_Tmin": 27.1,
+     "climatology": false
+    },
+    {
+     "a": 2.101,
+     "b": -0.029,
+     "era5_Tmax": 29.89,
+     "era5_Tmin": 24.02,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 1.914,
+     "b": 0.068,
+     "era5_Tmax": 30.17,
+     "era5_Tmin": 24.18,
+     "changi_Tmax": 32.3,
+     "changi_Tmin": 25.9,
+     "climatology": false
+    },
+    {
+     "a": 1.903,
+     "b": -0.043,
+     "era5_Tmax": 30.35,
+     "era5_Tmin": 23.77,
+     "changi_Tmax": 32.1,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.627,
+     "b": -0.035,
+     "era5_Tmax": 30.12,
+     "era5_Tmin": 23.28,
+     "changi_Tmax": 31.6,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    },
+    {
+     "a": 1.361,
+     "b": -0.08,
+     "era5_Tmax": 30.67,
+     "era5_Tmin": 23.72,
+     "changi_Tmax": 31.7,
+     "changi_Tmin": 25.3,
+     "climatology": false
+    }
+   ],
+   "2025": [
+    {
+     "a": 0.993,
+     "b": -0.239,
+     "era5_Tmax": 29.42,
+     "era5_Tmin": 22.98,
+     "changi_Tmax": 29.5,
+     "changi_Tmin": 24.6,
+     "climatology": false
+    },
+    {
+     "a": 1.133,
+     "b": -0.221,
+     "era5_Tmax": 31.1,
+     "era5_Tmin": 23.01,
+     "changi_Tmax": 31.2,
+     "changi_Tmin": 24.9,
+     "climatology": false
+    },
+    {
+     "a": 1.163,
+     "b": -0.155,
+     "era5_Tmax": 30.82,
+     "era5_Tmin": 23.37,
+     "changi_Tmax": 31.3,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    },
+    {
+     "a": 1.577,
+     "b": -0.127,
+     "era5_Tmax": 31.36,
+     "era5_Tmin": 23.22,
+     "changi_Tmax": 32.3,
+     "changi_Tmin": 25.2,
+     "climatology": false
+    },
+    {
+     "a": 1.303,
+     "b": -0.114,
+     "era5_Tmax": 32.0,
+     "era5_Tmin": 24.11,
+     "changi_Tmax": 32.8,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.278,
+     "b": -0.085,
+     "era5_Tmax": 31.64,
+     "era5_Tmin": 24.76,
+     "changi_Tmax": 32.6,
+     "changi_Tmin": 26.3,
+     "climatology": false
+    },
+    {
+     "a": 1.112,
+     "b": -0.145,
+     "era5_Tmax": 31.3,
+     "era5_Tmin": 24.64,
+     "changi_Tmax": 31.9,
+     "changi_Tmin": 26.2,
+     "climatology": false
+    },
+    {
+     "a": 1.617,
+     "b": -0.102,
+     "era5_Tmax": 30.56,
+     "era5_Tmin": 23.87,
+     "changi_Tmax": 31.8,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.36,
+     "b": -0.119,
+     "era5_Tmax": 30.49,
+     "era5_Tmin": 23.68,
+     "changi_Tmax": 31.4,
+     "changi_Tmin": 25.4,
+     "climatology": false
+    },
+    {
+     "a": 1.717,
+     "b": -0.106,
+     "era5_Tmax": 31.65,
+     "era5_Tmin": 23.71,
+     "changi_Tmax": 32.9,
+     "changi_Tmin": 25.8,
+     "climatology": false
+    },
+    {
+     "a": 1.462,
+     "b": 0.02,
+     "era5_Tmax": 31.25,
+     "era5_Tmin": 23.7,
+     "changi_Tmax": 32.8,
+     "changi_Tmin": 25.1,
+     "climatology": false
+    },
+    {
+     "a": 1.42,
+     "b": -0.152,
+     "era5_Tmax": 30.24,
+     "era5_Tmin": 23.16,
+     "changi_Tmax": 31.0,
+     "changi_Tmin": 25.0,
+     "climatology": false
+    }
+   ]
+  },
+  "GHI": {
+   "reference_monthly_kWh": [
+    130.9,
+    140.4,
+    157.1,
+    142.6,
+    141.1,
+    129.5,
+    138.2,
+    140.9,
+    143.4,
+    140.0,
+    121.8,
+    121.8
+   ],
+   "reference_annual_kWh": 1648,
+   "era5_monthly_mean_kWh": [
+    144.8,
+    150.0,
+    171.6,
+    155.4,
+    148.6,
+    138.8,
+    149.3,
+    152.8,
+    150.3,
+    153.4,
+    129.0,
+    131.7
+   ],
+   "era5_annual_mean_kWh": 1776,
+   "factors": [
+    0.904,
+    0.9364,
+    0.9155,
+    0.9175,
+    0.95,
+    0.9324,
+    0.9253,
+    0.9223,
+    0.954,
+    0.9127,
+    0.9442,
+    0.9254
+   ],
+   "order": "after",
+   "reference": [
+    "gsa_lta_1.35_103.82.json",
+    "gsa_lta_1.30_103.85.json",
+    "gsa_lta_1.37_103.98.json"
+   ]
+  }
+ },
+ "tmy": {
+  "file": "sg_tmy.json",
+  "months_from_year": [
+   2013,
+   2022,
+   2021,
+   2021,
+   2021,
+   2016,
+   2016,
+   2022,
+   2018,
+   2016,
+   2014,
+   2017
+  ],
+  "method": "Finkelstein-Schafer per calendar month over 2010-2025; weights Tmean 0.2, Tmax 0.1, Tmin 0.05, Tdp 0.2, Tdpmax 0.05, GHI 0.35, wind 0.05; joins blended over 12 h",
+  "Tmean": 28.12,
+  "Tmax": 36.7,
+  "CDD18": 3583,
+  "CDD26": 775,
+  "Tdp_mean": 23.94,
+  "RH_mean": 78.8,
+  "GHI_kWh": 1621,
+  "wind_mean": 7.94
+ },
+ "years": {
+  "2010": {
+   "file": "sg_2010.json",
+   "Tmean": 27.96,
+   "Tmax": 36.1,
+   "CDD18": 3524,
+   "CDD26": 718,
+   "Tdp_mean": 23.89,
+   "RH_mean": 79.5,
+   "GHI_kWh": 1601,
+   "wind_mean": 7.45
+  },
+  "2011": {
+   "file": "sg_2011.json",
+   "Tmean": 27.53,
+   "Tmax": 35.0,
+   "CDD18": 3368,
+   "CDD26": 569,
+   "Tdp_mean": 23.53,
+   "RH_mean": 79.6,
+   "GHI_kWh": 1606,
+   "wind_mean": 8.51
+  },
+  "2012": {
+   "file": "sg_2012.json",
+   "Tmean": 27.73,
+   "Tmax": 33.4,
+   "CDD18": 3441,
+   "CDD26": 633,
+   "Tdp_mean": 23.7,
+   "RH_mean": 79.4,
+   "GHI_kWh": 1636,
+   "wind_mean": 7.51
+  },
+  "2013": {
+   "file": "sg_2013.json",
+   "Tmean": 27.75,
+   "Tmax": 34.0,
+   "CDD18": 3448,
+   "CDD26": 643,
+   "Tdp_mean": 23.74,
+   "RH_mean": 79.5,
+   "GHI_kWh": 1585,
+   "wind_mean": 7.85
+  },
+  "2014": {
+   "file": "sg_2014.json",
+   "Tmean": 28.0,
+   "Tmax": 35.0,
+   "CDD18": 3542,
+   "CDD26": 734,
+   "Tdp_mean": 23.47,
+   "RH_mean": 77.2,
+   "GHI_kWh": 1701,
+   "wind_mean": 8.27
+  },
+  "2015": {
+   "file": "sg_2015.json",
+   "Tmean": 28.5,
+   "Tmax": 34.4,
+   "CDD18": 3723,
+   "CDD26": 914,
+   "Tdp_mean": 23.59,
+   "RH_mean": 75.4,
+   "GHI_kWh": 1704,
+   "wind_mean": 8.76
+  },
+  "2016": {
+   "file": "sg_2016.json",
+   "Tmean": 28.55,
+   "Tmax": 35.3,
+   "CDD18": 3740,
+   "CDD26": 929,
+   "Tdp_mean": 24.19,
+   "RH_mean": 78.0,
+   "GHI_kWh": 1618,
+   "wind_mean": 8.43
+  },
+  "2017": {
+   "file": "sg_2017.json",
+   "Tmean": 27.86,
+   "Tmax": 34.0,
+   "CDD18": 3491,
+   "CDD26": 683,
+   "Tdp_mean": 24.22,
+   "RH_mean": 81.2,
+   "GHI_kWh": 1647,
+   "wind_mean": 8.04
+  },
+  "2018": {
+   "file": "sg_2018.json",
+   "Tmean": 28.14,
+   "Tmax": 34.7,
+   "CDD18": 3591,
+   "CDD26": 792,
+   "Tdp_mean": 24.02,
+   "RH_mean": 79.1,
+   "GHI_kWh": 1609,
+   "wind_mean": 8.11
+  },
+  "2019": {
+   "file": "sg_2019.json",
+   "Tmean": 28.82,
+   "Tmax": 36.8,
+   "CDD18": 3839,
+   "CDD26": 1029,
+   "Tdp_mean": 23.99,
+   "RH_mean": 76.1,
+   "GHI_kWh": 1671,
+   "wind_mean": 8.81
+  },
+  "2020": {
+   "file": "sg_2020.json",
+   "Tmean": 28.22,
+   "Tmax": 35.0,
+   "CDD18": 3621,
+   "CDD26": 811,
+   "Tdp_mean": 24.27,
+   "RH_mean": 79.9,
+   "GHI_kWh": 1538,
+   "wind_mean": 8.37
+  },
+  "2021": {
+   "file": "sg_2021.json",
+   "Tmean": 28.14,
+   "Tmax": 36.7,
+   "CDD18": 3590,
+   "CDD26": 788,
+   "Tdp_mean": 23.94,
+   "RH_mean": 78.8,
+   "GHI_kWh": 1603,
+   "wind_mean": 8.44
+  },
+  "2022": {
+   "file": "sg_2022.json",
+   "Tmean": 27.97,
+   "Tmax": 34.5,
+   "CDD18": 3530,
+   "CDD26": 722,
+   "Tdp_mean": 23.9,
+   "RH_mean": 79.3,
+   "GHI_kWh": 1705,
+   "wind_mean": 7.71
+  },
+  "2023": {
+   "file": "sg_2023.json",
+   "Tmean": 28.36,
+   "Tmax": 35.1,
+   "CDD18": 3673,
+   "CDD26": 871,
+   "Tdp_mean": 24.0,
+   "RH_mean": 77.9,
+   "GHI_kWh": 1724,
+   "wind_mean": 8.13
+  },
+  "2024": {
+   "file": "sg_2024.json",
+   "Tmean": 28.61,
+   "Tmax": 35.4,
+   "CDD18": 3762,
+   "CDD26": 953,
+   "Tdp_mean": 24.24,
+   "RH_mean": 78.0,
+   "GHI_kWh": 1701,
+   "wind_mean": 7.77
+  },
+  "2025": {
+   "file": "sg_2025.json",
+   "Tmean": 28.14,
+   "Tmax": 35.0,
+   "CDD18": 3592,
+   "CDD26": 793,
+   "Tdp_mean": 23.61,
+   "RH_mean": 77.4,
+   "GHI_kWh": 1715,
+   "wind_mean": 6.27
+  }
+ }
+}

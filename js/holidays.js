@@ -12,6 +12,20 @@
 // (the Ministry sets the exact dates each year): Christmas 24 Dec–5 Jan, the winter week of Shrove Monday, Holy Week and
 // Easter week, Whit Tuesday to the Friday after, summer 1 Aug–11 Sep, the week of All Saints and the Day of Repentance.
 // That leaves about 188 school days; the profile's 200 is then not reached and no further day is taken off.
+//
+// Other cities (Singapore): cityCalendar(list) turns a city's own list of public holidays by year into a calendar that
+// daysOff(profile, y, calendar) uses instead of the Bavarian rules; without a calendar nothing changes. Rules:
+// - A year in the list takes its dates as given (data/sg/holidays.json from data.gov.sg: { "2019": ["2019-01-01", …] }).
+// - A year that is not in the list, which includes the typical year laid on 2018 when 2018 is not listed, takes the dates
+//   of the nearest listed year (the earlier one on a tie) by month and day, on the calendar of the year asked for. The
+//   number of holidays and their season are kept; the moving holidays (Chinese New Year, Hari Raya, Deepavali, Vesak,
+//   Good Friday) then sit on the dates of that year. 29 February is dropped in a common year.
+// - Holiday in lieu (Singapore Holidays Act 1998, s. 4(2)): a holiday that falls on a Sunday makes the next day that is
+//   not itself a public holiday a public holiday. sundayRule 'apply' adds those days, 'none' takes the list as it is,
+//   and 'auto' (default) adds them only if the list does not already name them: if every Sunday holiday in the list is
+//   followed by a listed day, the list is taken to include the days in lieu.
+// - School holidays: a profile with holidays 'school' takes opts.school (same format, same year rule) if given, and no
+//   school holidays otherwise (the profile's daysPerYear then spreads the remaining days off).
 
 export const TMY_YEAR = 2018;
 
@@ -64,14 +78,70 @@ export function schoolHolidays(y) {
   return [...new Set(out.map((c) => fileDay(y, c)))].filter((d) => d >= 0 && d < 365);
 }
 
+// ---------- a city's own holidays from a list by year (see the header) ----------
+// a date as "2019-01-01" or { date: "2019-01-01", … } → [y, m, d]
+const parseISO = (s) => { const m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(String(s && typeof s === 'object' ? s.date : s)); return m ? [+m[1], +m[2], +m[3]] : null; };
+const sundayOf = (y, c) => (new Date(Date.UTC(y, 0, 1)).getUTCDay() + c) % 7 === 0;   // calendar day c of year y is a Sunday
+
+// { "2019": [dates] } (other keys such as a source note are ignored), { holidays: … }, or a flat array of dates
+// → Map year → [[month, day], …]; a date is kept under its own year
+function listByYear(list) {
+  const out = new Map();
+  const add = (v) => { const p = parseISO(v); if (p) { if (!out.has(p[0])) out.set(p[0], []); out.get(p[0]).push([p[1], p[2]]); } };
+  if (Array.isArray(list)) list.forEach(add);
+  else if (list && typeof list === 'object') {
+    const years = Object.keys(list).filter((k) => /^\d{4}$/.test(k));
+    if (!years.length && list.holidays) return listByYear(list.holidays);
+    for (const k of years) if (Array.isArray(list[k])) list[k].forEach(add);
+  }
+  return out;
+}
+
+// list: { "2019": ["2019-01-01", ...], ... }; opts: { sundayRule: 'auto' | 'apply' | 'none', school: list }
+// → { publicHolidays(y), schoolHolidays(y) | null, sourceYear(y), sundayRule }: file days as publicHolidays above
+export function cityCalendar(list, opts = {}) {
+  const pub = listByYear(list), sch = opts.school ? listByYear(opts.school) : null;
+  let rule = opts.sundayRule || 'auto';
+  if (rule === 'auto') {
+    let sundays = 0, followed = 0;
+    for (const [y, md] of pub) {
+      const set = new Set(md.map(([m, d]) => calDay(y, m, d)));
+      for (const c of set) if (sundayOf(y, c)) { sundays++; if (set.has(c + 1)) followed++; }
+    }
+    rule = sundays > 0 && followed === sundays ? 'none' : 'apply';
+  }
+  const nearest = (byYear, y) => {
+    if (byYear.has(y)) return y;
+    let best = null;
+    for (const k of byYear.keys()) if (best == null || Math.abs(k - y) < Math.abs(best - y) || (Math.abs(k - y) === Math.abs(best - y) && k < best)) best = k;
+    return best;
+  };
+  const daysOf = (byYear, y, inLieu) => {
+    const from = nearest(byYear, y);
+    const cals = new Set();
+    for (const [m, d] of from == null ? [] : byYear.get(from)) if (!(m === 2 && d === 29 && !isLeap(y))) cals.add(calDay(y, m, d));
+    if (inLieu) for (const c of [...cals].sort((a, b) => a - b)) if (sundayOf(y, c)) { let n = c + 1; while (cals.has(n)) n++; cals.add(n); }
+    const last = calDay(y, 12, 31);
+    return [...cals].filter((c) => c >= 0 && c <= last).map((c) => fileDay(y, c)).filter((d) => d >= 0 && d < 365).sort((a, b) => a - b);
+  };
+  const cache = new Map();
+  return {
+    sundayRule: rule,
+    sourceYear: (y) => nearest(pub, y),
+    publicHolidays: (y) => { if (!cache.has(y)) cache.set(y, daysOf(pub, y, rule === 'apply')); return cache.get(y); },
+    schoolHolidays: sch ? (y) => daysOf(sch, y, false) : null,
+  };
+}
+
 // Days off of a profile in year y: a Set of file days. Empty for profiles in use every day around the clock (residential).
-export function daysOff(profile, y) {
+// cal: a calendar from cityCalendar (another city); without it the Bavarian holidays apply.
+export function daysOff(profile, y, cal = null) {
   const days = profile.daysPerWeek ?? 7, hours = (profile.end ?? 24) - (profile.start ?? 0);
   const off = new Set();
   if (days >= 7 && hours >= 24) return off;
   const isUse = (d) => weekdayOf(y, d) <= days;
-  for (const d of publicHolidays(y)) if (isUse(d)) off.add(d);
-  if (profile.holidays === 'school') for (const d of schoolHolidays(y)) if (isUse(d)) off.add(d);
+  for (const d of cal ? cal.publicHolidays(y) : publicHolidays(y)) if (isUse(d)) off.add(d);
+  if (profile.holidays === 'school') for (const d of cal ? (cal.schoolHolidays ? cal.schoolHolidays(y) : []) : schoolHolidays(y)) if (isUse(d)) off.add(d);
   const use = []; for (let d = 0; d < 365; d++) if (isUse(d) && !off.has(d)) use.push(d);
   const extra = profile.daysPerYear ? use.length - profile.daysPerYear : 0;
   if (extra > 0) { const step = use.length / extra; for (let j = 0; j < extra; j++) off.add(use[Math.floor((j + 0.5) * step)]); }

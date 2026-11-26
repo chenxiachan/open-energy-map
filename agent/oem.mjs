@@ -14,6 +14,8 @@ const argv = process.argv.slice(2);
 const flag = (k) => argv.includes('--' + k);
 const opt = (k, d) => { const i = argv.indexOf('--' + k); return i > -1 && i + 1 < argv.length ? argv[i + 1] : d; };
 const lang = ['en', 'de', 'zh'].includes(opt('lang')) ? opt('lang') : 'en';
+const city = String(opt('city', 'muc')).toLowerCase();   // muc (default) or sg
+const year = opt('year');   // Singapore only: weather year 2010–2025 (default: the typical year)
 const cmd = argv[0];
 
 const HELP = `Open Energy Map: building energy you can trace to its source (first city: Munich)
@@ -35,6 +37,12 @@ const HELP = `Open Energy Map: building energy you can trace to its source (firs
   node agent/oem.mjs mcp
       MCP server on stdio with the tools find_building and building_energy.
 
+  --city muc|sg     the city (default muc, Munich). Singapore: node agent/oem.mjs building --city sg --id w171999304
+                    or --address "blk 512 hougang ave 10" / "530512"; cooling demand (sensible + latent), electricity
+                    by end use, CO2, peak cooling load and EUI per GFA with ranges; a BCA-listed building also returns
+                    its measured EUI under "measured" (never an input). --year 2019 uses that weather year.
+                    --assume type=hdb|condo|landed|office|retail|hotel|mixed|education|healthcare|industrial|other
+                    era=<era id> system=<system key> storeys=N <input>=<number> (e.g. COP_cool=4, coolFrac=0.8)
   --lang en|de|zh   language of labels and notes (default en)
   --summary         shorter result: each input with its tier, prior range and first reference
   --compact         print one line of JSON`;
@@ -49,7 +57,7 @@ function parseAssume() {
     const [k, v] = String(argv[i + 1] || '').split('=');
     if (!k || v == null) throw new core.UserError(`--assume needs key=value, got ${argv[i + 1]}`);
     if (k.startsWith('refurbished.')) a.refurbished[k.slice(12)] = v;
-    else if (['age_class', 'system', 'usage'].includes(k)) a[k] = v;
+    else if (['age_class', 'system', 'usage'].includes(k) || (city === 'sg' && ['type', 'era'].includes(k))) a[k] = v;
     else if (['storeys', 'height_m'].includes(k)) a[k] = +v;
     else a.params[k] = +v;
   });
@@ -58,14 +66,14 @@ function parseAssume() {
 
 async function cli() {
   if (!cmd || cmd === 'help' || flag('help')) { console.log(HELP); return; }
-  await core.init(lang);
+  await core.init(lang, city);
   if (cmd === 'find') {
     const q = argv.slice(1).filter((x, i, a) => !x.startsWith('--') && !(a[i - 1] || '').startsWith('--')).join(' ');
     out(await core.findBuildings(q, +opt('limit', 10)));
   } else if (cmd === 'building') {
     const i = argv.indexOf('--at');
     const where = { address: opt('address'), osm_id: opt('id'), lod2_id: opt('lod2'), lat: i > -1 ? +argv[i + 1] : undefined, lon: i > -1 ? +argv[i + 2] : undefined };
-    out(await core.buildingEnergy(where, parseAssume(), { samples: +opt('samples', 300), detail: flag('summary') ? 'summary' : 'full' }));
+    out(await core.buildingEnergy(where, parseAssume(), { samples: +opt('samples', 300), detail: flag('summary') ? 'summary' : 'full', ...(city === 'sg' && year ? { year: +year } : {}) }));
   } else if (cmd === 'energy-ade') {
     const i = argv.indexOf('--at');
     const where = { address: opt('address'), osm_id: opt('id'), lod2_id: opt('lod2'), lat: i > -1 ? +argv[i + 1] : undefined, lon: i > -1 ? +argv[i + 2] : undefined };
@@ -113,10 +121,27 @@ const TOOLS = [
     annotations: { readOnlyHint: true, openWorldHint: false },
   },
 ];
+// Singapore (--city sg): the same two tools, described for Singapore
+const SG_INSTRUCTIONS = 'Building energy in Singapore (pilot) you can trace to its source. building_energy returns cooling demand, electricity by end use, CO2, peak cooling load and EUI per GFA with ranges, and the tier and source of every input; report the range and the tiers, and link map_url. A building in the BCA listing returns its measured EUI under measured, which is never a model input: quote it as measured data next to the model, not as a model result. An address can fit several buildings: if the result says status "ambiguous", ask or explain your choice, then call again with the osm_id and lat/lon.';
+if (city === 'sg') {
+  TOOLS[0].description = 'Search addresses, HDB block forms ("blk 512 hougang ave 10"), building names and 6-digit postcodes in Singapore (pilot). Returns matches with OSM id, postcode, coordinates and a link to the map.';
+  TOOLS[0].inputSchema.properties.query.description = 'Street and number, "blk <n> <street>", a building name or a 6-digit postcode, e.g. "530512"';
+  TOOLS[1].description = 'The energy model of one building in Singapore (pilot) from open data, as on the page index.html?city=sg: cooling demand (sensible + latent), electricity by end use, CO2, peak cooling load and EUI per GFA, each with a P10-P90 range, plus every input with its value, tier (observed, published_table, assumed, estimate, user_input) and source. For a building in the BCA listing, measured holds its measured EUI by year (never a model input). Report ranges and tiers, and link map_url.';
+  const P = TOOLS[1].inputSchema.properties;
+  delete P.lod2_id;
+  P.address.description = 'Street and number, "blk <n> <street>", a building name or a 6-digit postcode';
+  P.year = { type: 'integer', minimum: 2010, maximum: 2025, description: 'Weather year (default: the typical year); the grid emission factor follows it' };
+  P.assume = { type: 'object', description: 'What is known about the building; each value enters as user input', properties: {
+    type: { type: 'string', enum: ['hdb', 'condo', 'landed', 'office', 'retail', 'hotel', 'mixed', 'education', 'healthcare', 'industrial', 'other'] },
+    era: { type: 'string', description: 'Era id of the type, e.g. hdb_1980_1989, condo_2008plus, nr_2008_2020' },
+    system: { type: 'string', enum: ['window', 'split', 'vrf', 'unitary', 'chw_water', 'chw_air', 'package_wc', 'dcs'] },
+    storeys: { type: 'integer', minimum: 1 },
+    params: { type: 'object', description: 'Inputs by key, e.g. {"COP_cool": 4.2, "coolFrac": 0.8}; keys as in the inputs of the result', additionalProperties: { type: 'number' } } } };
+}
 const PROTOCOLS = ['2025-06-18', '2025-03-26', '2024-11-05'];
 
 async function mcp() {
-  await core.init(lang);
+  await core.init(lang, city);
   const send = (m) => process.stdout.write(JSON.stringify(m) + '\n');
   const reply = (id, result) => send({ jsonrpc: '2.0', id, result });
   const fail = (id, code, message) => send({ jsonrpc: '2.0', id, error: { code, message } });
@@ -126,7 +151,7 @@ async function mcp() {
       protocolVersion: PROTOCOLS.includes(params.protocolVersion) ? params.protocolVersion : PROTOCOLS[0],
       capabilities: { tools: {} },
       serverInfo: { name: 'open-energy-map', title: 'Open Energy Map', version: core.VERSION },
-      instructions: 'Building energy you can trace to its source. building_energy returns ranges and the source tier of every input; report the range and the tiers, and link map_url so the user can check. An address can fit several buildings: if the result says status "ambiguous", do not pick silently; ask or explain your choice, then call again with the osm_id and lat/lon. Coverage so far: Munich and its surroundings.',
+      instructions: city === 'sg' ? SG_INSTRUCTIONS : 'Building energy you can trace to its source. building_energy returns ranges and the source tier of every input; report the range and the tiers, and link map_url so the user can check. An address can fit several buildings: if the result says status "ambiguous", do not pick silently; ask or explain your choice, then call again with the osm_id and lat/lon. Coverage so far: Munich and its surroundings.',
     });
     if (method === 'ping') return reply(id, {});
     if (method === 'tools/list') return reply(id, { tools: TOOLS });
@@ -134,7 +159,7 @@ async function mcp() {
       const a = params.arguments || {};
       try {
         const r = params.name === 'find_building' ? { matches: await core.findBuildings(a.query || '', a.limit || 10) }
-          : params.name === 'building_energy' ? await core.buildingEnergy({ address: a.address, lat: a.lat, lon: a.lon, osm_id: a.osm_id, lod2_id: a.lod2_id }, a.assume || {}, { samples: a.samples, detail: a.detail === 'full' ? 'full' : 'summary' })
+          : params.name === 'building_energy' ? await core.buildingEnergy({ address: a.address, lat: a.lat, lon: a.lon, osm_id: a.osm_id, lod2_id: a.lod2_id }, a.assume || {}, { samples: a.samples, detail: a.detail === 'full' ? 'full' : 'summary', ...(city === 'sg' && a.year ? { year: a.year } : {}) })
           : null;
         if (!r) return fail(id, -32602, `Unknown tool ${params.name}`);
         return reply(id, { content: [{ type: 'text', text: JSON.stringify(r) }], structuredContent: r });

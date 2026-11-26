@@ -17,6 +17,8 @@ function tileKey(ix, iy) { return `${ix}_${iy}`; }
 async function loadTile(ix, iy) {
   const key = tileKey(ix, iy);
   if (TILE_CACHE.has(key)) return TILE_CACHE.get(key);
+  // tiles the index does not list hold no buildings (sea, outside the clip): no request, the same empty result
+  if (Array.isArray(INDEX.tiles) && !(INDEX.tileSet ||= new Set(INDEX.tiles.map((t) => (Array.isArray(t) ? `${t[0]}_${t[1]}` : String(t))))).has(key)) { TILE_CACHE.set(key, Promise.resolve([])); return TILE_CACHE.get(key); }
   const p = (async () => {
     const res = await fetch(`${INDEX.base}t_${key}.json`);
     if (!res.ok) return [];
@@ -31,7 +33,8 @@ async function loadTile(ix, iy) {
       const outer = dec(b.r);
       let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
       for (const [x, y] of outer) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
-      return { id: b.i, outer, holes: (b.h || []).map(dec), tags: b.t || {}, part: !!b.p, bbox: [x0, y0, x1, y1] };
+      // x: attributes joined to the outline by a city's data tools (Singapore: HDB, land use, GBA, BCA); absent in Munich
+      return { id: b.i, outer, holes: (b.h || []).map(dec), tags: b.t || {}, part: !!b.p, bbox: [x0, y0, x1, y1], ...(b.x ? { x: b.x } : {}) };
     });
   })();
   TILE_CACHE.set(key, p);

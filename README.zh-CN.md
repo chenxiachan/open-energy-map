@@ -3,14 +3,14 @@
   <img src="assets/readme/banner-zh-light.png" alt="Open Energy Map：可追溯到来源的建筑能耗。首个城市：慕尼黑">
 </picture></a></p>
 
-<p align="center">一个交互式网络地图，基于开放数据逐栋估算建筑的供暖需求。<br>结果以区间而非单一数值给出，每一项输入都可以追溯到来源。<br>第一座城市是慕尼黑。</p>
+<p align="center">一个交互式网络地图，基于开放数据逐栋估算建筑能耗：<br>慕尼黑算供暖，新加坡算制冷和用电。<br>结果以区间而非单一数值给出，每一项输入都可以追溯到来源。</p>
 
 <p align="center">
   <a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><img alt="打开地图" src="https://img.shields.io/badge/%E6%89%93%E5%BC%80%E5%9C%B0%E5%9B%BE_%E2%86%92-6b5ce7?style=for-the-badge" width="121"></a>
 </p>
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><b>chenxiachan.github.io/open-energy-map</b></a><br>
-在浏览器中运行，无需安装或注册，这里的链接直接打开中文界面。<br>点击任意一栋楼，或从 <a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w34107320@48.150707,11.573651">Schellingstraße 51</a>（马克斯福施塔特的一栋多户住宅）或<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w10053349@48.148842,11.567965">慕尼黑工业大学主楼</a>开始。</p>
+在浏览器中运行，无需安装或注册，这里的链接直接打开中文界面。左上角可以切换城市。点击任意一栋楼，或从下面几栋开始：<br><b>慕尼黑</b>：<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w34107320@48.150707,11.573651">Schellingstraße 51</a>（马克斯福施塔特的一栋多户住宅）或<a href="https://chenxiachan.github.io/open-energy-map/?lang=zh#b=w10053349@48.148842,11.567965">慕尼黑工业大学主楼</a><br><b>新加坡</b>：<a href="https://chenxiachan.github.io/open-energy-map/?city=sg&lang=zh#b=w764434028@1.302473,103.908659">马林百列 62 座组屋</a>（1975 年建成）或 <a href="https://chenxiachan.github.io/open-energy-map/?city=sg&lang=zh#b=w171999304@1.283322,103.850374">Republic Plaza</a>（带实测能耗的办公塔楼）</p>
 
 <p align="center">
   <a href="https://youtu.be/90e-aEyOkDE"><img alt="演示视频，1 分钟" src="https://img.shields.io/badge/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-1_%E5%88%86%E9%92%9F-e08a3c?style=flat-square&logo=youtube&logoColor=white"></a>
@@ -32,6 +32,8 @@
 
 Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利亚 LoD2 建筑模型、2022 年人口普查和逐时气象数据。页面据此在浏览器里为任意一栋建筑建立能耗模型，无需安装，也无需注册。每栋楼用同一个模型，所以结果可以在单栋、街道和全市三个尺度上阅读。OpenStreetMap、人口普查和 ERA5 覆盖德国全境，同样的方法可以扩展到更多城市和地区。
 
+新加坡是第二座城市，也是第一座湿热气候的城市。那里的轮廓接上 HDB 组屋资料、URA 总体规划和卫星估计的楼高；热模型补上了制冷需要的部分：湿空气的潜热负荷，住宅只在夜里给卧室开空调，以及按用途分的用电和各类空调系统的能效。输入按 BCA 公布的商业楼实测能耗和 EMA 的住户用电标定，再在标定没用到的楼和年份上检验。
+
 ## 功能
 
 <p align="center"><a href="https://chenxiachan.github.io/open-energy-map/?lang=zh"><picture>
@@ -39,13 +41,14 @@ Open Energy Map 将开放数据逐栋对齐：OpenStreetMap 轮廓、巴伐利�
   <img src="assets/readme/features-zh-light.jpg" alt="地图的四个画面：单栋建筑的三维模型和区间、带来源的输入参数表、全市单位面积供暖需求图层、三维街区漫游">
 </picture></a></p>
 
-- **单栋建模。** 点一栋楼或搜索地址，逐时热模型给出供暖需求、终端能源、CO₂ 和峰值负荷的 P10–P90 区间。
+- **单栋建模。** 点一栋楼或搜索地址，逐时热模型给出 P10–P90 区间：慕尼黑是供暖需求、终端能源、CO₂ 和峰值负荷，新加坡是制冷需求（含潜热）、按用途分的用电、CO₂ 和制冷峰值负荷。
 - **可追溯的输入。** 每项输入都标注来源等级（实测、已发表表格、假设、用户输入、账单标定），并注明文献和页码。页面说明不确定性来自哪里，以及补充哪项数据最能缩小区间。
-- **三维热平衡。** 按构件给出热损失和得热，也显示在三维立面上，太阳可调到一年中任意时刻。
-- **账单标定与改造。** 输入年度账单后用贝叶斯方法缩小区间；改造措施在同一模型上比较。
-- **全市图层。** 205,505 栋供暖建筑汇总到人口普查的 100 m 网格（27,295 格），包括地方供热规划用的热需求密度。任何颜色都不对应单一地址。
-- **三维街景。** 所选建筑周围的 LoD2 建筑、单棵树木和街景照片。
-- **导出。** EnergyPlus（IDF、EPW）和 [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE)，带每项输入的区间和来源等级。
+- **热平衡和制冷平衡。** 按构件给出热损失和得热，也显示在三维立面上，太阳可调到一年中任意时刻。每个结果都能展开成算式，一直点到产生它的输入和系数。
+- **实测能耗并列。** 新加坡 BCA 名单里的商业楼，在模型旁边显示公布的实测能耗。
+- **账单标定与改造（慕尼黑）。** 输入年度账单后用贝叶斯方法缩小区间；改造措施在同一模型上比较。
+- **全市图层。** 慕尼黑 205,505 栋供暖建筑汇总到人口普查的 100 m 网格（27,295 格），包括地方供热规划用的热需求密度；新加坡 120,595 栋建筑汇总到国家坐标系（SVY21）的 100 m 格，包括区域供冷用的冷需求密度。任何颜色都不对应单一地址。
+- **三维街景。** 在所选建筑周围的街区里漫游，并看街景照片；慕尼黑还有 LoD2 建筑、地形和单棵树木。
+- **导出（慕尼黑）。** EnergyPlus（IDF、EPW）和 [CityGML Energy ADE 3.0](https://github.com/tudelft3d/Energy_ADE)，带每项输入的区间和来源等级。
 - **给 AI 智能体用。** MCP 服务以 JSON 返回同一个模型，智能体就能引用可追溯的建筑能耗（见下）。
 
 ## 给 AI 智能体用
@@ -65,7 +68,11 @@ git clone https://github.com/chenxiachan/open-energy-map.git && cd open-energy-m
 claude mcp add open-energy-map -- node agent/oem.mjs mcp
 ```
 
-这样只对当前文件夹生效；加上 `--scope user` 并写 `agent/oem.mjs` 的绝对路径，就能在任何目录使用。
+这样只对当前文件夹生效；加上 `--scope user` 并写 `agent/oem.mjs` 的绝对路径，就能在任何目录使用。新加坡用 `--city sg` 再加一个服务：
+
+```bash
+claude mcp add open-energy-map-sg -- node agent/oem.mjs mcp --city sg
+```
 
 **Claude Desktop、Cursor、Windsurf、Gemini CLI** 和大多数客户端，在各自的 MCP 配置文件的 `mcpServers` 下加同样一项：
 
@@ -101,7 +108,7 @@ args = ["/path/to/open-energy-map/agent/oem.mjs", "mcp"]
 文件名和键名按各客户端 2026 年 11 月的文档；如有变化，以客户端文档为准。只能连接远程（HTTP）服务的网页聊天应用暂时用不了。
 </details>
 
-然后直接问，比如："慕尼黑 Schellingstraße 51 一年要多少供暖能耗？这个数有多可靠？"智能体会给出区间、主要影响因素及其来源等级，以及这栋楼在地图上的链接。告诉它你知道的情况（换了窗、装了热泵），它会把这些作为用户填写再算一次。
+然后直接问，比如："慕尼黑 Schellingstraße 51 一年要多少供暖能耗？这个数有多可靠？"或"新加坡后港 10 道 512 座组屋的空调一年用多少电？"智能体会给出区间、主要影响因素及其来源等级，以及这栋楼在地图上的链接。告诉它你知道的情况（换了窗、装了热泵），它会把这些作为用户填写再算一次。
 
 > [!TIP]
 > **要指定某一栋楼，给编号比给地址准。** 一个地址可能对应几栋楼（比如学校和它的体育馆），慕尼黑周边几个镇也有同名的街道和门牌；这时工具会返回候选，不会替你猜。两个编号都能唯一确定一栋楼：[**OSM 编号**](https://www.openstreetmap.org/way/34107320)（`w34107320`，在地图地址栏的 `#b=w34107320@…` 里，也在 *OSM ↗* 链接背后）和 [**LoD2 编号**](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=lod2)（`DEBY_LOD2_4958835`，巴伐利亚 LoD2 CityGML 里的 `gml:id`，鼠标悬停 *LoD2 ↗* 或在"参数与来源"页签的几何卡片里可以看到）。
@@ -116,6 +123,7 @@ args = ["/path/to/open-energy-map/agent/oem.mjs", "mcp"]
 node agent/oem.mjs building --id w34107320
 node agent/oem.mjs building --lod2 DEBY_LOD2_4958835 --assume refurbished.windows=yes --assume system=hp_air
 node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out schellingstr51.gml
+node agent/oem.mjs building --city sg --address "blk 512 hougang ave 10"
 ```
 
 选项、编号和返回字段见 [agent/README.md](agent/README.md)（英文）。
@@ -123,7 +131,7 @@ node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out sc
 
 ## 方法与数据
 
-任意一栋建筑的 **方法与导出** 页逐条说明每一步的假设和来源。
+任意一栋建筑的 **方法与导出**（慕尼黑）或 **方法**（新加坡）页逐条说明每一步的假设和来源。
 
 <details>
 <summary>方法，逐步说明</summary>
@@ -141,6 +149,20 @@ node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out sc
 </details>
 
 <details>
+<summary>新加坡的方法，逐步说明</summary>
+
+| 步骤 | 做法 | 主要来源 |
+|---|---|---|
+| 几何 | OSM 轮廓；层数取 HDB 资料，其次 OSM 的高度或层数，再次卫星估计的楼高；名单内的楼用 BCA 的总楼面面积 | OpenStreetMap、HDB、GlobalBuildingAtlas、BCA |
+| 类型与年代 | 组屋按建成年份；其他楼按 OSM 标签、URA 用地和 BCA 名单 | HDB、URA 2019 总体规划、BCA |
+| 气象 | 2010 至 2025 年逐时数据，按樟宜站和长期太阳辐射均值订正；典型气象年 | Open-Meteo（ERA5）、新加坡气象局、Solargis |
+| 热模型 | 按 ISO 13790 的逐时 5R1C 模型，加室外空气和人员的潜热负荷；部分开空调的住宅分成两个耦合的区；住宅夜间开空调；制冷、照明、设备和其他用电分开计 | ISO 13790、ASHRAE、BCA、NEA |
+| 空调系统 | 按系统取季节 COP：分体机和多联机、冷水机组、区域供冷；名单内的楼用它自己的冷站效率 | BCA、NEA |
+| 标定与检验 | 商业楼用一半 BCA 楼标定，在另一半楼和另一年上检验；住宅用 EMA 2018 至 2019 年的住户用电标定，在 2022 至 2024 年上检验；全岛总量和 EMA 的分部门用电对照 | BCA、EMA |
+| CO₂ | 用电乘以当年的电网排放系数 | EMA |
+</details>
+
+<details>
 <summary>数据与许可</summary>
 
 | 数据 | 来源 | 许可 |
@@ -152,8 +174,10 @@ node agent/oem.mjs energy-ade --address "Schellingstraße 51, München" --out sc
 | 街景照片（运行时加载） | Mapillary | CC BY-SA 4.0 |
 | 底图（运行时加载） | OpenFreeMap | © OpenMapTiles、© OpenStreetMap 贡献者 |
 | 材质贴图 | ambientCG | CC0 1.0 |
+| 新加坡：HDB 组屋资料和建筑轮廓、URA 2019 总体规划、BCA 建筑能耗清单 2017 至 2020 年、公众假期 | data.gov.sg（HDB、URA、BCA、人力部） | Singapore Open Data Licence 1.0 |
+| 新加坡：楼高 | GlobalBuildingAtlas LoD1（Zhu 等，2025） | CC BY-NC 4.0 |
 
-已发表的表格和标准，例如 IWU / TABULA 建筑类型学、DIN V 18599、GEG 2024、Heizspiegel München 2018 和 Loga 等（2019），均在使用处注明出处。完整列表见地图起始页底部。
+已发表的表格和标准，例如 IWU / TABULA 建筑类型学、DIN V 18599、GEG 2024、Heizspiegel München 2018 和 Loga 等（2019），以及新加坡 BCA、NEA、EMA、新加坡统计局和 HDB 的出版物，均在使用处注明出处。完整列表见地图起始页底部，新加坡的见 [data/archetypes_sg_sources.md](data/archetypes_sg_sources.md)。
 </details>
 
 ## 本地运行
@@ -168,7 +192,7 @@ index.html    页面
 css/          样式
 js/           模型、地图、三维视图和界面（ES 模块）
 agent/        给 LLM 智能体用的命令行工具和 MCP 服务
-data/         为地图预处理的开放数据；全市结果在 data/city/
+data/         为地图预处理的开放数据；全市结果在 data/city/；新加坡在 data/sg/
 assets/       材质贴图；logo 在 assets/brand/；本 README 的图片在 assets/readme/
 LICENSE       许可条款
 ```

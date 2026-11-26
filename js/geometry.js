@@ -343,6 +343,7 @@ export function applyLoD2(m, L2) {
 }
 
 // opts.lod2: Map OSM id → LoD2 array (data/lod2 tiles); neighbours then take their LoD2 heights for shading and party walls.
+// opts.heightOf(rec) → eaves in m or null: neighbour heights by another city's rule (Singapore); without it nothing changes.
 export function buildGeometry(rec, nbRecs, opts = {}) {
   const [clon, clat] = centroid(rec.outer);
   const F = makeFrame(clat, clon);
@@ -381,8 +382,10 @@ export function buildGeometry(rec, nbRecs, opts = {}) {
     const { H: hn, U: un } = heightAndUsage(n.tags, ringL, Math.abs(signedArea(ringL)), nc[0], nc[1]);
     const ln = !n.part && opts.lod2 ? lod2Record(opts.lod2.get(n.id)) : null;
     const unC = un.inferred && ln ? cadastreUsage(ln.fn, ln.resShare, ln.storeys || hn.floors) : null;
-    nbs.push({ id: n.id, outer: ringL, holes: n.holes.map(toL), height: ln ? +(ln.eaves + ln.ridge * 0.5).toFixed(1) : +(hn.height + hn.roof.ridgeHeight * 0.5).toFixed(1),
-      eaves: ln ? ln.eaves : hn.height, heated: (unC ? unC.heated : un.heated) && !n.part && !opts.lod2?.structures?.has(n.id) && !outbuilding(n, Math.abs(signedArea(ringL)), opts) && !openStructure(n.tags || {}, ln?.fn), part: n.part, tags: n.tags, lod2: !!ln });
+    // opts.heightOf(n) → eaves height in m or null: a city's own height rule for the neighbours (js/model_sg.js); absent in Munich
+    const hx = !ln && opts.heightOf ? opts.heightOf(n) : null;
+    nbs.push({ id: n.id, outer: ringL, holes: n.holes.map(toL), height: ln ? +(ln.eaves + ln.ridge * 0.5).toFixed(1) : hx != null ? +hx.toFixed(1) : +(hn.height + hn.roof.ridgeHeight * 0.5).toFixed(1),
+      eaves: ln ? ln.eaves : hx != null ? hx : hn.height, heated: (unC ? unC.heated : un.heated) && !n.part && !opts.lod2?.structures?.has(n.id) && !outbuilding(n, Math.abs(signedArea(ringL)), opts) && !openStructure(n.tags || {}, ln?.fn), part: n.part, tags: n.tags, lod2: !!ln });
   }
   const adjRings = nbs.filter((n) => n.heated && n.eaves >= 2.5);
 

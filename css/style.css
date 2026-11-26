@@ -70,7 +70,11 @@ a { color: var(--accent); }
 .toplink { flex: none; display: inline-flex; align-items: center; color: var(--muted); font-size: 12.5px; text-decoration: none; white-space: nowrap; }
 .toplink:hover { color: var(--fg); }
 .toplink svg { display: block; }
-.top .region { flex: none; margin-left: -6px; padding: 1px 9px; border: 1px solid var(--line-2); border-radius: 999px; font-size: 12px; line-height: 1.5; color: var(--fg-2); white-space: nowrap; }
+.top .citysw { margin-left: -4px; }
+.langsw a { font-size: 12.5px; line-height: 1.5; padding: 3px 9px; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.langsw a + a { border-left: 1px solid var(--line); }
+.langsw a:hover { color: var(--fg); }
+.langsw a[aria-current="page"] { background: var(--accent-soft); color: var(--fg); font-weight: 600; cursor: default; }
 #theme .ti { display: none; }
 .top .sub { color: var(--muted); font-size: 12.5px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .btn { border: 1px solid var(--line-2); background: var(--surface); border-radius: 8px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
@@ -369,7 +373,8 @@ svg .c-post { fill: var(--c1); }
   .top { padding: 8px 12px; gap: 12px; }
   .top .sub { display: none; }
   .top #home { display: none; }   /* the homepage stays linked in the licence line of the start page */
-  .top .region, #theme .tt { display: none; }
+  #theme .tt { display: none; }
+  .langsw a { padding: 3px 7px; }
   #theme { padding: 5px 8px; } #theme .ti { display: block; }
   .top h1 { flex: 1; font-size: 15.5px; }
   .panel, .bhead, .chips, .facts, .kpis { padding-left: 16px; padding-right: 16px; }
@@ -382,6 +387,10 @@ svg .c-post { fill: var(--c1); }
   .form { grid-template-columns: 1fr; }
   .months { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .grid3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {   /* the logo names the app; the city switch takes the name's place */
+  .top h1 { display: none; }
+  .top .citysw { margin-left: 0; margin-right: auto; }
 }
 
 

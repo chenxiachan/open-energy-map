@@ -19,8 +19,11 @@ const TIER_OF = { osm: 'observed', geometry: 'observed', lod2: 'observed', arche
 const VAR_TIER = { age: 'zensus', wwrScale: 'default', hScale: 'default', anScale: 'default', n50: 'default', heatedFrac: 'default', T_heat: 'profile', n_vent: 'profile', Q_int: 'profile' };
 
 let S = null;   // modules and data, loaded once per process
+let CITY_ID = 'muc';   // the city of this process: 'muc' (default) or 'sg' (init(lang, 'sg'), --city sg)
+export const cityId = () => CITY_ID;
 
-export async function init(lang = 'en') {
+export async function init(lang = 'en', city = null) {
+  if (String(city || CITY_ID).toLowerCase() === 'sg') { CITY_ID = 'sg'; return initSG(lang); }
   if (S) return S;
   // the page modules fix their language when js/i18n.js loads, from ?lang= as on the page
   if (typeof globalThis.location === 'undefined') globalThis.location = { search: `?lang=${lang}` };
@@ -137,6 +140,7 @@ const entry = (r, exact = true) => ({
 
 export async function findBuildings(query, limit = 10) {
   await init();
+  if (CITY_ID === 'sg') return findBuildingsSG(query, limit);
   const m = await matchAddress(query);
   return (m.rows.length ? m.rows.map((r) => entry(r)) : m.near.map((r) => entry(r, false))).slice(0, limit);
 }
@@ -214,7 +218,8 @@ async function ambiguous(base, list, reason) {
 // where: { osm_id, lat?, lon? } | { lod2_id } | { lat, lon } | { address }, taken in this order;
 // assume: what the caller knows (user input on the page)
 export async function buildingEnergy(where = {}, assume = {}, opts = {}) {
-  await init();
+  await init(undefined, opts.city || null);
+  if (CITY_ID === 'sg') return buildingEnergySG(where, assume, opts);
   const { G, Arch, solar, rc5, sys, osm, prior, checks, refs, T, A, L } = S;
   const n = Math.max(50, Math.min(1000, Math.round(opts.samples || 300)));
   const base = { tool: toolInfo(), query: { ...Object.fromEntries(Object.entries(where).filter(([, v]) => v != null && v !== '')), assume } };
@@ -386,6 +391,7 @@ function identity(id, lod2Map) {
 
 // ---------- CityGML 2.0 + Energy ADE 3.0 of one building (js/energyade.js, the same file as the Export tab) ----------
 export async function buildingEnergyADE(where = {}, assume = {}, opts = {}) {
+  if (CITY_ID === 'sg') throw new UserError('The CityGML export is not available for Singapore yet; use building for the JSON model.');
   const r = await buildingEnergy(where, assume, { ...opts, internal: true });
   if (!r.m) return { json: r, xml: null };   // not modelled: a structure, or several buildings fit the address
   const { m, res, fe, pr, inputs, prof, json } = r;
@@ -411,4 +417,224 @@ const SOURCES = [
   { data: 'Census 2022 on the 100 m grid (construction period, heating carrier, living area)', source: 'Statistische Ämter des Bundes und der Länder', licence: 'dl-de/by-2-0' },
   { data: 'Hourly weather (ERA5)', source: 'Open-Meteo, Copernicus Climate Change Service', licence: 'CC BY 4.0' },
   { data: 'Typology and use profiles', source: 'IWU / TABULA, DIN V 18599 (via dena 2023), GEG 2024', licence: 'cited by page in the references of each input' },
+];
+
+// =====================================================================================================================
+// Singapore (--city sg): the model of the page index.html?city=sg (js/model_sg.js), with the same inputs, ranges and
+// sources. Results are cooling demand (sensible + latent), electricity by end use, CO₂ and the peak cooling load per m²
+// of the type's reference area, and the EUI per m² GFA. A building in the BCA listing gets its measured EUI under
+// `measured`, kept apart from the results: it is never an input. Options: opts.year (weather year 2010–2025, default the
+// typical year; the grid emission factor follows the year), opts.samples.
+let SGS = null;
+const MAP_SG = (id, lat, lon) => `${SITE}?city=sg#b=${id}@${(+lat).toFixed(6)},${(+lon).toFixed(6)}`;
+
+async function initSG(lang = 'en') {
+  if (SGS) return SGS;
+  if (typeof globalThis.location === 'undefined') globalThis.location = { search: `?lang=${lang}&city=sg` };
+  const netFetch = globalThis.fetch;
+  if (!globalThis.__oemFetch) {
+    globalThis.fetch = async (u, o) => {
+      const x = u instanceof URL ? u.href : String(u);
+      if (/^(https?|data):/.test(x)) return netFetch(u, o);
+      const url = x.startsWith('file:') ? new URL(x) : new URL(x.replace(/^\.?\//, ''), ROOT);
+      try { return new Response(await readFile(url), { status: 200, headers: { 'content-type': 'application/json' } }); } catch { return new Response(null, { status: 404 }); }
+    };
+    globalThis.__oemFetch = true;
+  }
+  const im = (p) => import(new URL(p, ROOT).href);
+  const [i18n, city, osm, SGA, MS] = await Promise.all(['js/i18n.js', 'js/city.js', 'js/osmdb.js', 'js/archetype_sg.js', 'js/model_sg.js'].map(im));
+  const C = city.setCity('sg');
+  const idx = await osm.loadIndex(C.osm);
+  const A = await SGA.loadArchetypes(C.archetypes);
+  const rd = async (p) => JSON.parse(await readFile(new URL(p, ROOT), 'utf8'));
+  const [bca, hol, wIdx] = await Promise.all([rd(C.bca), rd(C.holidays), rd(C.weather + 'index.json')]);
+  SGS = { lang: i18n.LANG, L: i18n.L, C, osm, SGA, MS, A, idx, bcaRows: bca.rows, bcaSource: bca.source, cals: MS.calendars(hol, A), wIdx, W: new Map(), addr: null };
+  return SGS;
+}
+async function weatherSG(year) {
+  const key = year == null ? 'tmy' : String(year);
+  if (!SGS.W.has(key)) {
+    const meta = key === 'tmy' ? SGS.wIdx.tmy : SGS.wIdx.years[key];
+    if (!meta) throw new UserError(`No Singapore weather for ${year}; years: ${Object.keys(SGS.wIdx.years).join(', ')} (default: the typical year).`);
+    const w = JSON.parse(await readFile(new URL(SGS.C.weather + meta.file, ROOT), 'utf8'));
+    for (const k of ['T', 'GHI', 'DNI', 'DHI']) w[k] = Float32Array.from(w[k]);
+    SGS.W.set(key, w);
+  }
+  return SGS.W.get(key);
+}
+
+// ---------- addresses (data/sg/osm/addr.json): street, number, postcode, id, lon, lat, name ("BLK 512 HOUGANG AVE 10") ----------
+const normSG = (x) => String(x).toLowerCase().replace(/[.\-,#/()]/g, ' ').replace(/\s+/g, ' ').trim();
+async function addressesSG() {
+  if (!SGS.addr) {
+    const rows = JSON.parse(await readFile(new URL(SGS.C.addr, ROOT), 'utf8'));
+    SGS.addr = rows.map((r) => ({ street: r[0], number: r[1], postcode: r[2], id: r[3], lon: r[4], lat: r[5], name: r[6] || '', parts: normSG(`${r[0]} ${r[6] || ''}`).split(' ').filter(Boolean), hay: normSG(`${r[0]} ${r[1]} ${r[6] || ''}`) }));
+  }
+  return SGS.addr;
+}
+function parseSG(query) {
+  const toks = normSG(query).split(' ').filter(Boolean), q = { postcodes: [], number: null, words: [] };
+  const bi = toks.findIndex((t) => t === 'blk' || t === 'block');
+  if (bi > -1 && /^\d{1,4}[a-z]?$/.test(toks[bi + 1] || '')) q.number = toks[bi + 1];
+  toks.forEach((t, i) => {
+    if (['blk', 'block', 'singapore', 'sg', 's'].includes(t) || (bi > -1 && i === bi + 1)) return;
+    if (/^\d{6}$/.test(t)) { q.postcodes.push(t); return; }
+    if (q.number == null && i === 0 && /^\d{1,4}[a-z]?$/.test(t)) { q.number = t; return; }
+    q.words.push(t);
+  });
+  if (q.number == null) { const j = q.words.findIndex((t) => /^\d{1,4}[a-z]?$/.test(t)); if (j > -1 && q.words.length > 1) q.number = q.words.splice(j, 1)[0]; }
+  return q;
+}
+async function matchSG(query) {
+  const all = await addressesSG(), q = parseSG(query);
+  if (!q.words.length && !q.number && !q.postcodes.length) return { q, rows: [] };
+  const numOk = (r) => !q.number || String(r.number).toLowerCase() === q.number || new RegExp(`\\bblk ${q.number}\\b`).test(normSG(r.name));
+  const wordsOk = (r) => q.words.every((w) => r.parts.some((p) => p.startsWith(w)));
+  let rows = all.filter((r) => (!q.postcodes.length || q.postcodes.includes(r.postcode)) && wordsOk(r) && numOk(r));
+  const seen = new Set();
+  rows = rows.filter((r) => !seen.has(r.id) && seen.add(r.id));
+  return { q, rows };
+}
+const entrySG = (r) => ({ address: `${r.number ? r.number + ' ' : ''}${r.street || ''}`.trim() || null, name: r.name || null, postcode: r.postcode || null, osm_id: r.id, lat: r.lat, lon: r.lon, map_url: MAP_SG(r.id, r.lat, r.lon) });
+async function findBuildingsSG(query, limit = 10) {
+  return (await matchSG(query)).rows.slice(0, limit).map(entrySG);
+}
+async function locateSG(id) {
+  const row = (await addressesSG()).find((r) => r.id === id);
+  if (row) return { lat: row.lat, lon: row.lon };
+  const needle = `"i":"${id}"`, I = SGS.idx;
+  for (const f of (await readdir(new URL(SGS.C.osm, ROOT))).filter((x) => /^t_\d+_\d+\.json$/.test(x))) {
+    if (!(await readFile(new URL(SGS.C.osm + f, ROOT), 'utf8')).includes(needle)) continue;
+    const [ix, iy] = f.slice(2, -5).split('_').map(Number), rec = await SGS.osm.byId(id, I.bbox[0] + (ix + 0.5) * I.dlon, I.bbox[1] + (iy + 0.5) * I.dlat);
+    if (rec) return { lat: (rec.bbox[1] + rec.bbox[3]) / 2, lon: (rec.bbox[0] + rec.bbox[2]) / 2 };
+  }
+  return null;
+}
+
+const TIER_SG = { observed: 'observed', published_table: 'published_table', assumed: 'assumed', estimate: 'estimate', user: 'user_input' };
+async function buildingEnergySG(where = {}, assume = {}, opts = {}) {
+  const { osm, SGA, MS, A, L } = SGS;
+  const n = Math.max(50, Math.min(1000, Math.round(opts.samples || 300)));
+  const year = opts.year != null && opts.year !== 'tmy' ? +opts.year : null;
+  const tool = { name: 'Open Energy Map', version: VERSION, site: SITE, repository: REPO, city: 'sg', coverage: 'Singapore (pilot)', osm_snapshot: (SGS.idx.timestamp || '').slice(0, 10) || null, language: SGS.lang };
+  const base = { tool, query: { ...Object.fromEntries(Object.entries(where).filter(([, v]) => v != null && v !== '')), assume, ...(year ? { weather_year: year } : {}) } };
+  let lat = where.lat, lon = where.lon, osmId = where.osm_id, resolvedBy = null, match = null;
+  if (osmId != null) {
+    osmId = String(osmId).trim();
+    if (!OSM_ID.test(osmId)) throw new UserError(`osm_id should look like w100162742 or r1234567, got ${where.osm_id}.`);
+    if (lat == null || lon == null) { const p = await locateSG(osmId); if (!p) throw new UserError(`OSM id ${osmId} is not in the local Singapore data.`); ({ lat, lon } = p); }
+    resolvedBy = 'osm_id';
+  } else if (lat != null && lon != null) resolvedBy = 'point';
+  else if (where.address) {
+    const m = await matchSG(where.address);
+    if (!m.rows.length) throw new UserError(`No address in the local Singapore data matches "${where.address}". Try "blk <number> <street>", the street and number, a building name or the 6-digit postcode, or give lat and lon.`);
+    if (m.rows.length > 1) return { ...base, modelled: false, status: 'ambiguous', reason: `"${where.address}" fits ${m.rows.length} buildings.`, n_candidates: m.rows.length, candidates: m.rows.slice(0, 12).map(entrySG),
+      next_step: 'Ask which building is meant, or choose by name and postcode; then call again with the osm_id and lat/lon of that candidate.' };
+    match = entrySG(m.rows[0]); lat = match.lat; lon = match.lon; osmId = match.osm_id; resolvedBy = 'address';
+  } else throw new UserError('Give an address or postcode, lat and lon, or an osm_id.');
+  if (!osm.inCoverage(lon, lat)) throw new UserError(`${lat}, ${lon} is outside Singapore.`);
+  let rec = osmId ? await osm.byId(osmId, lon, lat) : null;
+  if (osmId && !rec) resolvedBy = 'point';
+  rec = rec || await osm.buildingAt(lon, lat);
+  if (!rec) throw new UserError(`No building outline at ${lat}, ${lon}.`);
+  base.resolved_by = resolvedBy; base.matched_address = match || undefined;
+  // the caller's assumptions, as user input on the page
+  const state = { user: {} };
+  if (assume.type != null || assume.usage != null) { const t = assume.type ?? assume.usage; if (!A.types[t]) throw new UserError(`type must be one of ${Object.keys(A.types).join(', ')}`); state.type = t; }
+  if (assume.era != null) state.era = String(assume.era);
+  if (assume.system != null) { if (!A.systems[assume.system]) throw new UserError(`system must be one of ${Object.keys(A.systems).join(', ')}`); state.system = assume.system; }
+  if (assume.storeys != null) state.floors = Math.max(1, Math.round(+assume.storeys));
+  for (const [k, v] of Object.entries(assume.params || {})) {
+    if (!SGA.PARAM_META[k]) throw new UserError(`Unknown input ${k}; inputs: ${Object.keys(SGA.PARAM_META).join(', ')}`);
+    if (!Number.isFinite(+v)) throw new UserError(`${k} must be a number`);
+    state.user[k] = +v;
+  }
+  const nb = await osm.neighbours(rec, 150);
+  const b = MS.buildModel(rec, nb, state, { A, bcaRows: SGS.bcaRows });
+  const cLat = (rec.bbox[1] + rec.bbox[3]) / 2, cLon = (rec.bbox[0] + rec.bbox[2]) / 2;
+  if (b.notModelled) return { ...base, building: { osm_id: rec.id, lat: rd(cLat, 6), lon: rd(cLon, 6), map_url: MAP_SG(rec.id, cLat, cLon) }, modelled: false, reason: b.notModelled.why, measured: measuredSG(b.bcaRow, null) };
+  if (state.era && !(SGA.erasOf(b.m.sgType) || []).some((e) => e.id === state.era)) throw new UserError(`era must be one of ${(SGA.erasOf(b.m.sgType) || []).map((e) => e.id).join(', ') || '(none for this type)'}`);
+  const W = await weatherSG(year), gef = MS.gridEF(A, year ?? 'TMY');
+  const sim = MS.simulate(b.m, W, SGS.cals), s = MS.summarize(b.m, sim.ctx, sim.p, sim.res, gef.value);
+  const pr = MS.priorMC(b, sim, gef.value, n, [42, 43], state);
+  const m = b.m, a = m.areas, t = m.osmTags || {};
+  const bandSG = (k, f = 1) => { const main = (pr.cond || pr)[k]; return { p10_p90: [sig(main[0] / f), sig(main[2] / f)], median: sig(main[1] / f), p10_p90_all_eras: pr.cond ? [sig(pr[k][0] / f), sig(pr[k][2] / f)] : undefined }; };
+  const era = b.asg.eraId ? (SGA.erasOf(m.sgType) || []).find((e) => e.id === b.asg.eraId) : null;
+  const geo = (key, label, value, unit, tier, source) => ({ key, label, value, unit, tier: TIER_SG[tier] || tier, source });
+  const inputs = Object.entries(m.params).filter(([k, v]) => SGA.PARAM_META[k] && typeof v.value === 'number').map(([k, v]) => ({
+    key: k, label: SGA.PARAM_META[k].label, group: SGA.PARAM_META[k].group, value: sig(v.value, 4), unit: SGA.PARAM_META[k].unit, tier: TIER_SG[v.tier] || v.tier,
+    source: v.source || null, note: v.note || null, prior_p10_p90: v.dist === 'fixed' ? null : [sig(v.p10), sig(v.p90)],
+    references: SGA.sourceRefs(`${v.source} ${v.note || ''}`).map((r) => ({ id: r.id, label: r.ref, url: r.url })),
+  }));
+  const out = {
+    ...base,
+    modelled: true,
+    building: {
+      osm_id: m.id, name: t.name || null, bca_name: b.bcaRow && b.bcaRow.name !== t.name ? b.bcaRow.name : undefined, address: m.address || match?.address || null,
+      lat: rd(m.center.lat, 6), lon: rd(m.center.lon, 6), map_url: MAP_SG(m.id, m.center.lat, m.center.lon), osm_url: `https://www.openstreetmap.org/${m.id.startsWith('w') ? 'way' : 'relation'}/${m.id.slice(1)}`,
+      planning_area: m.x?.pa || null, subzone: m.x?.sz || null, land_use: m.x?.lu || null, gross_plot_ratio: m.x?.gpr ?? m.x?.gprt ?? null,
+      type: m.sgType, type_label: SGA.TYPE_CN[m.sgType], variant: m.sgVariant || null, type_source: m.usageSrc, type_tier: TIER_SG[m.usageTier] || m.usageTier, rc5_usage: m.usage,
+      storeys: m.floors, height_m: rd(m.height, 1), storey_height_m: rd(m.floorHeight, 2), void_deck_m: m.voidDeck || 0,
+      geometry_sources: { storeys: m.geomSrc.floors, height: m.geomSrc.height, tier: { storeys: TIER_SG[m.geomTier.floors], height: TIER_SG[m.geomTier.height] }, height_p10_p90_m: m.geomPrior.h90 > m.geomPrior.h10 ? [rd(m.geomPrior.h10), rd(m.geomPrior.h90)] : null },
+      era: era ? { used: era.id, period: SGA.eraLabel(era), label: era.label_en, year: b.eraInfo.year || null, source: b.eraInfo.src, tier: TIER_SG[state.era ? 'user' : b.eraInfo.tier], prior: b.eraInfo.kind === 'prior' && !state.era ? Object.fromEntries(Object.entries(b.eraInfo.p).map(([k, v]) => [k, rd(v, 3)])) : undefined } : null,
+      footprint_m2: Math.round(a.footprint), reference_area_m2: Math.round(a.netFloor), reference_area_basis: a.refBasis, reference_area_source: a.refSrc, reference_area_tier: TIER_SG[a.refTier] || a.refTier,
+      reference_area_check: a.refCheck ? Object.fromEntries(Object.entries(a.refCheck).map(([k, v]) => [k, typeof v === 'number' ? sig(v, 6) : v])) : null,
+      gfa_m2: Math.round(a.gfa), gfa_source: a.gfaSrc,
+      hdb: m.x?.hdb ? { blk: m.x.hdb.blk, street: m.x.hdb.street, postcode: m.x.hdb.pc || null, year_completed: m.x.hdb.year, max_floor_level: m.x.hdb.levels, units: m.x.hdb.units, records_per_block: m.x.hdb.n || 1 } : undefined,
+      bca_listed: !!b.bcaRow,
+      cooling_system: { key: b.asg.sysKey, label: A.systems[b.asg.sysKey]?.label_en, scope: A.systems[b.asg.sysKey]?.scope, source: b.asg.sysSrc || (b.asg.systemShares ? `type prior: ${Object.entries(b.asg.systemShares).map(([k, v]) => `${k} ${rd(100 * v, 0)}%`).join(', ')}` : 'type default') },
+    },
+    results: {
+      weather: W.name || (year ? `ERA5 ${year}` : 'typical year from hourly ERA5 data 2010–2025 (Open-Meteo)'), weather_year: year || 'typical year',
+      area_basis: `per m² of the reference area (${a.refBasis}); eui_per_gfa per m² GFA`,
+      cooling_demand: { what: 'cooling demand of the air conditioning (useful cooling), sensible + latent', unit: 'kWh/(m²·a)', value: sig(s.cool), ...bandSG('cool'), sensible: sig(s.coolSens), latent: sig(s.coolLat), annual_MWh: sig(s.coolKWh / 1000), ac_hours: s.acHours },
+      electricity: { what: 'electricity at the building meter: cooling (demand ÷ COP), lighting, equipment, other', unit: 'kWh/(m²·a)', value: sig(s.elec.total), ...bandSG('e_total'), annual_MWh: sig(s.elecKWh / 1000),
+        by_end_use: Object.fromEntries(['cooling', 'lighting', 'equipment', 'other'].map((k) => [k, { value: sig(s.elec[k]), ...bandSG('e_' + k) }])) },
+      eui_per_gfa: { what: 'electricity per m² GFA, the basis of BCA EUI', unit: 'kWh/(m²·a)', value: sig(s.eui), ...bandSG('eui'), gfa_m2: Math.round(a.gfa) },
+      co2: { unit: 't/a', value: sig(s.co2t), ...bandSG('co2t'), per_m2_kg: sig(s.co2kg), grid_emission_factor: { value: gef.value, unit: 'kg CO2/kWh', year: gef.year, typical_year: gef.tmy || undefined, source: gef.source } },
+      peak_cooling_load: { what: 'hourly maximum of the cooling load (sensible + latent)', unit: 'kW', value: sig(s.peakW / 1000), per_m2_W: sig(s.peakWm2), per_m2_W_p10_p90: bandSG('peakWm2').p10_p90 },
+      ranges: `value: the model with the point values of the inputs. p10_p90 and median: ${n} draws of the inputs (independent; two-piece normal through each input's P10, value and P90)${pr.cond ? ', with the era fixed at the one used; p10_p90_all_eras: over all eras' : ''}.`,
+    },
+    measured: measuredSG(b.bcaRow, s),
+    uncertainty: { what: 'first-order share of each sampled input in the variance of the electricity per m² (approximate)', shares: MS.varShares(pr).slice(0, 10).map((x) => ({ input: x.key, share: rd(x.share, 3) })) },
+    geometry_inputs: [
+      geo('type', 'Type', m.sgType, null, m.usageTier, m.usageSrc), era ? geo('era', 'Era', era.id, null, state.era ? 'user' : b.eraInfo.tier, b.eraInfo.src) : null,
+      geo('storeys', 'Storeys', m.floors, null, m.geomTier.floors, m.geomSrc.floors), geo('height', 'Height', rd(m.height, 1), 'm', m.geomTier.height, m.geomSrc.height),
+      geo('footprint', 'Footprint', Math.round(a.footprint), 'm²', 'observed', 'OSM outline'), geo('reference_area', 'Reference area', Math.round(a.netFloor), 'm²', a.refTier, a.refSrc),
+      geo('gfa', 'GFA', Math.round(a.gfa), 'm²', SGA.RES_TYPES.includes(m.sgType) ? 'assumed' : a.refTier, a.gfaSrc),
+      geo('wwr', 'Window-to-wall ratio', m.params.WWR?.value ?? null, '–', m.params.WWR?.tier || 'assumed', m.params.WWR?.source || null),
+    ].filter(Boolean),
+    inputs,
+    tiers: { observed: 'measured or recorded for this building (OSM, HDB, URA, BCA listing) or computed from Singapore records', published_table: 'from a code, standard or official table', assumed: 'an assumption with the rule stated', estimate: 'a model estimate (GlobalBuildingAtlas height, storey heights)', user_input: 'given by the caller with assume' },
+    sources: SOURCES_SG,
+    disclaimer: 'Research prototype, Singapore pilot. Estimates from open data and published literature for reference only; they do not replace an energy audit or an on-site assessment.',
+    licence: 'Results: CC BY-NC 4.0; code and model: PolyForm Noncommercial 1.0.0; third-party data under the licences in sources. Commercial use needs a licence (x.c.chen@tum.de).',
+    cite: 'Open Energy Map, (c) 2026 Xia Chen, ' + REPO,
+  };
+  if (opts.internal) return { json: out, m, b, sim, s, pr };
+  return opts.detail === 'summary' ? { ...out, detail: 'summary (call again with detail "full" for every note and reference)', inputs: out.inputs.map((i) => ({ key: i.key, value: i.value, unit: i.unit, tier: i.tier, prior_p10_p90: i.prior_p10_p90, reference: i.references[0]?.id || i.source })), tiers: undefined } : out;
+}
+// the BCA listing of the building: measured, never an input; values outside 20–1000 kWh/(m²·a) flagged
+function measuredSG(row, s) {
+  const M = row ? SGS.MS.measured(row) : null;
+  if (!M) return null;
+  const y19 = M.years.find((y) => y.year === 2019);
+  return {
+    what: 'measured EUI published by BCA (annual electricity at the building meter ÷ GFA); for comparison only, never a model input',
+    unit: 'kWh/(m²·a)', name: M.name, address: M.address, postcode: M.postcode, bca_type: M.type, gfa_m2: M.gfa, top_year: M.topYear, ac_system: M.acSystem, combined_metering: M.combined || undefined,
+    match: { method: M.match, confidence: M.conf, name_differs_from_osm: M.nameConflict || undefined, outlines_in_listing: M.outlines },
+    eui_by_year: M.years.map((y) => ({ year: y.year, value: y.eui, source: y.src, plausible: y.plausible, note: !y.plausible ? 'implausible in the source (below 20 or above 1000)' : y.covid ? 'COVID year' : undefined })),
+    eui_2019: y19 ? (y19.plausible ? y19.eui : null) : null,
+    model_eui_per_gfa: s ? sig(s.eui) : undefined,
+    source: SGS.bcaSource,
+  };
+}
+const SOURCES_SG = [
+  { data: 'Building outlines, tags, addresses', source: '© OpenStreetMap contributors', licence: 'ODbL 1.0' },
+  { data: 'HDB Property Information, HDB Existing Building, URA Master Plan 2019 land use and boundaries, BCA Building Energy Performance Data 2017–2020, Singapore public holidays', source: 'data.gov.sg (HDB, URA, BCA, MOM), accessed 2026-11-25', licence: 'Singapore Open Data Licence v1.0, https://data.gov.sg/open-data-licence' },
+  { data: 'BCA Building Energy Benchmarking Report data 2022–2025', source: 'Building and Construction Authority, https://go.gov.sg/bca-bebr-data', licence: 'terms of the BCA website' },
+  { data: 'Building heights (LoD1)', source: 'GlobalBuildingAtlas, Zhu et al. 2025', licence: 'CC BY-NC 4.0' },
+  { data: 'Hourly weather (ERA5)', source: 'Open-Meteo, Copernicus Climate Change Service', licence: 'CC BY 4.0' },
+  { data: 'Grid emission factor, household electricity', source: 'EMA Singapore Energy Statistics', licence: 'EMA terms of use' },
+  { data: 'Archetype parameters', source: 'BCA codes and Green Mark, NEA, SingStat, HDB and the literature in data/archetypes_sg_sources.md', licence: 'cited per input' },
 ];

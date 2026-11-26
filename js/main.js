@@ -19,6 +19,7 @@ import { fillPhotos, photoLink } from './photos.js';
 import { openWalk, closeWalk, walkSelect } from './walk.js';
 import { priorMC, varShares } from './prior.js';
 import { PAIRS as VOI_PAIRS, known as voiKnown } from './voi.js';
+import { CITY, renderCitySwitch } from './city.js';   // ?city=sg hands the page to js/sg_app.js (end of file); Munich paths come from here too
 
 const $ = (s, r = document) => r.querySelector(s);
 const h = (tag, attrs = {}, ...kids) => {
@@ -70,9 +71,8 @@ function initLang() {
   }
   // index.html carries the English text, so the page does not flash another language before this runs
   $('#lang').setAttribute('aria-label', L('语言', 'Language', 'Sprache'));
-  // the region and the word on the theme button give way at phone width (css: .top .region, #theme .tt)
-  $('#region').textContent = L('慕尼黑', 'Munich', 'München');
-  $('#region').title = L('目前覆盖慕尼黑及周边', 'Currently covers Munich and its surroundings', 'Derzeit München und Umgebung');
+  // the city switch next to the name (js/city.js); the word on the theme button gives way at phone width (css: #theme .tt)
+  renderCitySwitch($('#citysw'), { muc: L('慕尼黑', 'Munich', 'München'), sg: L('新加坡', 'Singapore', 'Singapur') }, L('城市', 'City', 'Stadt'));
   $('#sub').textContent = L('正在加载数据…', 'Loading data…', 'Daten werden geladen …');
   $('#theme').innerHTML = '<svg class="ti" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"/></svg>';
   $('#theme').append(h('span', { class: 'tt' }, L('明暗', 'Theme', 'Hell/Dunkel')));
@@ -105,7 +105,7 @@ async function boot() {
   initLang();
   initTheme();
   const getJSON = (u) => fetch(u).then((r) => (r.ok ? r.json() : null)).catch(() => null);
-  const [idx, A, wIndex, , , hsCity, lod2Index] = await Promise.all([loadIndex(), loadArchetypes(), fetch('data/weather/index.json').then((r) => r.json()), loadZensus(), loadHeating(),
+  const [idx, A, wIndex, , , hsCity, lod2Index] = await Promise.all([loadIndex(CITY.osm), loadArchetypes(CITY.archetypes), fetch(CITY.weather + 'index.json').then((r) => r.json()), loadZensus(), loadHeating(),
     getJSON('data/heizspiegel_city.json'), getJSON('data/lod2/index.json')]);
   S.A = A; S.weatherIndex = wIndex; S.hsCity = hsCity; S.lod2Index = lod2Index;
   setFactors(A);
@@ -117,7 +117,7 @@ async function boot() {
   S.osmInfo = { n: idx.buildings, date: (idx.timestamp || '').slice(0, 10) };
   S.mapApi = createMap($('#map'), { dark: S.dark, onClick: (lon, lat) => pickAt(lon, lat), onCityHover: cityHover });
   initCity();
-  const presets = localize(await (await fetch('data/presets.json')).json());
+  const presets = localize(await (await fetch(CITY.presets)).json());
   for (const p of presets) $('#presets').append(h('button', { class: 'chip', title: pick(p, 'note'), onclick: () => pickPreset(p) }, pick(p, 'label')));
   initSearch();
   initTabs();
@@ -128,7 +128,7 @@ async function boot() {
 
 async function loadWeather(key) {
   const file = key === 'tmy' ? S.weatherIndex.tmy.file : S.weatherIndex.years[key].file;
-  const w = await (await fetch('data/weather/' + file)).json();
+  const w = await (await fetch(CITY.weather + file)).json();
   w.T = Float32Array.from(w.T); w.GHI = Float32Array.from(w.GHI); w.DNI = Float32Array.from(w.DNI); w.DHI = Float32Array.from(w.DHI);
   return w;
 }
@@ -145,7 +145,7 @@ function initSearch() {
       const v = norm(q.value);
       out.innerHTML = '';
       if (v.length < 3) return;
-      if (!ADDR) { out.append(h('div', { class: 'note', style: 'padding:8px 12px' }, L('正在载入地址索引…', 'Loading the address index…', 'Adressindex wird geladen …'))); ADDR = (await (await fetch('data/osm/addr.json')).json()).map((r) => [...r, norm(`${r[0]} ${r[1]} ${r[6]}`)]); out.innerHTML = ''; }
+      if (!ADDR) { out.append(h('div', { class: 'note', style: 'padding:8px 12px' }, L('正在载入地址索引…', 'Loading the address index…', 'Adressindex wird geladen …'))); ADDR = (await (await fetch(CITY.addr)).json()).map((r) => [...r, norm(`${r[0]} ${r[1]} ${r[6]}`)]); out.innerHTML = ''; }
       const toks = v.split(' ');
       const hits = [];
       for (const r of ADDR) { if (toks.every((t) => r[7].includes(t))) { hits.push(r); if (hits.length > 12) break; } }
@@ -1806,4 +1806,4 @@ function renderMethod() {
   </div>`, METHOD_EN(), METHOD_DE());
 }
 
-boot().catch((e) => { console.error(e); $('#sub').textContent = L('加载失败：', 'Loading failed: ', 'Laden fehlgeschlagen: ') + e.message; });
+(CITY.id === 'muc' ? boot() : import('./sg_app.js').then((m) => m.boot())).catch((e) => { console.error(e); $('#sub').textContent = L('加载失败：', 'Loading failed: ', 'Laden fehlgeschlagen: ') + e.message; });

@@ -1,0 +1,157 @@
+{
+ "meta": {
+  "file": "data/sg/calib_commercial.json",
+  "compiled": "2026-11-26",
+  "source": "BCA BEBR 2023, training half (this study)",
+  "sourceEntry": {
+   "id": "BCA_CALIB2023",
+   "ref": "This study: BCA BEBR 2023 EUI of the training half of the matched commercial buildings (qa/sg_bca_validation.md, tools/sg/calibrate_bca.mjs)",
+   "url": null
+  },
+  "method": "Office, retail, hotel: type multipliers on P_equip and E_other, posterior by random-walk MCMC on a linear surrogate of the model EUI (checked against full model runs), Student-t (ν 4) likelihood of ln(measured / model), priors ln m ~ N(0, s) with s from the table P10–P90; value = table value × posterior median multiplier, P10–P90 = posterior P10–P90. useScale (new key, a factor on the occupant, lighting, equipment and other loads together): value 1 (mixed: fitted), P10–P90 = the between-building spread, two-piece log-normal widths set on the training half so that 10 % of its buildings fall below and 10 % above the model P10–P90 (surrogate with P_equip and E_other drawn from their posterior ranges). Together the ranges are the posterior plus the residual spread.",
+  "training": {
+   "year": 2023,
+   "half": "train",
+   "split": "qa/sg_bca_validation.json split, seed 20261126",
+   "nByType": {
+    "office": 104,
+    "retail": 56,
+    "hotel": 40
+   }
+  },
+  "mixed": "P_equip and E_other not fitted: mixed developments take the calibrated office, retail and hotel values through their BCA GFA shares (archetype_sg.js assign), their own P_equip and E_other the blend-weighted mean of those multipliers; their useScale (value and range) is fitted on the mixed training buildings",
+  "tierNote": "calibrated: fitted to measured EUI of Singapore buildings (BCA). Not for residential types.",
+  "domain": {
+   "rule": "calibrated values apply to BCA-listed buildings and to unlisted outlines with GFA (refAreaFactor × footprint × storeys) ≥ gfaMin of their type; smaller unlisted outlines keep the table values",
+   "gfaMin": {
+    "office": 4000,
+    "retail": 5100,
+    "hotel": 5000,
+    "mixed": 1800
+   },
+   "p5": {
+    "office": 5464,
+    "retail": 5535,
+    "hotel": 5368,
+    "mixed": 5726
+   },
+   "n": {
+    "office": 105,
+    "retail": 57,
+    "hotel": 40,
+    "mixed": 115
+   },
+   "basis": "smallest BCA GFA among the training buildings of the type, rounded down to 100 m² (training half, qa/sg_bca_validation.json, seed 20261126); tools/sg/calib_domain.mjs"
+  }
+ },
+ "types": {
+  "office": {
+   "P_equip": {
+    "value": 9.91,
+    "p10": 6.29,
+    "p90": 13.6,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 7 (4–12, assumed) × posterior multiplier 1.415 (P10–P90 0.898–1.941), n = 104 training buildings, 2023; the range is the posterior of the type value, the spread between buildings is in useScale"
+   },
+   "E_other": {
+    "value": 37.1,
+    "p10": 21.2,
+    "p90": 52.5,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 20 (10–35, assumed) × posterior multiplier 1.853 (P10–P90 1.058–2.624), n = 104 training buildings, 2023; the range is the posterior of the type value, the spread between buildings is in useScale"
+   },
+   "useScale": {
+    "value": 1,
+    "p10": 0.544,
+    "p90": 1.545,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "unit": "×",
+    "note": "value 1; range: between-building spread not explained by the inputs, a factor on the occupant, lighting, equipment and other loads: two-piece log-normal widths 0.475 / 0.34 (ln) set so that 10 % of the 104 training buildings (2023) fall below and 10 % above the model P10–P90 (linear surrogate)"
+   }
+  },
+  "retail": {
+   "P_equip": {
+    "value": 40,
+    "p10": 32.8,
+    "p90": 46.2,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 15 (6–30, assumed) × posterior multiplier 2.67 (P10–P90 2.184–3.08), n = 56 training buildings, 2023; the range is the posterior of the type value, the spread between buildings is in useScale"
+   },
+   "E_other": {
+    "value": 36.5,
+    "p10": 15.7,
+    "p90": 78.6,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 40 (15–80, assumed) × posterior multiplier 0.912 (P10–P90 0.393–1.964), n = 56 training buildings, 2023; the range is the posterior of the type value, the spread between buildings is in useScale"
+   },
+   "useScale": {
+    "value": 1,
+    "p10": 0.34,
+    "p90": 1.49,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "unit": "×",
+    "note": "value 1; range: between-building spread not explained by the inputs, a factor on the occupant, lighting, equipment and other loads: two-piece log-normal widths 0.843 / 0.311 (ln) set so that 10 % of the 56 training buildings (2023) fall below and 10 % above the model P10–P90 (linear surrogate)"
+   }
+  },
+  "hotel": {
+   "P_equip": {
+    "value": 6.08,
+    "p10": 3.31,
+    "p90": 9.24,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 6 (3–12, assumed) × posterior multiplier 1.014 (P10–P90 0.552–1.54), n = 40 training buildings, 2023; the range is the posterior of the type value, the spread between buildings is in useScale"
+   },
+   "E_other": {
+    "value": 67.7,
+    "p10": 35,
+    "p90": 103,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 40 (20–70, assumed) × posterior multiplier 1.692 (P10–P90 0.874–2.584), n = 40 training buildings, 2023; the range is the posterior of the type value, the spread between buildings is in useScale"
+   },
+   "useScale": {
+    "value": 1,
+    "p10": 0.428,
+    "p90": 1.707,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "unit": "×",
+    "note": "value 1; range: between-building spread not explained by the inputs, a factor on the occupant, lighting, equipment and other loads: two-piece log-normal widths 0.661 / 0.417 (ln) set so that 10 % of the 40 training buildings (2023) fall below and 10 % above the model P10–P90 (linear surrogate)"
+   }
+  },
+  "mixed": {
+   "P_equip": {
+    "value": 15.2,
+    "p10": 10.3,
+    "p90": 20,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 8.5 (4–18, assumed) × 1.792, the office, retail and hotel multipliers weighted by types.mixed.blend (derived, not fitted to mixed developments)"
+   },
+   "E_other": {
+    "value": 41.6,
+    "p10": 21,
+    "p90": 69.4,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "note": "table 28 (12–55, assumed) × 1.484, the office, retail and hotel multipliers weighted by types.mixed.blend (derived, not fitted to mixed developments)"
+   },
+   "useScale": {
+    "value": 0.794,
+    "p10": 0.241,
+    "p90": 1.474,
+    "source": "BCA BEBR 2023, training half (this study)",
+    "tier": "calibrated",
+    "unit": "×",
+    "note": "value: posterior median 0.794 (P10–P90 0.735–0.862) fitted on the 111 mixed training buildings with the calibrated parts; range: between-building spread not explained by the inputs, a factor on the occupant, lighting, equipment and other loads: two-piece log-normal widths 0.931 / 0.482 (ln) set so that 10 % of the 111 training buildings (2023) fall below and 10 % above the model P10–P90 (linear surrogate)"
+   }
+  }
+ }
+}

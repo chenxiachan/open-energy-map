@@ -16,7 +16,9 @@ const FLAT = col(0x8d8a83);
 const SHOP_AMENITY = /^(restaurant|cafe|bar|pub|fast_food|bank|pharmacy|ice_cream|bakery)$/;
 
 // { list: [{ ring, holes, eaves, ridge, top, fh, bay, … }], grid: Map cell → indices, C, sel, roofs }
-export function buildingList(recs, lod2, F, model, wwrSel, gh) {
+// heightOf (optional): the city's own heights, record → { eaves, floors } or null (Singapore: js/archetype_sg.js
+// neighbourHeight, as for the neighbours of its energy model); without it, LoD2 and then heightAndUsage (Munich)
+export function buildingList(recs, lod2, F, model, wwrSel, gh, heightOf = null) {
   const list = [], seen = new Set();
   for (const b of recs) {
     if (b.part || seen.has(b.id)) continue;
@@ -34,8 +36,10 @@ export function buildingList(recs, lod2, F, model, wwrSel, gh) {
     const tags = b.tags || {}, sel = b.id === model.id;
     let eaves, ridge, floors, shape;
     const L2 = sel ? null : lod2Record(lod2.get(b.id));
+    const HC = !sel && !(L2 && L2.eaves > 0) && heightOf ? heightOf(b) : null;   // null: the default rules below, as js/geometry.js does
     if (sel) { eaves = model.height; ridge = model.roof?.ridgeHeight || 0; floors = model.floors; shape = model.roof?.shape; }
     else if (L2 && L2.eaves > 0) { eaves = L2.eaves; ridge = L2.ridge || 0; floors = L2.storeys; shape = L2.shape; }
+    else if (HC) { eaves = HC.eaves; floors = HC.floors; ridge = 0; shape = tags['roof:shape'] || 'flat'; }
     else { const { H } = heightAndUsage(tags, ring, fp, cx, cy); eaves = H.height; ridge = H.roof?.ridgeHeight || 0; floors = H.floors; shape = tags['roof:shape'] || H.roof?.shape; }
     if (!(eaves > 0)) eaves = 6;
     floors = Math.max(1, Math.round(floors || eaves / 3));

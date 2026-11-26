@@ -33,6 +33,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { L } from './i18n.js';
+import { CITY } from './city.js';
 import { around, lod2Around } from './osmdb.js';
 import { makeFrame } from './geo.js';
 import { loadGround } from './terrain.js';
@@ -68,7 +69,8 @@ export function closeWalk() {
 }
 
 // model: the selected building (id, lonlatOuter, center, height, floors, roof, …); ctx: { h, info, mapApi, host, sun
-// ({ azimuth, altitude } or null), wwr (the model's window-to-wall ratio or null) }
+// ({ azimuth, altitude } or null), wwr (the model's window-to-wall ratio or null), and for a city other than Munich
+// tipText (what the scene is made of) and heightOf (record → { eaves, floors } or null: the city's own heights) }
 export async function openWalk(model, ctx) {
   closeWalk();
   const { h, mapApi, host } = ctx;
@@ -82,7 +84,7 @@ export async function openWalk(model, ctx) {
   // full screen takes the whole map column, so the map can stay on as a small map in the corner
   const full = h('button', { type: 'button', class: 'walk-btn', title: L('全屏', 'Full screen', 'Vollbild'), 'aria-label': L('全屏', 'Full screen', 'Vollbild'),
     onclick: () => (document.fullscreenElement ? document.exitFullscreen() : host.requestFullscreen?.())?.catch?.(() => {}) }, '⛶');
-  const tip = ctx.info?.(L(
+  const tip = ctx.info?.(ctx.tipText || L(
     `合成的街区，不是照片。楼是 OSM 轮廓，高度和层数来自巴伐利亚 LoD2；没有 LoD2 的楼按 OSM 标签和默认规则估，和能耗模型里的邻楼一样。屋顶按屋顶类型生成（LoD2，否则 OSM 的 roof:shape）：近似矩形的楼做双坡或四坡，其他轮廓做内缩坡顶，和邻楼共墙的一侧做山墙，生成不了时退回平顶。墙面和屋面材料取 OSM 的材料标签（有标签的楼不多），其他楼用几种常见的浅色抹灰和陶瓦。窗按层高和平均窗墙比画出（进入漫游时所选的楼用模型估的 ${ctx.wwr ? Math.round(ctx.wwr * 100) + '%' : '值'}，其他楼 ${Math.round(WWR_DEFAULT * 100)}%），标了商铺的楼底层画成橱窗：都是估算的样子，不是真实的立面。地形和地面颜色来自巴伐利亚测绘局的 DGM1 和 DOP40 航拍（目前只有 TUM 主楼周围 4 km²，别处是平地），平屋顶直接用航拍；道路、绿地和水面来自底图（OpenFreeMap / OpenMapTiles）；墙、瓦、铺地、草和沥青的纹理来自 ambientCG（CC0）。树来自巴伐利亚单棵树数据（2024），位置和树高是实测的，树冠大小按常见行道树的比例从树高估算。天空和太阳取 3D 视图里选的月份和时刻。只有所选楼着青色；点一栋楼就选中它，右侧换成这栋楼的结果。`,
     `A synthetic street model, not photos. Buildings are OSM outlines with heights and storeys from the Bavarian LoD2; without LoD2 they are estimated from the OSM tags and default rules, as for the neighbours of the energy model. Roofs are shaped from the roof type (LoD2, else the OSM roof:shape tag): a gable or hip roof over near-rectangular outlines, an inset hip roof over other outlines, gable walls where a neighbour shares the wall, and a flat top where no valid roof can be built. Wall and roof materials come from the OSM material tags (few buildings have them); the others get a few common light plaster colours and clay tiles. Windows follow the storey height and an average window-to-wall ratio (${ctx.wwr ? Math.round(ctx.wwr * 100) + '%, the model’s estimate,' : 'the model’s estimate'} for the building selected on entry, ${Math.round(WWR_DEFAULT * 100)}% for the others), and buildings tagged as shops get shop fronts: the look of an estimate, not the real facades. Terrain and ground colour come from the DGM1 and the DOP40 orthophoto of the Bavarian surveying agency (so far only the 4 km² around the TUM main building, flat elsewhere), and flat roofs take the orthophoto; roads, green and water come from the base map (OpenFreeMap / OpenMapTiles); wall, tile, paving, grass and asphalt textures come from ambientCG (CC0). Trees come from the Bavarian single-tree data (2024): measured positions and heights, crowns estimated from the height. Sky and sun follow the month and hour chosen under the 3D view. Only the selected building is tinted; click a building to select it, and the panel switches to it.`,
     `Ein synthetisches Straßenmodell, keine Fotos. Gebäude sind OSM-Umrisse mit Höhen und Geschossen aus dem bayerischen LoD2; ohne LoD2 aus OSM-Tags und Standardregeln geschätzt, wie die Nachbarn im Energiemodell. Dächer entstehen aus der Dachform (LoD2, sonst das OSM-Tag roof:shape): Sattel- oder Walmdach über annähernd rechteckigen Umrissen, sonst ein eingerücktes Walmdach, Giebelwände dort, wo ein Nachbar die Wand teilt, und ein Flachdach, wo sich kein gültiges Dach bilden lässt. Wand- und Dachmaterialien stammen aus den OSM-Materialtags (nur wenige Gebäude haben sie); die übrigen erhalten einige übliche helle Putzfarben und Tonziegel. Fenster folgen der Geschosshöhe und einem mittleren Fensterflächenanteil (${ctx.wwr ? Math.round(ctx.wwr * 100) + ' %, die Schätzung des Modells,' : 'die Schätzung des Modells'} für das beim Betreten gewählte Gebäude, ${Math.round(WWR_DEFAULT * 100)} % für die übrigen), als Laden markierte Gebäude erhalten Schaufenster: das Bild einer Schätzung, nicht die echten Fassaden. Gelände und Bodenfarbe stammen aus dem DGM1 und dem Orthophoto DOP40 der Bayerischen Vermessungsverwaltung (bisher nur die 4 km² um das TUM-Hauptgebäude, sonst eben), Flachdächer zeigen das Orthophoto; Straßen, Grün und Wasser stammen aus der Grundkarte (OpenFreeMap / OpenMapTiles); Wand-, Ziegel-, Pflaster-, Gras- und Asphalttexturen von ambientCG (CC0). Bäume stammen aus den bayerischen Einzelbaumdaten (2024): gemessene Standorte und Höhen, Kronen aus der Höhe geschätzt. Himmel und Sonne folgen Monat und Uhrzeit unter der 3D-Ansicht. Nur das gewählte Gebäude ist eingefärbt; ein Klick auf ein Gebäude wählt es aus, und die Seitenleiste wechselt dorthin.`));
@@ -105,16 +107,18 @@ export async function openWalk(model, ctx) {
   const F = makeFrame(model.center.lat, model.center.lon);
   let recs, lod2, ground, terr, trees;
   try {
-    [recs, lod2, ground, terr, trees] = await Promise.all([around(model.center.lon, model.center.lat), lod2Around(model.center.lon, model.center.lat),
-      groundFeatures(F).catch(() => null), loadGround(F, R_LOAD + GROUND_PAD).catch((e) => { console.warn('walk: no terrain', e); return null; }),
-      loadTrees(F, R_LOAD).catch((e) => { console.warn('walk: no trees', e); return []; })]);
+    // a city without LoD2, terrain or tree data (js/city.js layers, e.g. Singapore) keeps flat ground and no trees
+    const lay = CITY.layers || {};
+    [recs, lod2, ground, terr, trees] = await Promise.all([around(model.center.lon, model.center.lat), lay.lod2 ? lod2Around(model.center.lon, model.center.lat) : new Map(),
+      groundFeatures(F).catch(() => null), lay.terrain ? loadGround(F, R_LOAD + GROUND_PAD).catch((e) => { console.warn('walk: no terrain', e); return null; }) : null,
+      lay.trees ? loadTrees(F, R_LOAD).catch((e) => { console.warn('walk: no trees', e); return []; }) : []]);
   } catch (e) { if (cur === me) msg.textContent = L(`数据没有加载（${e.message}）`, `The data did not load (${e.message})`, `Die Daten wurden nicht geladen (${e.message})`); return; }
   if (cur !== me) return;
   // ground height in m relative to the start area, interpolated on the terrain grid itself, so roads, buildings and the
   // eye use exactly the surface that is drawn (the raw 2 m data have kerbs and steps that would poke through roads)
   const grid = terrainGrid(terr ? terr.h : () => 0);
   const gh = grid.h;
-  const blds = buildingList(recs, lod2, F, model, ctx.wwr, gh);
+  const blds = buildingList(recs, lod2, F, model, ctx.wwr, gh, ctx.heightOf);   // ctx.heightOf: the city's own heights (Singapore)
   partyWalls(blds);
 
   // ---- renderer, sky and light

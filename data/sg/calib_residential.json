@@ -1,0 +1,475 @@
+{
+ "meta": {
+  "compiled": "2026-11-26",
+  "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+  "protocol": "qa/sg_ema_validation.md",
+  "method": "Bayesian grid posterior per dwelling row: ln coolFrac (prior = the table: two-piece normal through p10, value, p90) and ln s, one common factor on P_light, P_equip and E_other (prior N(0, 0.205²)); log-space Gaussian likelihood of the national EMA monthly values per household account 2018-01 to 2019-12 with σ integrated out and the effective sample size from the residuals' lag-1 autocorrelation; the model is the point model of js/model_sg.js over the OSM housing stock with the weather of each year, the billing kernel below and coolFrac scaled by HES AC ownership of the year. value = posterior median, p10/p90 = 10 % and 90 % quantiles of the marginal posterior. P_light, P_equip and E_other of a row move together (one factor), so their p10/p90 are not independent.",
+  "billingKernelMonths": 0.5,
+  "ownershipRule": "coolFrac is stated at HES 2023 AC ownership, like the table; for another year multiply by households.byDwelling.<row>.acOwnershipByYear interpolated to that year ÷ the 2023 value",
+  "merge": "households.byDwelling.<row>.<param> (HDB rows hdb_1r2r, hdb_3r, hdb_4r, hdb_5r_ex) override the rows of data/archetypes_sg.json households.byDwelling, which assign() weights by the flat area of each block; types.condo and types.landed override those types' params. There is deliberately no types.hdb entry: it would replace the per-block weighting of the rows. The stock mean for blocks without units is in meta.hdbStockMean.",
+  "hdbStockMean": {
+   "note": "the calibrated HDB rows weighted by their national flat area in the OSM-matched stock (hdb_1r2r 5 %, hdb_3r 15 %, hdb_4r 42 %, hdb_5r_ex 38 %); for types.hdb.params (blocks without units) only",
+   "coolFrac": {
+    "value": 0.1963,
+    "p10": 0.1071,
+    "p90": 0.2935
+   },
+   "P_light": {
+    "value": 0.3062,
+    "p10": 0.2651,
+    "p90": 0.3453
+   },
+   "P_equip": {
+    "value": 2.8063,
+    "p10": 2.4299,
+    "p90": 3.1651
+   },
+   "E_other": {
+    "value": 6.6977,
+    "p10": 5.7993,
+    "p90": 7.5542
+   }
+  },
+  "notTest": "Test results (2022–2024) are in qa/sg_ema_validation.json; nothing here was tuned on them.",
+  "posterior": {
+   "hdb_1r2r": {
+    "k": {
+     "p10": 0.5136,
+     "p50": 1.1537,
+     "p90": 2.3856
+    },
+    "s": {
+     "p10": 1.0733,
+     "p50": 1.1355,
+     "p90": 1.1796
+    },
+    "corr_lnCoolFrac_lnS": -0.786,
+    "residualSD_log": 0.0455,
+    "residualMean_log": 0.0103,
+    "lag1Rho": 0.495,
+    "nEff": 8.1,
+    "gamma": 0.067
+   },
+   "hdb_3r": {
+    "k": {
+     "p10": 0.9493,
+     "p50": 1.708,
+     "p90": 2.4822
+    },
+    "s": {
+     "p10": 0.839,
+     "p50": 0.9653,
+     "p90": 1.0927
+    },
+    "corr_lnCoolFrac_lnS": -0.936,
+    "residualSD_log": 0.0385,
+    "residualMean_log": 0.0082,
+    "lag1Rho": 0.37,
+    "nEff": 11,
+    "gamma": 0.066
+   },
+   "hdb_4r": {
+    "k": {
+     "p10": 0.7333,
+     "p50": 1.3278,
+     "p90": 1.9661
+    },
+    "s": {
+     "p10": 0.7974,
+     "p50": 0.9255,
+     "p90": 1.0488
+    },
+    "corr_lnCoolFrac_lnS": -0.929,
+    "residualSD_log": 0.0433,
+    "residualMean_log": 0.008,
+    "lag1Rho": 0.442,
+    "nEff": 9.3,
+    "gamma": 0.066
+   },
+   "hdb_5r_ex": {
+    "k": {
+     "p10": 0.7591,
+     "p50": 1.4152,
+     "p90": 2.1391
+    },
+    "s": {
+     "p10": 0.823,
+     "p50": 0.9622,
+     "p90": 1.0927
+    },
+    "corr_lnCoolFrac_lnS": -0.925,
+    "residualSD_log": 0.0466,
+    "residualMean_log": 0.0084,
+    "lag1Rho": 0.439,
+    "nEff": 9.3,
+    "gamma": 0.062
+   },
+   "condo": {
+    "k": {
+     "p10": 0.8546,
+     "p50": 1.4942,
+     "p90": 2.1408
+    },
+    "s": {
+     "p10": 0.776,
+     "p50": 0.9161,
+     "p90": 1.0591
+    },
+    "corr_lnCoolFrac_lnS": -0.933,
+    "residualSD_log": 0.0473,
+    "residualMean_log": 0.0082,
+    "lag1Rho": 0.385,
+    "nEff": 10.6,
+    "gamma": 0.067
+   },
+   "landed": {
+    "k": {
+     "p10": 0.7702,
+     "p50": 1.4201,
+     "p90": 2.1506
+    },
+    "s": {
+     "p10": 0.8962,
+     "p50": 1.0151,
+     "p90": 1.124
+    },
+    "corr_lnCoolFrac_lnS": -0.931,
+    "residualSD_log": 0.038,
+    "residualMean_log": 0.0081,
+    "lag1Rho": 0.391,
+    "nEff": 10.5,
+    "gamma": 0.067
+   }
+  }
+ },
+ "types": {
+  "condo": {
+   "coolFrac": {
+    "value": 0.2719,
+    "p10": 0.1555,
+    "p90": 0.3896,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 0.182,
+     "p10": 0.082,
+     "p90": 0.345
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.6), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+   },
+   "P_light": {
+    "value": 0.3664,
+    "p10": 0.3104,
+    "p90": 0.4237,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 0.4,
+     "p10": 0.24,
+     "p90": 0.64
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.6), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.916, P10–P90 0.776–1.059)"
+   },
+   "P_equip": {
+    "value": 3.3436,
+    "p10": 2.8323,
+    "p90": 3.8658,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 3.65,
+     "p10": 2.56,
+     "p90": 4.75
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.6), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.916, P10–P90 0.776–1.059)"
+   },
+   "E_other": {
+    "value": 7.9698,
+    "p10": 6.7509,
+    "p90": 9.2144,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 8.7,
+     "p10": 5.2,
+     "p90": 14
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.6), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.916, P10–P90 0.776–1.059)"
+   }
+  },
+  "landed": {
+   "coolFrac": {
+    "value": 0.1786,
+    "p10": 0.0969,
+    "p90": 0.2705,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 0.1258,
+     "p10": 0.0567,
+     "p90": 0.2392
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.5), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+   },
+   "P_light": {
+    "value": 0.3299,
+    "p10": 0.2913,
+    "p90": 0.3653,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 0.325,
+     "p10": 0.2,
+     "p90": 0.525
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.5), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.015, P10–P90 0.896–1.124)"
+   },
+   "P_equip": {
+    "value": 3.0536,
+    "p10": 2.696,
+    "p90": 3.3813,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 3.0083,
+     "p10": 2.1083,
+     "p90": 3.9083
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.5), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.015, P10–P90 0.896–1.124)"
+   },
+   "E_other": {
+    "value": 7.2746,
+    "p10": 6.4228,
+    "p90": 8.0552,
+    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "tier": "calibrated",
+    "prior": {
+     "value": 7.1667,
+     "p10": 4.3333,
+     "p90": 11.5
+    },
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 10.5), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.015, P10–P90 0.896–1.124)"
+   }
+  }
+ },
+ "households": {
+  "byDwelling": {
+   "hdb_1r2r": {
+    "coolFrac": {
+     "value": 0.0496,
+     "p10": 0.0221,
+     "p90": 0.1026,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.043,
+      "p10": 0.019,
+      "p90": 0.081
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.1), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+    },
+    "P_light": {
+     "value": 0.3747,
+     "p10": 0.3542,
+     "p90": 0.3893,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.33,
+      "p10": 0.2,
+      "p90": 0.53
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.1), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.135, P10–P90 1.073–1.180)"
+    },
+    "P_equip": {
+     "value": 3.4404,
+     "p10": 3.2521,
+     "p90": 3.5742,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 3.03,
+      "p10": 2.12,
+      "p90": 3.94
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.1), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.135, P10–P90 1.073–1.180)"
+    },
+    "E_other": {
+     "value": 8.1753,
+     "p10": 7.7278,
+     "p90": 8.4932,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 7.2,
+      "p10": 4.3,
+      "p90": 11.6
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.1), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.135, P10–P90 1.073–1.180)"
+    }
+   },
+   "hdb_3r": {
+    "coolFrac": {
+     "value": 0.222,
+     "p10": 0.1234,
+     "p90": 0.3227,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.13,
+      "p10": 0.059,
+      "p90": 0.247
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 11.0), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+    },
+    "P_light": {
+     "value": 0.3282,
+     "p10": 0.2852,
+     "p90": 0.3715,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.34,
+      "p10": 0.2,
+      "p90": 0.54
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 11.0), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.965, P10–P90 0.839–1.093)"
+    },
+    "P_equip": {
+     "value": 2.9926,
+     "p10": 2.6007,
+     "p90": 3.3873,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 3.1,
+      "p10": 2.17,
+      "p90": 4.03
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 11.0), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.965, P10–P90 0.839–1.093)"
+    },
+    "E_other": {
+     "value": 7.1436,
+     "p10": 6.2082,
+     "p90": 8.0857,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 7.4,
+      "p10": 4.4,
+      "p90": 11.9
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 11.0), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.965, P10–P90 0.839–1.093)"
+    }
+   },
+   "hdb_4r": {
+    "coolFrac": {
+     "value": 0.2085,
+     "p10": 0.1151,
+     "p90": 0.3087,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.157,
+      "p10": 0.071,
+      "p90": 0.298
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+    },
+    "P_light": {
+     "value": 0.3054,
+     "p10": 0.2631,
+     "p90": 0.3461,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.33,
+      "p10": 0.2,
+      "p90": 0.53
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.925, P10–P90 0.797–1.049)"
+    },
+    "P_equip": {
+     "value": 2.795,
+     "p10": 2.408,
+     "p90": 3.1673,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 3.02,
+      "p10": 2.11,
+      "p90": 3.93
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.925, P10–P90 0.797–1.049)"
+    },
+    "E_other": {
+     "value": 6.6636,
+     "p10": 5.741,
+     "p90": 7.5511,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 7.2,
+      "p10": 4.3,
+      "p90": 11.5
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.925, P10–P90 0.797–1.049)"
+    }
+   },
+   "hdb_5r_ex": {
+    "coolFrac": {
+     "value": 0.1925,
+     "p10": 0.1032,
+     "p90": 0.2909,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.136,
+      "p10": 0.061,
+      "p90": 0.259
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+    },
+    "P_light": {
+     "value": 0.2887,
+     "p10": 0.2469,
+     "p90": 0.3278,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 0.3,
+      "p10": 0.18,
+      "p90": 0.48
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.962, P10–P90 0.823–1.093)"
+    },
+    "P_equip": {
+     "value": 2.6556,
+     "p10": 2.2715,
+     "p90": 3.0158,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 2.76,
+      "p10": 1.93,
+      "p90": 3.59
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.962, P10–P90 0.823–1.093)"
+    },
+    "E_other": {
+     "value": 6.3504,
+     "p10": 5.4319,
+     "p90": 7.2117,
+     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "tier": "calibrated",
+     "prior": {
+      "value": 6.6,
+      "p10": 4,
+      "p90": 10.5
+     },
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.3), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 0.962, P10–P90 0.823–1.093)"
+    }
+   }
+  }
+ }
+}
