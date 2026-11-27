@@ -235,7 +235,9 @@ m² of dwelling floor area.
   washing machines/irons 1 %, others 26 % (read from the Annex A infographic by a subagent). Lighting = 6 %, equipment
   = 55 % (refrigerators, fans, TVs, computers, set-top boxes, washing, others), E_other = 15 % (water heaters, kitchen
   appliances, kettles) of the EMA 2017 mean electricity per household account of the dwelling type (EMA_SES Table 3.5),
-  divided by the floor area and (for W/m²) 8,760 h. AC (24 %) is left to the model. The shares are national, not by
+  divided by the floor area and (for W/m²) 8,760 h. AC (24 %) is left to the model; since 2026-11-27 the EMA calibration
+  (`tools/sg/ema_fit.mjs --ac-share 0.24,0.2`, `qa/sg_ema_validation.md` §10.7) takes it as a soft prior on each row's AC
+  part of household electricity, because EMA's totals cannot split the AC from the rest. The shares are national, not by
   dwelling type; p10/p90 ×0.6–1.6 (lighting, E_other) and ×0.7–1.3 (equipment) are assumed. Gas cooking and gas water
   heaters are not electricity: EMA town gas per account in 2024 (kWh/month): 1–2-room 36, 3-room 51, 4-room 63,
   5-room & executive 70, condo 86, landed 134 (subagent extract of EMA chart file natavg-tg-2026.csv).

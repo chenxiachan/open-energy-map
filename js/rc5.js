@@ -341,7 +341,7 @@ export function run(ctx, p, opts = {}) {
       const tH = night ? Tset - sb : Tset;
       const inAC = mixed && (acWrap ? hl >= acS || hl < acE : hl >= acS && hl < acE);
       let aC = inAC ? 1 : 0;   // share of the cooled zone with the AC on (1 or 0 without daytime AC)
-      if (dayAC && !inAC) aC = Math.min(dayMax, Math.max(0, ((twoZone ? airU : prevFree) - p.acDayT) / dayBand));
+      if (dayAC && !inAC) aC = dayMax * Math.min(1, Math.max(0, ((twoZone ? airU : prevFree) - p.acDayT) / dayBand));
       if (nightAC && inAC) aC = nightMin + (1 - nightMin) * Math.min(1, Math.max(0, ((twoZone ? airU : prevFree) - p.acNightT) / nightBand));
       const coolOn = coolOK && (mixed ? aC > 0 : (resid || o));
       if (!mixed) aC = 1;

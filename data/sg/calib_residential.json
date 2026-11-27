@@ -1,254 +1,268 @@
 {
  "meta": {
   "compiled": "2026-11-26",
-  "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+  "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
   "protocol": "qa/sg_ema_validation.md",
   "method": "Bayesian grid posterior per dwelling row: ln coolFrac (prior = the table: two-piece normal through p10, value, p90) and ln s, one common factor on P_light, P_equip and E_other (prior N(0, 0.205²)); log-space Gaussian likelihood of the national EMA monthly values per household account 2018-01 to 2019-12 with σ integrated out and the effective sample size from the residuals' lag-1 autocorrelation; the model is the point model of js/model_sg.js over the OSM housing stock with the weather of each year, the billing kernel below and coolFrac scaled by HES AC ownership of the year. value = posterior median, p10/p90 = 10 % and 90 % quantiles of the marginal posterior. P_light, P_equip and E_other of a row move together (one factor), so their p10/p90 are not independent.",
   "billingKernelMonths": 0.5,
+  "acSharePrior": {
+   "arg": "0.24,0.2",
+   "source": "NEA 2017 household energy consumption study (AC 24 % of household electricity, NEA press release 2018-05-05)",
+   "rowTargets": {
+    "hdb_1r2r": 0.065,
+    "hdb_3r": 0.206,
+    "hdb_4r": 0.246,
+    "hdb_5r_ex": 0.237,
+    "condo": 0.275,
+    "landed": 0.212
+   },
+   "sdLn": 0.2,
+   "note": "a prior on each row's AC share added to the EMA likelihood (tools/sg/ema_fit.mjs --ac-share, default 0.24,0.2; none leaves it out)"
+  },
   "ownershipRule": "coolFrac is stated at HES 2023 AC ownership, like the table; for another year multiply by households.byDwelling.<row>.acOwnershipByYear interpolated to that year ÷ the 2023 value",
   "merge": "households.byDwelling.<row>.<param> (HDB rows hdb_1r2r, hdb_3r, hdb_4r, hdb_5r_ex) override the rows of data/archetypes_sg.json households.byDwelling, which assign() weights by the flat area of each block; types.condo and types.landed override those types' params. There is deliberately no types.hdb entry: it would replace the per-block weighting of the rows. The stock mean for blocks without units is in meta.hdbStockMean.",
   "hdbStockMean": {
    "note": "the calibrated HDB rows weighted by their national flat area in the OSM-matched stock (hdb_1r2r 5 %, hdb_3r 15 %, hdb_4r 42 %, hdb_5r_ex 38 %); for types.hdb.params (blocks without units) only",
    "coolFrac": {
-    "value": 0.1211,
-    "p10": 0.074,
-    "p90": 0.1757
+    "value": 0.1758,
+    "p10": 0.1429,
+    "p90": 0.2153
    },
    "P_light": {
-    "value": 0.3327,
-    "p10": 0.3062,
-    "p90": 0.3568
+    "value": 0.3139,
+    "p10": 0.2957,
+    "p90": 0.33
    },
    "P_equip": {
-    "value": 3.0489,
-    "p10": 2.8067,
-    "p90": 3.2701
+    "value": 2.8766,
+    "p10": 2.7098,
+    "p90": 3.0245
    },
    "E_other": {
-    "value": 7.2768,
-    "p10": 6.6987,
-    "p90": 7.805
+    "value": 6.8656,
+    "p10": 6.4674,
+    "p90": 7.2187
    }
   },
   "notTest": "Test results (2022–2024) are in qa/sg_ema_validation.json; nothing here was tuned on them.",
   "posterior": {
    "hdb_1r2r": {
     "k": {
-     "p10": 0.5905,
-     "p50": 1.2624,
-     "p90": 2.2654
+     "p10": 1.2122,
+     "p50": 1.5437,
+     "p90": 1.9617
     },
     "s": {
-     "p10": 1.0675,
-     "p50": 1.1236,
-     "p90": 1.1693
+     "p10": 1.085,
+     "p50": 1.1162,
+     "p90": 1.1459
     },
-    "corr_lnCoolFrac_lnS": -0.818,
-    "residualSD_log": 0.0411,
-    "residualMean_log": 0.0092,
-    "lag1Rho": 0.468,
-    "nEff": 8.7,
-    "gamma": 0.1
+    "corr_lnCoolFrac_lnS": -0.524,
+    "residualSD_log": 0.0406,
+    "residualMean_log": 0.0088,
+    "lag1Rho": 0.492,
+    "nEff": 8.2,
+    "gamma": 0.099
    },
    "hdb_3r": {
     "k": {
-     "p10": 0.6035,
-     "p50": 0.9628,
-     "p90": 1.3579
+     "p10": 1.0919,
+     "p50": 1.3389,
+     "p90": 1.6311
     },
     "s": {
-     "p10": 0.9961,
-     "p50": 1.0708,
-     "p90": 1.1414
+     "p10": 0.9704,
+     "p50": 1.0224,
+     "p90": 1.0687
     },
-    "corr_lnCoolFrac_lnS": -0.907,
-    "residualSD_log": 0.0389,
-    "residualMean_log": 0.0079,
-    "lag1Rho": 0.449,
-    "nEff": 9.1,
-    "gamma": 0.1
+    "corr_lnCoolFrac_lnS": -0.868,
+    "residualSD_log": 0.039,
+    "residualMean_log": 0.0082,
+    "lag1Rho": 0.439,
+    "nEff": 9.4,
+    "gamma": 0.099
    },
    "hdb_4r": {
     "k": {
-     "p10": 0.5029,
-     "p50": 0.8143,
-     "p90": 1.1755
+     "p10": 0.9863,
+     "p50": 1.2115,
+     "p90": 1.4822
     },
     "s": {
-     "p10": 0.9282,
-     "p50": 1.0112,
-     "p90": 1.0868
+     "p10": 0.8867,
+     "p50": 0.9453,
+     "p90": 0.9969
     },
-    "corr_lnCoolFrac_lnS": -0.896,
-    "residualSD_log": 0.0435,
-    "residualMean_log": 0.0077,
-    "lag1Rho": 0.502,
-    "nEff": 7.9,
-    "gamma": 0.099
+    "corr_lnCoolFrac_lnS": -0.846,
+    "residualSD_log": 0.0448,
+    "residualMean_log": 0.0078,
+    "lag1Rho": 0.492,
+    "nEff": 8.2,
+    "gamma": 0.098
    },
    "hdb_5r_ex": {
     "k": {
-     "p10": 0.5387,
-     "p50": 0.8917,
-     "p90": 1.2974
+     "p10": 1.0486,
+     "p50": 1.2921,
+     "p90": 1.5841
     },
     "s": {
-     "p10": 0.9555,
-     "p50": 1.045,
-     "p90": 1.1269
+     "p10": 0.9217,
+     "p50": 0.9826,
+     "p90": 1.0365
     },
-    "corr_lnCoolFrac_lnS": -0.892,
-    "residualSD_log": 0.0462,
-    "residualMean_log": 0.0081,
-    "lag1Rho": 0.5,
-    "nEff": 8,
-    "gamma": 0.092
+    "corr_lnCoolFrac_lnS": -0.836,
+    "residualSD_log": 0.0469,
+    "residualMean_log": 0.0083,
+    "lag1Rho": 0.489,
+    "nEff": 8.2,
+    "gamma": 0.09
    },
    "condo": {
     "k": {
-     "p10": 0.5518,
-     "p50": 0.8502,
-     "p90": 1.1774
+     "p10": 0.9955,
+     "p50": 1.2146,
+     "p90": 1.4765
     },
     "s": {
-     "p10": 0.935,
-     "p50": 1.0222,
-     "p90": 1.1049
+     "p10": 0.8951,
+     "p50": 0.9589,
+     "p90": 1.0154
     },
-    "corr_lnCoolFrac_lnS": -0.907,
-    "residualSD_log": 0.0458,
-    "residualMean_log": 0.0079,
-    "lag1Rho": 0.46,
-    "nEff": 8.9,
-    "gamma": 0.088
+    "corr_lnCoolFrac_lnS": -0.856,
+    "residualSD_log": 0.0479,
+    "residualMean_log": 0.008,
+    "lag1Rho": 0.466,
+    "nEff": 8.7,
+    "gamma": 0.091
    },
    "landed": {
     "k": {
-     "p10": 0.5331,
-     "p50": 0.8488,
-     "p90": 1.2092
+     "p10": 1.0397,
+     "p50": 1.2787,
+     "p90": 1.5684
     },
     "s": {
-     "p10": 1.0137,
-     "p50": 1.0847,
-     "p90": 1.1493
+     "p10": 0.9699,
+     "p50": 1.0242,
+     "p90": 1.0713
     },
-    "corr_lnCoolFrac_lnS": -0.909,
-    "residualSD_log": 0.0366,
-    "residualMean_log": 0.0077,
-    "lag1Rho": 0.439,
-    "nEff": 9.4,
-    "gamma": 0.095
+    "corr_lnCoolFrac_lnS": -0.85,
+    "residualSD_log": 0.039,
+    "residualMean_log": 0.0081,
+    "lag1Rho": 0.486,
+    "nEff": 8.3,
+    "gamma": 0.096
    }
   }
  },
  "types": {
   "condo": {
    "coolFrac": {
-    "value": 0.1547,
-    "p10": 0.1004,
-    "p90": 0.2143,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 0.2211,
+    "p10": 0.1812,
+    "p90": 0.2687,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 0.182,
      "p10": 0.082,
      "p90": 0.345
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.9), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 27.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 23.4 %; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
    },
    "P_light": {
-    "value": 0.4089,
-    "p10": 0.374,
-    "p90": 0.4419,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 0.3836,
+    "p10": 0.3581,
+    "p90": 0.4062,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 0.4,
      "p10": 0.24,
      "p90": 0.64
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.9), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.022, P10–P90 0.935–1.105)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 27.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 23.4 %; one common factor s on P_light, P_equip and E_other (s = 0.959, P10–P90 0.895–1.015)"
    },
    "P_equip": {
-    "value": 3.7312,
-    "p10": 3.4127,
-    "p90": 4.0327,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 3.5,
+    "p10": 3.2673,
+    "p90": 3.7063,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 3.65,
      "p10": 2.56,
      "p90": 4.75
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.9), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.022, P10–P90 0.935–1.105)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 27.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 23.4 %; one common factor s on P_light, P_equip and E_other (s = 0.959, P10–P90 0.895–1.015)"
    },
    "E_other": {
-    "value": 8.8935,
-    "p10": 8.1343,
-    "p90": 9.6123,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 8.3425,
+    "p10": 7.7878,
+    "p90": 8.8342,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 8.7,
      "p10": 5.2,
      "p90": 14
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.9), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.022, P10–P90 0.935–1.105)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 27.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 23.4 %; one common factor s on P_light, P_equip and E_other (s = 0.959, P10–P90 0.895–1.015)"
    }
   },
   "landed": {
    "coolFrac": {
-    "value": 0.1068,
-    "p10": 0.0671,
-    "p90": 0.1521,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 0.1609,
+    "p10": 0.1308,
+    "p90": 0.1973,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 0.1258,
      "p10": 0.0567,
      "p90": 0.2392
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.3), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 21.2 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.2 %; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
    },
    "P_light": {
-    "value": 0.3525,
-    "p10": 0.3295,
-    "p90": 0.3735,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 0.3329,
+    "p10": 0.3152,
+    "p90": 0.3482,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 0.325,
      "p10": 0.2,
      "p90": 0.525
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.085, P10–P90 1.014–1.149)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.3), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 21.2 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.2 %; one common factor s on P_light, P_equip and E_other (s = 1.024, P10–P90 0.970–1.071)"
    },
    "P_equip": {
-    "value": 3.2631,
-    "p10": 3.0496,
-    "p90": 3.4573,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 3.0811,
+    "p10": 2.9178,
+    "p90": 3.2227,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 3.0083,
      "p10": 2.1083,
      "p90": 3.9083
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.085, P10–P90 1.014–1.149)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.3), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 21.2 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.2 %; one common factor s on P_light, P_equip and E_other (s = 1.024, P10–P90 0.970–1.071)"
    },
    "E_other": {
-    "value": 7.7738,
-    "p10": 7.2651,
-    "p90": 8.2364,
-    "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+    "value": 7.34,
+    "p10": 6.9511,
+    "p90": 7.6774,
+    "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
     "tier": "calibrated",
     "prior": {
      "value": 7.1667,
      "p10": 4.3333,
      "p90": 11.5
     },
-    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.085, P10–P90 1.014–1.149)"
+    "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.3), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 21.2 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.2 %; one common factor s on P_light, P_equip and E_other (s = 1.024, P10–P90 0.970–1.071)"
    }
   }
  },
@@ -256,218 +270,218 @@
   "byDwelling": {
    "hdb_1r2r": {
     "coolFrac": {
-     "value": 0.0543,
-     "p10": 0.0254,
-     "p90": 0.0974,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.0664,
+     "p10": 0.0521,
+     "p90": 0.0844,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.043,
       "p10": 0.019,
       "p90": 0.081
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 6.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 6.3 %; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
     },
     "P_light": {
-     "value": 0.3708,
-     "p10": 0.3523,
-     "p90": 0.3859,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.3683,
+     "p10": 0.358,
+     "p90": 0.3782,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.33,
       "p10": 0.2,
       "p90": 0.53
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.124, P10–P90 1.067–1.169)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 6.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 6.3 %; one common factor s on P_light, P_equip and E_other (s = 1.116, P10–P90 1.085–1.146)"
     },
     "P_equip": {
-     "value": 3.4046,
-     "p10": 3.2344,
-     "p90": 3.5431,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 3.382,
+     "p10": 3.2874,
+     "p90": 3.4722,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 3.03,
       "p10": 2.12,
       "p90": 3.94
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.124, P10–P90 1.067–1.169)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 6.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 6.3 %; one common factor s on P_light, P_equip and E_other (s = 1.116, P10–P90 1.085–1.146)"
     },
     "E_other": {
-     "value": 8.0902,
-     "p10": 7.6857,
-     "p90": 8.4192,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 8.0364,
+     "p10": 7.8117,
+     "p90": 8.2507,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 7.2,
       "p10": 4.3,
       "p90": 11.6
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.7), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.124, P10–P90 1.067–1.169)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 6.5 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 6.3 %; one common factor s on P_light, P_equip and E_other (s = 1.116, P10–P90 1.085–1.146)"
     }
    },
    "hdb_3r": {
     "coolFrac": {
-     "value": 0.1252,
-     "p10": 0.0785,
-     "p90": 0.1765,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.1741,
+     "p10": 0.142,
+     "p90": 0.212,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.13,
       "p10": 0.059,
       "p90": 0.247
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.1), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 20.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.4 %; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
     },
     "P_light": {
-     "value": 0.3641,
-     "p10": 0.3387,
-     "p90": 0.3881,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.3476,
+     "p10": 0.3299,
+     "p90": 0.3634,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.34,
       "p10": 0.2,
       "p90": 0.54
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.1), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.071, P10–P90 0.996–1.141)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 20.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.4 %; one common factor s on P_light, P_equip and E_other (s = 1.022, P10–P90 0.970–1.069)"
     },
     "P_equip": {
-     "value": 3.3196,
-     "p10": 3.088,
-     "p90": 3.5382,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 3.1694,
+     "p10": 3.0082,
+     "p90": 3.3131,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 3.1,
       "p10": 2.17,
       "p90": 4.03
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.1), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.071, P10–P90 0.996–1.141)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 20.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.4 %; one common factor s on P_light, P_equip and E_other (s = 1.022, P10–P90 0.970–1.069)"
     },
     "E_other": {
-     "value": 7.9241,
-     "p10": 7.3714,
-     "p90": 8.4461,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 7.5656,
+     "p10": 7.1809,
+     "p90": 7.9087,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 7.4,
       "p10": 4.4,
       "p90": 11.9
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.1), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.071, P10–P90 0.996–1.141)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 9.4), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 20.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 18.4 %; one common factor s on P_light, P_equip and E_other (s = 1.022, P10–P90 0.970–1.069)"
     }
    },
    "hdb_4r": {
     "coolFrac": {
-     "value": 0.1278,
-     "p10": 0.079,
-     "p90": 0.1846,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.1902,
+     "p10": 0.1548,
+     "p90": 0.2327,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.157,
       "p10": 0.071,
       "p90": 0.298
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 7.9), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 24.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 21.2 %; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
     },
     "P_light": {
-     "value": 0.3337,
-     "p10": 0.3063,
-     "p90": 0.3586,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.3119,
+     "p10": 0.2926,
+     "p90": 0.329,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.33,
       "p10": 0.2,
       "p90": 0.53
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 7.9), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.011, P10–P90 0.928–1.087)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 24.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 21.2 %; one common factor s on P_light, P_equip and E_other (s = 0.945, P10–P90 0.887–0.997)"
     },
     "P_equip": {
-     "value": 3.0539,
-     "p10": 2.8032,
-     "p90": 3.282,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 2.8548,
+     "p10": 2.678,
+     "p90": 3.0106,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 3.02,
       "p10": 2.11,
       "p90": 3.93
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 7.9), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.011, P10–P90 0.928–1.087)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 24.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 21.2 %; one common factor s on P_light, P_equip and E_other (s = 0.945, P10–P90 0.887–0.997)"
     },
     "E_other": {
-     "value": 7.2807,
-     "p10": 6.6831,
-     "p90": 7.8247,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 6.8061,
+     "p10": 6.3846,
+     "p90": 7.1777,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 7.2,
       "p10": 4.3,
       "p90": 11.5
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 7.9), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.011, P10–P90 0.928–1.087)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 24.6 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 21.2 %; one common factor s on P_light, P_equip and E_other (s = 0.945, P10–P90 0.887–0.997)"
     }
    },
    "hdb_5r_ex": {
     "coolFrac": {
-     "value": 0.1213,
-     "p10": 0.0733,
-     "p90": 0.1764,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.1757,
+     "p10": 0.1426,
+     "p90": 0.2154,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.136,
       "p10": 0.061,
       "p90": 0.259
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.0), billing kernel 0.5 month(s); prior = the table; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 23.7 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 20.9 %; at HES 2023 AC ownership (scale by acOwnershipByYear for other years)"
     },
     "P_light": {
-     "value": 0.3135,
-     "p10": 0.2866,
-     "p90": 0.3381,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 0.2948,
+     "p10": 0.2765,
+     "p90": 0.3109,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 0.3,
       "p10": 0.18,
       "p90": 0.48
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.0), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.045, P10–P90 0.955–1.127)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 23.7 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 20.9 %; one common factor s on P_light, P_equip and E_other (s = 0.983, P10–P90 0.922–1.036)"
     },
     "P_equip": {
-     "value": 2.8841,
-     "p10": 2.6371,
-     "p90": 3.1102,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 2.7119,
+     "p10": 2.5438,
+     "p90": 2.8607,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 2.76,
       "p10": 1.93,
       "p90": 3.59
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.0), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.045, P10–P90 0.955–1.127)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 23.7 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 20.9 %; one common factor s on P_light, P_equip and E_other (s = 0.983, P10–P90 0.922–1.036)"
     },
     "E_other": {
-     "value": 6.8967,
-     "p10": 6.306,
-     "p90": 7.4373,
-     "source": "EMA SES Table 3.5, 2018–2019 (this study)",
+     "value": 6.4849,
+     "p10": 6.0831,
+     "p90": 6.8407,
+     "source": "EMA SES Table 3.5, 2018–2019, with NEA_HECS2017 as a prior on the AC share (this study)",
      "tier": "calibrated",
      "prior": {
       "value": 6.6,
       "p10": 4,
       "p90": 10.5
      },
-     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.0), billing kernel 0.5 month(s); prior = the table; one common factor s on P_light, P_equip and E_other (s = 1.045, P10–P90 0.955–1.127)"
+     "note": "posterior of (coolFrac, base factor s) on the EMA national monthly values 2018–2019 (24 months, effective n 8.2), billing kernel 0.5 month(s); prior = the table, and the AC part of the row's household electricity ~ log-normal around 23.7 % (NEA_HECS2017 national 24 % scaled by the uncalibrated model's row ratio, sd 0.2 in ln), calibrated 20.9 %; one common factor s on P_light, P_equip and E_other (s = 0.983, P10–P90 0.922–1.036)"
     }
    }
   }

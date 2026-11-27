@@ -161,7 +161,7 @@ The tab **Method & export** (Munich) or **Method** (Singapore) of any building d
 | Weather | Hourly data 2010 to 2025, corrected to the Changi station and long-term solar means; a typical year | Open-Meteo (ERA5), MSS, Solargis |
 | Thermal model | Hourly 5R1C model after ISO 13790 with the latent load of outdoor air and occupants, partly air-conditioned flats as two coupled zones, bedroom AC at night and, by the room temperature, on hot afternoons, and electricity for cooling, lighting, equipment and other uses | ISO 13790, ASHRAE, BCA, NEA, SUTD household survey |
 | Air conditioning | Seasonal COP by system: split and VRF units, chilled water plants, district cooling; the plant efficiency of listed buildings | BCA, NEA |
-| Calibration and checks | Commercial types calibrated on half of the BCA buildings and checked on the other half and another year; housing calibrated on EMA household electricity of 2018 to 2019 and checked on 2022 to 2024; the island totals compared with EMA consumption by sector | BCA, EMA |
+| Calibration and checks | Commercial types calibrated on half of the BCA buildings and checked on the other half and another year; housing calibrated on EMA household electricity of 2018 to 2019, with the AC part NEA metered as a prior, and checked on 2022 to 2024; the island totals compared with EMA consumption by sector | BCA, EMA, NEA |
 | CO₂ | Electricity times the grid emission factor of the year | EMA |
 </details>
 
